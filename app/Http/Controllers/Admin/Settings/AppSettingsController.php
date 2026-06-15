@@ -111,8 +111,8 @@ class AppSettingsController extends Controller
     public function updatewebinfo(Request $request)
     {
         $this->validate($request, [
-            'logo' => 'mimes:jpg,jpeg,png|max:500|image',
-            'favicon' => 'mimes:jpg,jpeg,png,ico|max:500',
+            'logo' => 'mimes:jpg,jpeg,png|max:5120|image',
+            'favicon' => 'mimes:jpg,jpeg,png,ico|max:5120',
         ]);
 
         $settings = Settings::where('id', '=', '1')->first();
