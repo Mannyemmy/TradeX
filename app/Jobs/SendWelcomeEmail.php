@@ -2,17 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Models\Settings;
+use App\Mail\WelcomeEmail;
 use App\Models\User;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-class SendRegistrationEmails implements ShouldQueue
+class SendWelcomeEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -26,12 +26,9 @@ class SendRegistrationEmails implements ShouldQueue
     public function handle(): void
     {
         try {
-            $settings = Settings::where('id', 1)->first();
-            if ($settings && $settings->enable_verification == 'true') {
-                $this->user->notify(new VerifyEmail);
-            }
+            Mail::to($this->user->email)->send(new WelcomeEmail($this->user));
         } catch (\Exception $e) {
-            Log::error('Verification email failed: ' . $e->getMessage());
+            Log::error('Welcome email failed: ' . $e->getMessage());
         }
     }
 }
