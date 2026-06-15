@@ -1,0 +1,105 @@
+@extends('layouts.base')
+
+@section('title', 'Legal Docs & FAQ')
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/@@alpinejs/collapse@3.14.8/dist/cdn.min.js" defer></script>
+@endpush
+
+@section('content')
+
+{{-- ===== HERO ===== --}}
+<section class="bg-body-bg py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+        <h1 class="font-serif text-3xl md:text-4xl font-bold text-body-text">Company <span class="text-primary">Legal Docs</span></h1>
+    </div>
+</section>
+
+{{-- ===== LEGAL DOC CARDS ===== --}}
+<section class="bg-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {{-- Terms of Service --}}
+            <div class="border-l-4 border-primary pl-5">
+                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </div>
+                <h4 class="font-semibold text-body-text text-lg">Terms of Service</h4>
+                <p class="text-body-muted text-sm mt-2 leading-relaxed">Read the Risk Warning and customer Agreement for {{ $settings->site_name }} as well as our Developer Agreements.</p>
+                <a href="{{ route('terms') }}" class="inline-flex items-center text-primary text-sm font-medium mt-3 hover:underline">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    Terms of Service for {{ $settings->site_name }}
+                </a>
+            </div>
+
+            {{-- Policies --}}
+            <div class="border-l-4 border-primary pl-5">
+                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h4 class="font-semibold text-body-text text-lg">Policies</h4>
+                <p class="text-body-muted text-sm mt-2 leading-relaxed">Find out more about what information we collect at {{ $settings->site_name }}, how we use it, and what control you have over your data.</p>
+                <a href="{{ route('privacy') }}" class="inline-flex items-center text-primary text-sm font-medium mt-3 hover:underline">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    AML Policy
+                </a>
+            </div>
+
+            {{-- Security --}}
+            <div class="border-l-4 border-primary pl-5">
+                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mb-3">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <h4 class="font-semibold text-body-text text-lg">Security</h4>
+                <p class="text-body-muted text-sm mt-2 leading-relaxed">Learn more about how we keep your work and personal data safe when you're using our services.</p>
+                <div class="space-y-2 mt-3">
+                    <a href="{{ route('safety') }}" class="block text-primary text-sm font-medium hover:underline">Security Overview</a>
+                    <a href="{{ route('risk') }}" class="inline-flex items-center text-primary text-sm font-medium hover:underline">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        Risk Disclosure
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ===== FAQ SECTION ===== --}}
+<section class="bg-body-bg py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="bg-white rounded-xl border border-body-border shadow-sm p-6 md:p-10">
+            <h2 class="font-serif text-2xl font-bold text-body-text">Frequently asked questions</h2>
+            <p class="text-body-muted text-sm mt-2">Common questions about using {{ $settings->site_name }}. If your question is not listed here, contact us at <a href="mailto:{{ $settings->contact_email }}" class="text-primary hover:underline">{{ $settings->contact_email }}</a>.</p>
+
+            <div class="mt-6 space-y-3">
+                @php
+                    $faqs = [
+                        ['q' => 'How does ' . $settings->site_name . ' protect my account?', 'a' => 'We use SSL encryption on all connections, offer two-factor authentication (2FA), and keep client funds in segregated accounts separate from company operating funds.'],
+                        ['q' => 'How can I deposit and withdraw funds?', 'a' => 'You can deposit and withdraw using the payment methods listed in your dashboard, including bank transfer and supported e-wallets. Withdrawal requests are typically processed within 24 hours.'],
+                        ['q' => 'What happens if there is a security incident?', 'a' => 'We have procedures in place to investigate, contain and resolve security incidents. If your account is affected, we will notify you by email and guide you through the next steps.'],
+                        ['q' => 'What are the risks of trading?', 'a' => 'Trading CFDs, forex and cryptocurrencies carries a high level of risk. You may lose some or all of your invested capital. Only trade with money you can afford to lose. Please read our risk disclosure for full details.'],
+                        ['q' => 'How do I contact support?', 'a' => 'You can reach our support team by email at ' . $settings->contact_email . ' or through the live chat on our website. We aim to respond within one business day.'],
+                    ];
+                @endphp
+
+                @foreach($faqs as $i => $faq)
+                <div x-data="{ open: {{ $i === 0 ? 'true' : 'false' }} }" class="border border-body-border rounded-lg overflow-hidden">
+                    <button @click="open = !open" class="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-body-bg/50 transition">
+                        <span class="font-medium text-body-text text-sm">{{ $faq['q'] }}</span>
+                        <svg class="w-5 h-5 text-body-muted flex-shrink-0 ml-4 transition-transform" :class="open && 'rotate-180'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div x-show="open" x-collapse>
+                        <div class="px-5 pb-4 text-body-muted text-sm leading-relaxed">{{ $faq['a'] }}</div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <div class="bg-body-bg rounded-lg px-4 py-3 mt-6">
+                <p class="text-body-muted text-sm">For general inquiries please contact <a href="mailto:{{ $settings->contact_email }}" class="text-primary hover:underline">{{ $settings->contact_email }}</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@endsection

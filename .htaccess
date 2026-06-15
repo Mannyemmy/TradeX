@@ -1,0 +1,56 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Allow static assets (images, fonts, css, js) to pass through directly
+    RewriteCond %{REQUEST_URI} \.(jpg|jpeg|png|gif|ico|svg|webp|bmp|css|js|woff|woff2|ttf|eot|otf|map)$ [NC]
+    RewriteRule ^ - [L]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+<Files .env>
+Order allow,deny
+Deny from all
+</Files>
+<FilesMatch "(\.env|\.git|config\.php|artisan)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+<FilesMatch "^(\.env|composer\..*|artisan|server\.php|phpunit\.xml)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+<FilesMatch "\.(zip|tar|gz|bak|sql|rar|7z)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Block direct access to temp/ and update/ directories
+<IfModule mod_rewrite.c>
+    RewriteRule ^temp(/.*)?$ - [F,L]
+    RewriteRule ^update(/.*)?$ - [F,L]
+</IfModule>
+
+RewriteRule ^(.*/)?\.git/ - [F,L]
+
+Options -Indexes
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php81” package as the default “PHP” programming language.
+
+# php -- END cPanel-generated handler, do not edit
