@@ -194,10 +194,21 @@
             </div>
 
             {{-- Submit --}}
-            <button type="submit"
-                class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2.5 rounded-lg transition-colors">
-                Register
+            <button type="submit" id="registerBtn"
+                class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <span id="registerBtnText">Register</span>
+                <svg id="registerBtnSpinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
             </button>
+            <script>
+                document.querySelector('form').addEventListener('submit', function() {
+                    document.getElementById('registerBtn').disabled = true;
+                    document.getElementById('registerBtnText').textContent = 'Processing...';
+                    document.getElementById('registerBtnSpinner').classList.remove('hidden');
+                });
+            </script>
         </form>
 
         {{-- Link --}}
