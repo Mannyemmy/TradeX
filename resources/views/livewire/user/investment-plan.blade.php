@@ -167,8 +167,8 @@
                     </div>
 
                     <form wire:submit.prevent="joinPlan">
-                        <button type="submit" {{ $disabled }}
-                            class="w-full bg-primary hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed text-content-inverse font-semibold py-3 px-4 rounded-lg transition-colors">
+                        <button type="submit"
+                            class="w-full bg-primary hover:bg-primary-dark text-content-inverse font-semibold py-3 px-4 rounded-lg transition-colors">
                             Confirm & Invest
                         </button>
                     </form>
