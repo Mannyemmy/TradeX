@@ -1,5 +1,5 @@
 
-@extends('layouts.dashly1')
+@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
     <!-- Page title -->

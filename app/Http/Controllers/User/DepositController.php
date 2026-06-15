@@ -76,6 +76,15 @@ class DepositController extends Controller
     public function payment(Request $request)
     {
         $methodname =  Wdmethod::firstWhere('name', $request->session()->get('payment_mode'));
+
+        // The payment page is only meaningful within the deposit flow (which sets
+        // the payment_mode/amount in the session). If reached directly without a
+        // selected method, send the user back to the deposit screen instead of
+        // dereferencing a null payment mode in the view.
+        if (! $methodname) {
+            return redirect()->route('deposits')->with('message', 'Please choose a deposit method to continue.');
+        }
+
         return view("user.payment")
             ->with(array(
                 'amount' => $request->session()->get('amount'),
