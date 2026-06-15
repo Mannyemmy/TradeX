@@ -125,20 +125,20 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                     <x-admin.form-group label="Logo" for="logo" helper="Recommended: max 200×100px">
-                        <input type="file" name="logo" id="logo"
+                        <input type="file" name="logo" id="logo" onchange="previewFile(this, 'logoPreview')"
                             class="w-full text-sm text-content-secondary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-light file:text-primary hover:file:bg-primary/20 cursor-pointer">
                     </x-admin.form-group>
                     <div class="mt-3 p-3 border border-border rounded-lg text-center bg-surface-alt">
-                        <img src="{{ asset('storage/app/public/' . $settings->logo) }}" alt="Logo" class="max-h-16 inline-block">
+                        <img id="logoPreview" src="{{ asset('storage/app/public/' . $settings->logo) }}" alt="Logo" class="max-h-16 inline-block">
                     </div>
                 </div>
                 <div>
                     <x-admin.form-group label="Favicon" for="favicon" helper="Recommended: max 32×32px">
-                        <input type="file" name="favicon" id="favicon"
+                        <input type="file" name="favicon" id="favicon" onchange="previewFile(this, 'faviconPreview')"
                             class="w-full text-sm text-content-secondary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-light file:text-primary hover:file:bg-primary/20 cursor-pointer">
                     </x-admin.form-group>
                     <div class="mt-3 p-3 border border-border rounded-lg text-center bg-surface-alt">
-                        <img src="{{ asset('storage/app/public/' . $settings->favicon) }}" alt="Favicon" class="max-h-8 inline-block">
+                        <img id="faviconPreview" src="{{ asset('storage/app/public/' . $settings->favicon) }}" alt="Favicon" class="max-h-8 inline-block">
                     </div>
                 </div>
             </div>

@@ -87,6 +87,17 @@
 
 @push('scripts')
 <script>
+    function previewFile(input, imgId) {
+        var file = input.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(imgId).src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
     // Select2 initialization
     $(document).ready(function() {
         $('.select2').select2({
