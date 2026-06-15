@@ -5,7 +5,7 @@
 
     <x-admin.page-header :title="$title">
         <x-slot name="actions">
-            <button type="button" onclick="window.dispatchEvent(new CustomEvent('open-addAssetModal'))"
+            <button type="button" onclick="$('#addAssetModal').removeClass('hidden').addClass('flex')"
                     class="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-medium hover:bg-primary-hover transition-colors">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                 Add Custom Asset
@@ -121,47 +121,58 @@
     </div>
 
     {{-- Add Custom Asset Modal --}}
-    <x-admin.modal id="addAssetModal" title="Add Custom Asset">
-        <form action="{{ route('admin.assets.store') }}" method="POST" class="space-y-4">
-            @csrf
-            <x-admin.form-group label="Name" for="name" required>
-                <input type="text" name="name" id="name" required placeholder="e.g. Custom Token"
-                       class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-            </x-admin.form-group>
-            <x-admin.form-group label="Symbol" for="symbol" required>
-                <input type="text" name="symbol" id="symbol" required placeholder="e.g. CTKN"
-                       class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-            </x-admin.form-group>
-            <x-admin.form-group label="Asset Class" for="asset_class" required>
-                <select name="asset_class" id="asset_class" required
-                        class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-                    <option value="crypto">Crypto</option>
-                    <option value="forex">Forex</option>
-                    <option value="stock">Stock</option>
-                    <option value="etf">ETF</option>
-                    <option value="index">Index</option>
-                </select>
-            </x-admin.form-group>
-            <x-admin.form-group label="Initial Price" for="price">
-                <input type="number" name="price" id="price" step="0.00000001" min="0" placeholder="0.00"
-                       class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-            </x-admin.form-group>
-            <x-admin.form-group label="Logo URL" for="logo_url" helper="Optional — paste a direct image URL">
-                <input type="url" name="logo_url" id="logo_url" placeholder="https://..."
-                       class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-            </x-admin.form-group>
-            <div class="flex justify-end gap-3 pt-2">
-                <button type="button" @click="open = false"
-                        class="bg-secondary-light text-content-secondary rounded-lg px-4 py-2 text-sm font-medium hover:bg-surface-alt transition-colors">
-                    Cancel
-                </button>
-                <button type="submit"
-                        class="bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-medium hover:bg-primary-hover transition-colors">
-                    Add Asset
+    <div id="addAssetModal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-surface-overlay/60" onclick="$('#addAssetModal').removeClass('flex').addClass('hidden')"></div>
+        <div class="relative w-full max-w-lg bg-surface-card rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-border flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-content">Add Custom Asset</h3>
+                <button type="button" onclick="$('#addAssetModal').removeClass('flex').addClass('hidden')" class="text-content-muted hover:text-content transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
-        </form>
-    </x-admin.modal>
+            <div class="px-6 py-5">
+                <form action="{{ route('admin.assets.store') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <x-admin.form-group label="Name" for="name" required>
+                        <input type="text" name="name" id="name" required placeholder="e.g. Custom Token"
+                               class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                    </x-admin.form-group>
+                    <x-admin.form-group label="Symbol" for="symbol" required>
+                        <input type="text" name="symbol" id="symbol" required placeholder="e.g. CTKN"
+                               class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                    </x-admin.form-group>
+                    <x-admin.form-group label="Asset Class" for="asset_class" required>
+                        <select name="asset_class" id="asset_class" required
+                                class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                            <option value="crypto">Crypto</option>
+                            <option value="forex">Forex</option>
+                            <option value="stock">Stock</option>
+                            <option value="etf">ETF</option>
+                            <option value="index">Index</option>
+                        </select>
+                    </x-admin.form-group>
+                    <x-admin.form-group label="Initial Price" for="price">
+                        <input type="number" name="price" id="price" step="0.00000001" min="0" placeholder="0.00"
+                               class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                    </x-admin.form-group>
+                    <x-admin.form-group label="Logo URL" for="logo_url" helper="Optional — paste a direct image URL">
+                        <input type="url" name="logo_url" id="logo_url" placeholder="https://..."
+                               class="w-full bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                    </x-admin.form-group>
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" onclick="$('#addAssetModal').removeClass('flex').addClass('hidden')"
+                                class="bg-secondary-light text-content-secondary rounded-lg px-4 py-2 text-sm font-medium hover:bg-surface-alt transition-colors">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                class="bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-medium hover:bg-primary-hover transition-colors">
+                            Add Asset
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
