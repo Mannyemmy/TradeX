@@ -160,7 +160,7 @@ class AppSettingsController extends Controller
         $moreset->purchase_code = $request->purchase_code;
         $moreset->save();
 
-        return redirect()->back()->with('success', 'Settings Saved successfully For more script like this join our telegram with https://t.me/+AU0r-kLCuto5M2Q0');
+        return redirect()->back()->with('success', 'Settings Saved successfully.');
     }
 
 
