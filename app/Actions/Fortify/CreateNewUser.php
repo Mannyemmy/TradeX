@@ -2,7 +2,7 @@
 
 namespace App\Actions\Fortify;
 
-use App\Jobs\SendRegistrationEmails;
+use App\Jobs\SendEmailVerification;
 use App\Models\User;
 use App\Models\Settings;
 use App\Models\Agent;
@@ -91,7 +91,7 @@ class CreateNewUser implements CreatesNewUsers
         $cryptoaccnt->user_id = $user->id;
         $cryptoaccnt->save();
         $request->session()->forget('ref_by');
-        SendRegistrationEmails::dispatch($user);
+        SendEmailVerification::dispatch($user);
 
         \App\Services\NotificationService::notifyAdmin('registration', 'New User Registered', $user->name . ' (' . $user->email . ') just created an account.', url('admin/dashboard/manageusers'));
 
