@@ -9,7 +9,10 @@ class SoftwareModule extends Component
 {
     public function render()
     {
-        return view('livewire.admin.software-module');
+        $settings = Settings::find(1);
+        return view('livewire.admin.software-module', [
+            'mod' => $settings ? ($settings->modules ?? []) : [],
+        ]);
     }
 
     public function updateModule($module, $value)
