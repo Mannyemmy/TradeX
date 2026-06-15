@@ -2,7 +2,7 @@
 
 namespace App\Actions\Fortify;
 
-use App\Mail\WelcomeEmail;
+use App\Jobs\SendRegistrationEmails;
 use App\Models\User;
 use App\Models\Settings;
 use App\Models\Agent;
@@ -14,8 +14,6 @@ use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -93,11 +91,7 @@ class CreateNewUser implements CreatesNewUsers
         $cryptoaccnt->user_id = $user->id;
         $cryptoaccnt->save();
         $request->session()->forget('ref_by');
-        try {
-            Mail::to($user->email)->send(new WelcomeEmail($user));
-        } catch (\Exception $e) {
-            Log::error('Welcome email failed: ' . $e->getMessage());
-        }
+        SendRegistrationEmails::dispatch($user);
 
         \App\Services\NotificationService::notifyAdmin('registration', 'New User Registered', $user->name . ' (' . $user->email . ') just created an account.', url('admin/dashboard/manageusers'));
 

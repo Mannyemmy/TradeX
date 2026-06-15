@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('process:trades')->everyMinute();
+        $schedule->command('queue:work --stop-when-empty --max-time=30')->everyMinute()->withoutOverlapping();
         $schedule->job(new \App\Jobs\CalculateCopyTradeProfit)->daily();
         $schedule->job(new \App\Jobs\GenerateBotTrades)->everyFiveMinutes();
         $schedule->job(new \App\Jobs\CalculateBotProfit)->hourly();
