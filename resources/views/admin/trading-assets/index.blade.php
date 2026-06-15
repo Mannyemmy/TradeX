@@ -5,7 +5,7 @@
 
     <x-admin.page-header :title="$title">
         <x-slot name="actions">
-            <button @click="$dispatch('open-addAssetModal')"
+            <button type="button" onclick="window.dispatchEvent(new CustomEvent('open-addAssetModal'))"
                     class="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-medium hover:bg-primary-hover transition-colors">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                 Add Custom Asset
