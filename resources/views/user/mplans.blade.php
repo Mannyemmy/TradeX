@@ -160,31 +160,15 @@
     @endif
 
     {{-- Invest Slide-Over Drawer --}}
-    <div x-data="{ open: false }"
-         x-on:open-invest-drawer.window="open = true"
-         x-on:keydown.escape.window="open = false">
+    <div id="investDrawer" class="fixed inset-0 z-50 hidden" role="dialog">
         {{-- Backdrop --}}
-        <div x-show="open" x-cloak
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black/60 z-40" @click="open = false"></div>
+        <div class="absolute inset-0 bg-black/60 z-40 transition-opacity duration-300" onclick="closeInvestDrawer()"></div>
         {{-- Drawer Panel --}}
-        <div x-show="open" x-cloak
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="translate-x-full"
-             x-transition:enter-end="translate-x-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="translate-x-0"
-             x-transition:leave-end="translate-x-full"
-             class="fixed inset-y-0 right-0 z-50 w-full max-w-2xl bg-surface-base border-l border-surface-border overflow-y-auto">
+        <div class="absolute inset-y-0 right-0 z-50 w-full max-w-2xl bg-surface-base border-l border-surface-border overflow-y-auto shadow-xl transition-transform duration-300 translate-x-full">
             {{-- Drawer Header --}}
             <div class="sticky top-0 z-10 bg-surface-base border-b border-surface-border px-6 py-4 flex items-center justify-between">
                 <h2 class="text-lg font-bold text-content-primary">Invest in Plan</h2>
-                <button @click="open = false" class="p-2 rounded-lg hover:bg-surface-overlay text-content-tertiary hover:text-content-primary transition-colors">
+                <button type="button" onclick="closeInvestDrawer()" class="p-2 rounded-lg hover:bg-surface-overlay text-content-tertiary hover:text-content-primary transition-colors">
                     <x-icon name="x-mark" class="w-5 h-5" />
                 </button>
             </div>
@@ -201,8 +185,27 @@
 @parent
 <script>
     function openInvestDrawer(planId) {
-        Livewire.emit('selectPlanById', planId);
-        window.dispatchEvent(new CustomEvent('open-invest-drawer'));
+        try { Livewire.emit('selectPlanById', planId); } catch(e) {}
+        var el = document.getElementById('investDrawer');
+        if (!el) return;
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+        setTimeout(function() {
+            el.querySelector('div.absolute.inset-y-0').classList.remove('translate-x-full');
+        }, 10);
     }
+    function closeInvestDrawer() {
+        var el = document.getElementById('investDrawer');
+        if (!el) return;
+        var panel = el.querySelector('div.absolute.inset-y-0');
+        if (panel) panel.classList.add('translate-x-full');
+        setTimeout(function() {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+        }, 300);
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeInvestDrawer();
+    });
 </script>
 @endsection
