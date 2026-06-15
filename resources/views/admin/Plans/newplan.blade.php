@@ -13,7 +13,7 @@
 
     <div class="mt-6">
         <x-admin.card>
-            <form role="form" method="post" action="{{ route('addplan') }}">
+            <form role="form" method="post" action="{{ route('addplan') }}" onsubmit="var btn=document.getElementById('addPlanBtn'); btn.disabled=true; btn.querySelector('span').textContent='Processing...'; btn.querySelector('svg').classList.remove('hidden');">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <x-admin.form-group label="Plan Name" :required="true">
@@ -100,9 +100,10 @@
                     </x-admin.form-group>
 
                     <div class="md:col-span-2">
-                        <button type="submit"
+                        <button type="submit" id="addPlanBtn"
                                 class="inline-flex items-center gap-1.5 bg-primary text-primary-foreground hover:bg-primary-hover rounded-lg px-4 py-2 text-sm font-medium transition-colors">
-                            Add Plan
+                            <svg class="w-4 h-4 hidden animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                            <span>Add Plan</span>
                         </button>
                     </div>
                 </div>

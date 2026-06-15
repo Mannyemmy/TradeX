@@ -31,7 +31,7 @@
         <h1 class="text-2xl font-bold text-content-primary mb-1">Sign Up for Free</h1>
         <p class="text-content-tertiary text-sm mb-6">It's free to sign up and only takes a minute.</p>
 
-        <form method="POST" action="{{ route('register') }}" id="registerForm" onsubmit="document.getElementById('registerBtn').disabled = true; document.getElementById('registerBtnText').textContent = 'Processing...'; document.getElementById('registerBtnSpinner').classList.remove('hidden');">
+        <form method="POST" action="{{ route('register') }}" id="registerForm" onsubmit="var btn=document.getElementById('registerBtn'); btn.disabled=true; btn.querySelector('span').textContent='Processing...'; btn.querySelector('svg').classList.remove('hidden');">
             @csrf
 
             {{-- Row 1: Name + Username --}}
