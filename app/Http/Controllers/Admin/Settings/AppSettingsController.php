@@ -240,6 +240,30 @@ class AppSettingsController extends Controller
     /**
      * Test API connection (AJAX).
      */
+    public function toggleModule(Request $request)
+    {
+        $allowed = [
+            'investment', 'cryptoswap', 'pre_ipo', 'trading',
+            'copy_trading', 'bot_trading', 'signal', 'nft', 'loan', 'membership',
+            'stocktrading',
+        ];
+
+        $module = $request->input('module');
+        $value = $request->input('value');
+
+        if (!in_array($module, $allowed)) {
+            return redirect()->back()->with('message', 'Invalid module');
+        }
+
+        $settings = Settings::find(1);
+        $options = $settings->modules ?? [];
+        $options[$module] = $value === 'true';
+        $settings->modules = $options;
+        $settings->save();
+
+        return redirect()->back()->with('success', 'Module updated successfully');
+    }
+
     public function testApiConnection(Request $request)
     {
         $provider = $request->input('provider');

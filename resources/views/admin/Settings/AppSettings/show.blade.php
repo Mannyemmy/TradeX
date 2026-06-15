@@ -54,7 +54,7 @@
         <div class="mt-6">
             {{-- Module Tab --}}
             <div x-show="activeTab === 'module'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                <livewire:admin.software-module />
+                @include('livewire.admin.software-module')
             </div>
 
             {{-- Website Information Tab --}}

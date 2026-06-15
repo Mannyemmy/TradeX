@@ -263,6 +263,7 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function () {
         // Settings Routes
         Route::get('dashboard/settings/app-settings', 'appsettingshow')->name('appsettingshow');
         Route::post('update-theme', 'updateTheme')->name('theme.update');
+        Route::post('dashboard/toggle-module', 'toggleModule')->name('toggleModule');
         // API Configuration
         Route::post('dashboard/update-api-keys', 'updateApiKeys')->name('updateapikeys');
         Route::post('dashboard/test-api-connection', 'testApiConnection')->name('testapiconnection');
