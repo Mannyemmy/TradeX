@@ -31,7 +31,7 @@
         <h1 class="text-2xl font-bold text-content-primary mb-1">Sign Up for Free</h1>
         <p class="text-content-tertiary text-sm mb-6">It's free to sign up and only takes a minute.</p>
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register') }}" id="registerForm" onsubmit="document.getElementById('registerBtn').disabled = true; document.getElementById('registerBtnText').textContent = 'Processing...'; document.getElementById('registerBtnSpinner').classList.remove('hidden');">
             @csrf
 
             {{-- Row 1: Name + Username --}}
@@ -202,13 +202,6 @@
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                 </svg>
             </button>
-            <script>
-                document.querySelector('form').addEventListener('submit', function() {
-                    document.getElementById('registerBtn').disabled = true;
-                    document.getElementById('registerBtnText').textContent = 'Processing...';
-                    document.getElementById('registerBtnSpinner').classList.remove('hidden');
-                });
-            </script>
         </form>
 
         {{-- Link --}}
