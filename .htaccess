@@ -18,6 +18,9 @@
     RewriteCond %{REQUEST_URI} \.(jpg|jpeg|png|gif|ico|svg|webp|bmp|css|js|woff|woff2|ttf|eot|otf|map)$ [NC]
     RewriteRule ^ - [L]
 
+    # Serve custom homepage (test-homepage.html) for root URL
+    RewriteRule ^$ test-homepage.html [L]
+
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
