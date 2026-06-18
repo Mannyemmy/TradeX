@@ -1,4 +1,4 @@
-@extends('emails.layouts.master')
+﻿@extends('emails.layouts.master')
 
 @section('preheader')Your NFT bid has been approved!@endsection
 
@@ -9,7 +9,7 @@
 
 <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #374151;">
     Your bid of <strong>{{ number_format($bid->amount, 2) }} ETH</strong> for the NFT
-    <strong>&ldquo;{{ $nft->name }}&rdquo;</strong> has been <span style="color: #059669; font-weight: 600;">approved</span>!
+    <strong>&ldquo;{{ $nft->name }}&rdquo;</strong> has been <span style="color: #2E5C8A; font-weight: 600;">approved</span>!
 </p>
 
 <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #374151;">

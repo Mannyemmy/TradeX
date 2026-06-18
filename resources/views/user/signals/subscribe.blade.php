@@ -1,4 +1,4 @@
-@extends('layouts.dash1')
+﻿@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
 
@@ -88,7 +88,7 @@
             text: 'Subscribe for {{ $settings->currency }}' + price.toLocaleString() + '?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#059669',
+            confirmButtonColor: '#2E5C8A',
             cancelButtonColor: '#2A2F36',
             confirmButtonText: 'Yes, Subscribe!',
             cancelButtonText: 'Cancel',

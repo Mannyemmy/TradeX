@@ -15,32 +15,32 @@
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin: 0 0 24px;">
     <tr>
         <td style="padding: 8px 0; font-size: 14px; line-height: 1.5; color: #374151; border-bottom: 1px solid #F3F4F6;">
-            <span style="color: #059669; font-weight: 700;">&#9679;</span>&nbsp; <strong>Trading System</strong> &mdash; Buy, sell, and manage assets effortlessly.
+            <span style="color: #2E5C8A; font-weight: 700;">&#9679;</span>&nbsp; <strong>Trading System</strong> &mdash; Buy, sell, and manage assets effortlessly.
         </td>
     </tr>
     <tr>
         <td style="padding: 8px 0; font-size: 14px; line-height: 1.5; color: #374151; border-bottom: 1px solid #F3F4F6;">
-            <span style="color: #059669; font-weight: 700;">&#9679;</span>&nbsp; <strong>Copy Trading</strong> &mdash; Mirror expert traders' strategies for passive gains.
+            <span style="color: #2E5C8A; font-weight: 700;">&#9679;</span>&nbsp; <strong>Copy Trading</strong> &mdash; Mirror expert traders' strategies for passive gains.
         </td>
     </tr>
     <tr>
         <td style="padding: 8px 0; font-size: 14px; line-height: 1.5; color: #374151; border-bottom: 1px solid #F3F4F6;">
-            <span style="color: #059669; font-weight: 700;">&#9679;</span>&nbsp; <strong>NFT Marketplace</strong> &mdash; Trade exclusive digital assets securely.
+            <span style="color: #2E5C8A; font-weight: 700;">&#9679;</span>&nbsp; <strong>NFT Marketplace</strong> &mdash; Trade exclusive digital assets securely.
         </td>
     </tr>
     <tr>
         <td style="padding: 8px 0; font-size: 14px; line-height: 1.5; color: #374151; border-bottom: 1px solid #F3F4F6;">
-            <span style="color: #059669; font-weight: 700;">&#9679;</span>&nbsp; <strong>Signal Subscription</strong> &mdash; Stay ahead with premium market insights.
+            <span style="color: #2E5C8A; font-weight: 700;">&#9679;</span>&nbsp; <strong>Signal Subscription</strong> &mdash; Stay ahead with premium market insights.
         </td>
     </tr>
     <tr>
         <td style="padding: 8px 0; font-size: 14px; line-height: 1.5; color: #374151; border-bottom: 1px solid #F3F4F6;">
-            <span style="color: #059669; font-weight: 700;">&#9679;</span>&nbsp; <strong>Flexible Investment Management</strong> &mdash; Choose from tailored plans to suit your goals.
+            <span style="color: #2E5C8A; font-weight: 700;">&#9679;</span>&nbsp; <strong>Flexible Investment Management</strong> &mdash; Choose from tailored plans to suit your goals.
         </td>
     </tr>
     <tr>
         <td style="padding: 8px 0; font-size: 14px; line-height: 1.5; color: #374151;">
-            <span style="color: #059669; font-weight: 700;">&#9679;</span>&nbsp; <strong>Loan System</strong> &mdash; Access financial support when you need it.
+            <span style="color: #2E5C8A; font-weight: 700;">&#9679;</span>&nbsp; <strong>Loan System</strong> &mdash; Access financial support when you need it.
         </td>
     </tr>
 </table>
@@ -53,7 +53,7 @@
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                     <td width="36" valign="top" style="padding-right: 12px;">
-                        <span style="display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; background-color: #059669; color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700;">1</span>
+                        <span style="display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; background-color: #2E5C8A; color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700;">1</span>
                     </td>
                     <td style="font-size: 14px; line-height: 1.5; color: #374151;">
                         <strong>Make a Deposit</strong> &mdash; Fund your account securely.
@@ -68,7 +68,7 @@
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                     <td width="36" valign="top" style="padding-right: 12px;">
-                        <span style="display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; background-color: #059669; color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700;">2</span>
+                        <span style="display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; background-color: #2E5C8A; color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700;">2</span>
                     </td>
                     <td style="font-size: 14px; line-height: 1.5; color: #374151;">
                         <strong>Select an Investment Plan</strong> &mdash; Choose a strategy that fits your goals.
@@ -83,7 +83,7 @@
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                     <td width="36" valign="top" style="padding-right: 12px;">
-                        <span style="display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; background-color: #059669; color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700;">3</span>
+                        <span style="display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; background-color: #2E5C8A; color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700;">3</span>
                     </td>
                     <td style="font-size: 14px; line-height: 1.5; color: #374151;">
                         <strong>Sit Back &amp; Earn</strong> &mdash; Watch your money work for you!

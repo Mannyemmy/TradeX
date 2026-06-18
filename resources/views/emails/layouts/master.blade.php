@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,7 +48,7 @@
 
                     {{-- ========== HEADER ========== --}}
                     <tr>
-                        <td align="center" class="email-header-inner" style="background-color: #059669; padding: 24px 32px;">
+                        <td align="center" class="email-header-inner" style="background-color: #2E5C8A; padding: 24px 32px;">
                             @if(!empty($settings->logo))
                                 <a href="{{ config('app.url') }}" target="_blank" style="text-decoration: none;">
                                     <img src="{{ asset('storage/app/public/' . $settings->logo) }}"
@@ -112,7 +112,7 @@
 
                             @if(!empty($settings->contact_email))
                                 <p style="margin: 0 0 16px; font-size: 13px; line-height: 1.5; color: #9CA3AF;">
-                                    <a href="mailto:{{ $settings->contact_email }}" style="color: #059669; text-decoration: none;">
+                                    <a href="mailto:{{ $settings->contact_email }}" style="color: #2E5C8A; text-decoration: none;">
                                         {{ $settings->contact_email }}
                                     </a>
                                 </p>

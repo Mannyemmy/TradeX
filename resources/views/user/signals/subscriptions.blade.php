@@ -1,4 +1,4 @@
-@extends('layouts.dash1')
+﻿@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
 
@@ -85,7 +85,7 @@
             text: 'Renew ' + planName + ' for {{ $settings->currency }}' + price.toLocaleString() + '?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#059669',
+            confirmButtonColor: '#2E5C8A',
             cancelButtonColor: '#2A2F36',
             confirmButtonText: 'Yes, Renew!',
             cancelButtonText: 'Cancel',

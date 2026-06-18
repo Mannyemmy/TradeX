@@ -2,6 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(/c/xampp/mysql/bin/mysql.exe -u root --database=\"tradexpromax\" -e \"SHOW COLUMNS FROM withdrawals;\")"
-    ]
+    ],
+    "defaultMode": "bypassPermissions"
   }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.dash1')
+﻿@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
 
@@ -634,12 +634,12 @@
                             <p><strong>Amount:</strong> ${cs}${Number(this.amount).toFixed(2)}</p>
                             <p><strong>Leverage:</strong> ${this.leverage}x</p>
                             ${this.tradeType === 'binary' ? '<p><strong>Duration:</strong> ' + this.durationOptions.find(d => d.value === this.duration)?.label + '</p>' : '<p><strong>Duration:</strong> No expiry (spot)</p>'}
-                            <p><strong>Potential P/L:</strong> <span style="color:#22C55E">+${cs}${profitLoss}</span> / <span style="color:#EF4444">-${cs}${profitLoss}</span></p>
+                            <p><strong>Potential P/L:</strong> <span style="color:#1A3A7F">+${cs}${profitLoss}</span> / <span style="color:#EF4444">-${cs}${profitLoss}</span></p>
                         </div>
                     `,
                     icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: action === 'buy' ? '#22C55E' : '#EF4444',
+                    confirmButtonColor: action === 'buy' ? '#1A3A7F' : '#EF4444',
                     cancelButtonColor: '#2A2F36',
                     confirmButtonText: `${action.toUpperCase()} Now`,
                     cancelButtonText: "Cancel",

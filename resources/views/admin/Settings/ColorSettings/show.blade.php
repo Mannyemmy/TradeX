@@ -1,4 +1,4 @@
-@extends('layouts.admin-dash')
+﻿@extends('layouts.admin-dash')
 @section('title', 'Color Settings')
 
 @section('content')
@@ -145,10 +145,10 @@ function colorSettings() {
         saving: false,
         defaults: @json($defaults),
         colors: {
-            primary_color: '{{ $themeColors->primary_color ?? '#059669' }}',
-            primary_light: '{{ $themeColors->primary_light ?? '#34D399' }}',
-            primary_dark: '{{ $themeColors->primary_dark ?? '#047857' }}',
-            gain_color: '{{ $themeColors->gain_color ?? '#22C55E' }}',
+            primary_color: '{{ $themeColors->primary_color ?? '#2E5C8A' }}',
+            primary_light: '{{ $themeColors->primary_light ?? '#5DADE2' }}',
+            primary_dark: '{{ $themeColors->primary_dark ?? '#0F3A6E' }}',
+            gain_color: '{{ $themeColors->gain_color ?? '#1A3A7F' }}',
             loss_color: '{{ $themeColors->loss_color ?? '#EF4444' }}',
             warning_color: '{{ $themeColors->warning_color ?? '#F59E0B' }}',
             info_color: '{{ $themeColors->info_color ?? '#3B82F6' }}',

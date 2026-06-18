@@ -1,4 +1,4 @@
-@php
+﻿@php
 use App\Models\Wdmethod;
 $dmethods = $paymethod = collect(); // lazy-loaded below only when deposit modals are needed
 $showDepositModals = request()->is('dashboard') || request()->is('dashboard/deposits*') || request()->is('dashboard/payment*');
@@ -50,12 +50,12 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
                         inverse: '{{ $themeColors->surface_base ?? '#0F1115' }}',
                     },
                     primary: {
-                        DEFAULT: '{{ $themeColors->primary_color ?? '#059669' }}',
-                        light: '{{ $themeColors->primary_light ?? '#34D399' }}',
-                        dark: '{{ $themeColors->primary_dark ?? '#047857' }}',
-                        subtle: '{!! \App\Models\ThemeColor::hexToRgba($themeColors->primary_color ?? '#059669', 0.12) !!}',
+                        DEFAULT: '{{ $themeColors->primary_color ?? '#2E5C8A' }}',
+                        light: '{{ $themeColors->primary_light ?? '#5DADE2' }}',
+                        dark: '{{ $themeColors->primary_dark ?? '#0F3A6E' }}',
+                        subtle: '{!! \App\Models\ThemeColor::hexToRgba($themeColors->primary_color ?? '#2E5C8A', 0.12) !!}',
                     },
-                    gain: '{{ $themeColors->gain_color ?? '#22C55E' }}',
+                    gain: '{{ $themeColors->gain_color ?? '#1A3A7F' }}',
                     loss: '{{ $themeColors->loss_color ?? '#EF4444' }}',
                     warning: '{{ $themeColors->warning_color ?? '#F59E0B' }}',
                     info: '{{ $themeColors->info_color ?? '#3B82F6' }}',

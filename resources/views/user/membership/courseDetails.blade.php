@@ -1,4 +1,4 @@
-@extends('layouts.dash1')
+﻿@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
 
@@ -129,7 +129,7 @@
             text: '{{ !$course->amount ? \App\Helpers\CurrencyHelper::formatForUser(0) : \App\Helpers\CurrencyHelper::formatForUser($course->amount) }} will be deducted from your account balance.',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#059669',
+            confirmButtonColor: '#2E5C8A',
             cancelButtonColor: '#2A2F36',
             confirmButtonText: 'Confirm Purchase',
             cancelButtonText: 'Cancel',

@@ -1,4 +1,4 @@
-@php
+﻿@php
     $score = Auth::user()->signal_strength_score ?? 0;
     if ($score >= 50) {
         $tierLabel = 'Strong Signal';
@@ -36,7 +36,7 @@
     {{-- Progress Bar --}}
     <div class="w-full h-3 rounded-full bg-surface-overlay overflow-hidden mb-2">
         <div class="h-full rounded-full transition-all duration-500"
-             style="width: {{ $score }}%; background: linear-gradient(90deg, #22C55E, #10B981);"></div>
+             style="width: {{ $score }}%; background: linear-gradient(90deg, #1A3A7F, #2E5C8A);"></div>
     </div>
 
     {{-- Scale Labels --}}

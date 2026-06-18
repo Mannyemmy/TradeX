@@ -1,4 +1,4 @@
-@extends('layouts.dash1')
+﻿@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
 
@@ -218,12 +218,12 @@
                 datasets: [{
                     label: 'Price ($)',
                     data: {!! json_encode($priceHistory->pluck('price')) !!},
-                    borderColor: '#059669',
+                    borderColor: '#2E5C8A',
                     backgroundColor: 'rgba(5, 150, 105, 0.1)',
                     fill: true,
                     tension: 0.3,
                     pointRadius: 3,
-                    pointBackgroundColor: '#059669',
+                    pointBackgroundColor: '#2E5C8A',
                 }]
             },
             options: {

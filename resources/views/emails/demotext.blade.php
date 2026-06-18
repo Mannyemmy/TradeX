@@ -1,4 +1,4 @@
-@extends('emails.layouts.master')
+﻿@extends('emails.layouts.master')
 
 @section('preheader')Welcome to {{ $settings->site_name ?? config('app.name') }}!@endsection
 
@@ -30,7 +30,7 @@
 @if(!empty($settings->contact_email))
 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #374151;">
     If you need any help, do not hesitate to reach out to us at
-    <a href="mailto:{{ $settings->contact_email }}" style="color: #059669; text-decoration: none;">{{ $settings->contact_email }}</a>.
+    <a href="mailto:{{ $settings->contact_email }}" style="color: #2E5C8A; text-decoration: none;">{{ $settings->contact_email }}</a>.
 </p>
 @endif
 @endsection

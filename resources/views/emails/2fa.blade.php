@@ -1,4 +1,4 @@
-@extends('emails.layouts.master')
+﻿@extends('emails.layouts.master')
 
 @section('preheader')Your 2FA verification code@endsection
 
@@ -14,7 +14,7 @@
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 24px auto; text-align: center;">
     <tr>
         <td style="background-color: #F3F4F6; border: 1px solid #E5E7EB; border-radius: 8px; padding: 16px 32px;">
-            <span style="font-size: 28px; font-weight: 700; letter-spacing: 4px; color: #059669; font-family: 'Courier New', monospace;">
+            <span style="font-size: 28px; font-weight: 700; letter-spacing: 4px; color: #2E5C8A; font-family: 'Courier New', monospace;">
                 {!! $demo->message !!}
             </span>
         </td>

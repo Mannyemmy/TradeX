@@ -22,15 +22,15 @@
     @endphp
     <style>
         :root {
-            --primary: {{ $hexToRgb($tc->primary_color ?? '#059669') }};
-            --primary-hover: {{ $hexToRgb($tc->primary_dark ?? '#047857') }};
-            --primary-light: 240 253 250;
+            --primary: {{ $hexToRgb($tc->primary_color ?? '#2E5C8A') }};
+            --primary-hover: {{ $hexToRgb($tc->primary_dark ?? '#0F3A6E') }};
+            --primary-light: 219 234 254;
             --primary-foreground: 255 255 255;
             --secondary: 51 65 85;
             --secondary-hover: 30 41 59;
             --secondary-light: 241 245 249;
             --secondary-foreground: 255 255 255;
-            --accent: {{ $hexToRgb($tc->primary_light ?? '#34D399') }};
+            --accent: {{ $hexToRgb($tc->primary_light ?? '#5DADE2') }};
             --surface: 248 250 252;
             --surface-card: 255 255 255;
             --surface-alt: 241 245 249;
@@ -49,7 +49,7 @@
             --content-secondary: 71 85 105;
             --content-muted: 148 163 184;
             --content-inverse: 255 255 255;
-            --success: {{ $hexToRgb($tc->gain_color ?? '#22C55E') }};
+            --success: {{ $hexToRgb($tc->gain_color ?? '#1A3A7F') }};
             --success-light: 236 253 245;
             --warning: {{ $hexToRgb($tc->warning_color ?? '#F59E0B') }};
             --warning-light: 255 251 235;
@@ -57,16 +57,16 @@
             --danger-light: 254 242 242;
             --info: {{ $hexToRgb($tc->info_color ?? '#3B82F6') }};
             --info-light: 240 249 255;
-            --chart-1: {{ $hexToRgb($tc->primary_color ?? '#059669') }};
+            --chart-1: {{ $hexToRgb($tc->primary_color ?? '#2E5C8A') }};
             --chart-2: {{ $hexToRgb($tc->info_color ?? '#3B82F6') }};
             --chart-3: {{ $hexToRgb($tc->warning_color ?? '#F59E0B') }};
-            --chart-4: {{ $hexToRgb($tc->gain_color ?? '#22C55E') }};
+            --chart-4: {{ $hexToRgb($tc->gain_color ?? '#1A3A7F') }};
             --chart-5: {{ $hexToRgb($tc->loss_color ?? '#EF4444') }};
         }
         .dark {
-            --primary: {{ $hexToRgb($tc->primary_light ?? '#34D399') }};
-            --primary-hover: {{ $hexToRgb($tc->primary_color ?? '#059669') }};
-            --primary-light: 19 78 74;
+            --primary: {{ $hexToRgb($tc->primary_light ?? '#5DADE2') }};
+            --primary-hover: {{ $hexToRgb($tc->primary_color ?? '#2E5C8A') }};
+            --primary-light: 30 58 138;
             --primary-foreground: 15 23 42;
             --surface: 15 23 42;
             --surface-card: 30 41 59;

@@ -36,7 +36,7 @@
         <div>
             <label class="block text-sm font-medium text-[#9AA0AB] mb-2">Enter Amount to Withdraw (@userCurrency)</label>
             <input type="number" wire:model="amount" name="amount" required placeholder="Enter Amount"
-                class="w-full bg-[#1C2127] border border-[#2A2F36] rounded-lg px-4 py-3 text-[#E8EAED] placeholder-[#6B7280] focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+                class="w-full bg-[#1C2127] border border-[#2A2F36] rounded-lg px-4 py-3 text-[#E8EAED] placeholder-[#6B7280] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
         </div>
 
         <input value="{{ $payment_mode }}" type="hidden" name="method">
@@ -47,24 +47,24 @@
                     <label class="text-sm font-medium text-[#9AA0AB]">Enter OTP</label>
                     <div>
                         <a href="#" wire:click="requestOtp" wire:loading.remove wire:target="requestOtp"
-                            class="inline-flex items-center gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-md transition-colors">
+                            class="inline-flex items-center gap-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md transition-colors">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                             Request OTP
                         </a>
-                        <span class="text-xs text-emerald-400" wire:loading wire:target="requestOtp">Sending OTP to your email...</span>
+                        <span class="text-xs text-blue-400" wire:loading wire:target="requestOtp">Sending OTP to your email...</span>
                     </div>
                 </div>
                 <input type="text" wire:model="otpCode" required placeholder="Enter OTP"
-                    class="w-full bg-[#1C2127] border border-[#2A2F36] rounded-lg px-4 py-3 text-[#E8EAED] placeholder-[#6B7280] focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+                    class="w-full bg-[#1C2127] border border-[#2A2F36] rounded-lg px-4 py-3 text-[#E8EAED] placeholder-[#6B7280] focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
                 <p class="mt-1.5 text-xs text-[#6B7280]">OTP will be sent to your email when you request</p>
             </div>
         @endif
 
         <div>
             <button type="submit" wire:loading.attr="disabled" wire:target="withdraw"
-                class="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                class="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
                 Complete Request
             </button>
         </div>

@@ -1,4 +1,4 @@
-@extends('layouts.dash1')
+﻿@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
 
@@ -680,10 +680,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const values = Object.values(data);
 
     const colorMap = {
-        'Trading':      '#059669',
+        'Trading':      '#2E5C8A',
         'Investments':  '#3B82F6',
         'Copy Trading': '#F59E0B',
-        'Pre-IPO':      '#22C55E',
+        'Pre-IPO':      '#1A3A7F',
         'Stocks':       '#8B5CF6',
         'NFTs':         '#EC4899',
     };

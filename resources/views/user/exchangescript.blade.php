@@ -1,4 +1,4 @@
-{{-- Exchange/Swap Script — included by asset.blade.php --}}
+﻿{{-- Exchange/Swap Script — included by asset.blade.php --}}
 <script>
 (function() {
     const destinationAsset = document.getElementById('destinationasset');
@@ -15,7 +15,7 @@
             text: message,
             background: '#161A1E',
             color: '#E8EAED',
-            confirmButtonColor: '#059669'
+            confirmButtonColor: '#2E5C8A'
         });
     }
 
@@ -26,7 +26,7 @@
             text: message,
             background: '#161A1E',
             color: '#E8EAED',
-            confirmButtonColor: '#059669'
+            confirmButtonColor: '#2E5C8A'
         });
     }
 

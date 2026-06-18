@@ -1,4 +1,4 @@
-@extends('emails.layouts.master')
+﻿@extends('emails.layouts.master')
 
 @section('preheader'){{ $foramin ? 'New deposit notification' : 'Deposit ' . ($deposit->status == 'Processed' ? 'confirmed' : 'received') }}@endsection
 
@@ -25,13 +25,13 @@
 
         <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #374151;">
             Your deposit of <strong>{{ \App\Helpers\CurrencyHelper::formatForUser($deposit->amount, $user) }}</strong> has been successfully
-            <span style="color: #059669; font-weight: 600;">processed and confirmed</span>.
+            <span style="color: #2E5C8A; font-weight: 600;">processed and confirmed</span>.
         </p>
 
         @include('emails.partials.transaction-details', ['details' => [
             ['label' => 'Amount', 'value' => \App\Helpers\CurrencyHelper::formatForUser($deposit->amount, $user)],
             ['label' => 'Payment Method', 'value' => $deposit->payment_mode],
-            ['label' => 'Status', 'value' => '<span style="color: #059669; font-weight: 600;">&#10003; Confirmed</span>'],
+            ['label' => 'Status', 'value' => '<span style="color: #2E5C8A; font-weight: 600;">&#10003; Confirmed</span>'],
             ['label' => 'Account Balance', 'value' => \App\Helpers\CurrencyHelper::formatForUser($user->account_bal, $user)],
         ]])
 

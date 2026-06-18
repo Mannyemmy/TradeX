@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     {{-- Meta --}}
@@ -8,7 +8,7 @@
     <meta name="description" content="{{ $settings->site_name }} - Unlock the Power of Your Finance" />
     <meta property="og:image" content="{{ asset('storage/app/public/' . $settings->logo) }}" />
     <meta property="og:url" content="{{ $settings->site_address }}">
-    <meta name="theme-color" content="{{ $themeColors->primary_color ?? '#059669' }}" />
+    <meta name="theme-color" content="{{ $themeColors->primary_color ?? '#2E5C8A' }}" />
     <link rel="shortcut icon" href="{{ asset('storage/app/public/' . $settings->favicon) }}" type="image/x-icon">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('storage/app/public/' . $settings->favicon) }}" />
 
@@ -37,10 +37,10 @@
                         inverse: '{{ $themeColors->surface_base ?? '#0F1115' }}',
                     },
                     primary: {
-                        DEFAULT: '{{ $themeColors->primary_color ?? '#059669' }}',
-                        light: '{{ $themeColors->primary_light ?? '#34D399' }}',
-                        dark: '{{ $themeColors->primary_dark ?? '#047857' }}',
-                        subtle: '{!! \App\Models\ThemeColor::hexToRgba($themeColors->primary_color ?? '#059669', 0.12) !!}',
+                        DEFAULT: '{{ $themeColors->primary_color ?? '#2E5C8A' }}',
+                        light: '{{ $themeColors->primary_light ?? '#5DADE2' }}',
+                        dark: '{{ $themeColors->primary_dark ?? '#0F3A6E' }}',
+                        subtle: '{!! \App\Models\ThemeColor::hexToRgba($themeColors->primary_color ?? '#2E5C8A', 0.12) !!}',
                     },
                     body: {
                         bg: '{{ $themeColors->body_bg ?? '#F5F7F9' }}',
@@ -48,7 +48,7 @@
                         muted: '{{ $themeColors->body_muted ?? '#6B7280' }}',
                         border: '{{ $themeColors->body_border ?? '#E5E7EB' }}',
                     },
-                    gain: '{{ $themeColors->gain_color ?? '#22C55E' }}',
+                    gain: '{{ $themeColors->gain_color ?? '#1A3A7F' }}',
                     loss: '{{ $themeColors->loss_color ?? '#EF4444' }}',
                     warning: '{{ $themeColors->warning_color ?? '#F59E0B' }}',
                     info: '{{ $themeColors->info_color ?? '#3B82F6' }}',

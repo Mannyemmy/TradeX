@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -34,9 +34,9 @@
                         inverse: '#0F1115',
                     },
                     primary: {
-                        DEFAULT: '#059669',
-                        light: '#34D399',
-                        dark: '#047857',
+                        DEFAULT: '#2E5C8A',
+                        light: '#5DADE2',
+                        dark: '#0F3A6E',
                         subtle: 'rgba(5,150,105,0.12)',
                     },
                 },

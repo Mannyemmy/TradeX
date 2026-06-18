@@ -1,4 +1,4 @@
-@extends('layouts.dash1')
+﻿@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
 
@@ -236,7 +236,7 @@
                     text: 'Are you sure you want to buy this NFT for {{ $nft->price }} ETH?',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#059669',
+                    confirmButtonColor: '#2E5C8A',
                     cancelButtonColor: '#2A2F36',
                     confirmButtonText: 'Yes, Buy Now',
                     cancelButtonText: 'Cancel',
@@ -253,7 +253,7 @@
             bidBtn.addEventListener('click', function() {
                 const amount = document.querySelector('#bid-form input[name="amount"]').value;
                 if (!amount || amount <= 0) {
-                    Swal.fire({ title: 'Error', text: 'Please enter a valid bid amount.', icon: 'error', background: '#161A1E', color: '#E8EAED', confirmButtonColor: '#059669' });
+                    Swal.fire({ title: 'Error', text: 'Please enter a valid bid amount.', icon: 'error', background: '#161A1E', color: '#E8EAED', confirmButtonColor: '#2E5C8A' });
                     return;
                 }
                 Swal.fire({
@@ -261,7 +261,7 @@
                     text: 'Place a bid of ' + amount + ' ETH?',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#059669',
+                    confirmButtonColor: '#2E5C8A',
                     cancelButtonColor: '#2A2F36',
                     confirmButtonText: 'Yes, Place Bid',
                     cancelButtonText: 'Cancel',

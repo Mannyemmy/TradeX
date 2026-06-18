@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -35,12 +35,12 @@
                         inverse: '#0F1115',
                     },
                     primary: {
-                        DEFAULT: '#059669',
-                        light: '#34D399',
-                        dark: '#047857',
+                        DEFAULT: '#2E5C8A',
+                        light: '#5DADE2',
+                        dark: '#0F3A6E',
                         subtle: 'rgba(5,150,105,0.12)',
                     },
-                    gain: '#22C55E',
+                    gain: '#1A3A7F',
                     loss: '#EF4444',
                     warning: '#F59E0B',
                     info: '#3B82F6',

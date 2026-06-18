@@ -1,4 +1,4 @@
-@extends('emails.layouts.master')
+﻿@extends('emails.layouts.master')
 
 @section('preheader')Your trade for {{ $trade->asset_name }} has been updated@endsection
 
@@ -12,7 +12,7 @@
 </p>
 
 @php
-    $plColor = $trade->profit_loss >= 0 ? '#059669' : '#DC2626';
+    $plColor = $trade->profit_loss >= 0 ? '#2E5C8A' : '#DC2626';
     $plSign = $trade->profit_loss >= 0 ? '+' : '-';
 @endphp
 

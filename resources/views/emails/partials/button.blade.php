@@ -1,9 +1,9 @@
 {{--
     Bulletproof email CTA button.
     Usage: @include('emails.partials.button', ['url' => '...', 'label' => 'View Dashboard'])
-    Optional: 'color' => '#059669' (default emerald)
+    Optional: 'color' => '#2E5C8A' (default emerald)
 --}}
-@php $btnColor = $color ?? '#059669'; @endphp
+@php $btnColor = $color ?? '#2E5C8A'; @endphp
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
     <tr>
         <td align="center" class="btn-td" style="background-color: {{ $btnColor }}; border-radius: 6px; padding: 14px 28px;">

@@ -1,4 +1,4 @@
-@inject('uc', 'App\Http\Controllers\User\UsersController')
+﻿@inject('uc', 'App\Http\Controllers\User\UsersController')
 @php
     $array = \App\Models\User::all();
     $usr = Auth::user()->id;
@@ -95,7 +95,7 @@
                 icon: 'success',
                 background: '#161A1E',
                 color: '#E8EAED',
-                confirmButtonColor: '#059669',
+                confirmButtonColor: '#2E5C8A',
                 timer: 2000,
                 timerProgressBar: true
             });

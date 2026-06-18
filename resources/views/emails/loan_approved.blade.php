@@ -1,4 +1,4 @@
-@extends('emails.layouts.master')
+﻿@extends('emails.layouts.master')
 
 @section('preheader')Your loan application has been approved@endsection
 
@@ -8,7 +8,7 @@
 <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700; color: #111827;">Loan Application Approved</h2>
 
 <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #374151;">
-    We are pleased to inform you that your loan application has been <span style="color: #059669; font-weight: 600;">approved</span> and the funds have been credited to your account.
+    We are pleased to inform you that your loan application has been <span style="color: #2E5C8A; font-weight: 600;">approved</span> and the funds have been credited to your account.
 </p>
 
 @php $settings = \App\Models\Settings::find(1); @endphp
@@ -19,7 +19,7 @@
     ['label' => 'Duration', 'value' => $loan->duration . ' months'],
     ['label' => 'Interest Rate', 'value' => $loan->interest_rate . '% ' . ucfirst($loan->interest_type ?? '')],
     ['label' => 'First Payment', 'value' => $loan->first_payment_date ? $loan->first_payment_date->format('M d, Y') : 'N/A'],
-    ['label' => 'Status', 'value' => '<span style="color: #059669; font-weight: 600;">Approved &amp; Disbursed</span>'],
+    ['label' => 'Status', 'value' => '<span style="color: #2E5C8A; font-weight: 600;">Approved &amp; Disbursed</span>'],
 ]])
 
 <p style="margin: 16px 0 0; font-size: 15px; line-height: 1.6; color: #374151;">

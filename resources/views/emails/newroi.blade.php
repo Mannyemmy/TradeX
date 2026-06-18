@@ -1,4 +1,4 @@
-@extends('emails.layouts.master')
+﻿@extends('emails.layouts.master')
 
 @section('preheader')New ROI received on your investment@endsection
 
@@ -13,7 +13,7 @@
 
 @include('emails.partials.transaction-details', ['details' => [
     ['label' => 'Plan', 'value' => $plan],
-    ['label' => 'Amount', 'value' => '<span style="color: #059669; font-weight: 600;">' . \App\Helpers\CurrencyHelper::formatForUser($amount, $user ?? null) . '</span>'],
+    ['label' => 'Amount', 'value' => '<span style="color: #2E5C8A; font-weight: 600;">' . \App\Helpers\CurrencyHelper::formatForUser($amount, $user ?? null) . '</span>'],
     ['label' => 'Date', 'value' => $plandate],
 ]])
 @endsection

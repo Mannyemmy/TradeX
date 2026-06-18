@@ -1,4 +1,4 @@
-@extends('layouts.dash1')
+﻿@extends('layouts.dash1')
 @section('title', $title)
 @section('content')
 
@@ -87,7 +87,7 @@ function transferForm() {
                 inputPlaceholder: 'Enter your account password',
                 background: '#161A1E',
                 color: '#E8EAED',
-                confirmButtonColor: '#059669',
+                confirmButtonColor: '#2E5C8A',
                 showCancelButton: true,
                 cancelButtonColor: '#2A2F36'
             });
@@ -99,7 +99,7 @@ function transferForm() {
                     icon: 'error',
                     background: '#161A1E',
                     color: '#E8EAED',
-                    confirmButtonColor: '#059669'
+                    confirmButtonColor: '#2E5C8A'
                 });
                 return;
             }
@@ -128,7 +128,7 @@ function transferForm() {
                         icon: 'success',
                         background: '#161A1E',
                         color: '#E8EAED',
-                        confirmButtonColor: '#059669'
+                        confirmButtonColor: '#2E5C8A'
                     });
                     setTimeout(() => {
                         window.location.href = "{{ url('/dashboard/transfer-funds') }}";
@@ -140,7 +140,7 @@ function transferForm() {
                         icon: 'error',
                         background: '#161A1E',
                         color: '#E8EAED',
-                        confirmButtonColor: '#059669'
+                        confirmButtonColor: '#2E5C8A'
                     });
                 }
             } catch (err) {
@@ -151,7 +151,7 @@ function transferForm() {
                     icon: 'error',
                     background: '#161A1E',
                     color: '#E8EAED',
-                    confirmButtonColor: '#059669'
+                    confirmButtonColor: '#2E5C8A'
                 });
             } finally {
                 this.loading = false;

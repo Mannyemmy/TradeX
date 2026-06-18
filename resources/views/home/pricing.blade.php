@@ -19,7 +19,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
         @php
             $services = [
-                ['color' => 'emerald', 'hex' => '#059669', 'title' => 'Forex', 'desc' => 'Trade major, minor and exotic currency pairs. Spreads and fees are published on your trading dashboard before you place an order.'],
+                ['color' => 'blue', 'hex' => '#2E5C8A', 'title' => 'Forex', 'desc' => 'Trade major, minor and exotic currency pairs. Spreads and fees are published on your trading dashboard before you place an order.'],
                 ['color' => 'blue', 'hex' => '#2563EB', 'title' => 'Stock CFDs', 'desc' => 'Speculate on price movements of well-known stocks. You do not own the underlying shares — you trade on the price difference.'],
                 ['color' => 'purple', 'hex' => '#7C3AED', 'title' => 'Commodities', 'desc' => 'Trade CFDs on gold, silver, oil and other commodities. Prices are sourced from market data providers.'],
                 ['color' => 'sky', 'hex' => '#0284C7', 'title' => 'Indices', 'desc' => 'Access CFDs on popular stock indices. Track the broader market direction without trading individual stocks.'],

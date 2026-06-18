@@ -1,4 +1,4 @@
-@php
+﻿@php
     $sub_link = 'https://trade.mql5.com/trade';
 @endphp
 @extends('layouts.dash1')
@@ -98,7 +98,7 @@
             icon: 'info',
             background: '#161A1E',
             color: '#E8EAED',
-            confirmButtonColor: '#059669',
+            confirmButtonColor: '#2E5C8A',
             confirmButtonText: 'Okay'
         });
     }

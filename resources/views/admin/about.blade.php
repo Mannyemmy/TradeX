@@ -1,4 +1,4 @@
-@extends('layouts.admin-dash')
+﻿@extends('layouts.admin-dash')
 @section('title', 'Platform Features Guide')
 
 @section('content')
@@ -1027,7 +1027,7 @@
             <div class="bg-surface-alt rounded-lg p-4">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="w-4 h-4 rounded-full" style="background: #0F1115;"></div>
-                    <div class="w-4 h-4 rounded-full" style="background: #059669;"></div>
+                    <div class="w-4 h-4 rounded-full" style="background: #2E5C8A;"></div>
                     <h4 class="text-sm font-semibold text-content">User Dashboard</h4>
                 </div>
                 <p class="text-xs text-content-secondary">Dark + emerald green theme. Professional, Robinhood/Binance-inspired. Responsive, sidebar navigation, Inter font, smooth transitions, live price tickers.</p>
