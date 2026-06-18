@@ -13,12 +13,12 @@ class CreateThemeColorsTable extends Migration
             $table->id();
 
             // Primary colors
-            $table->string('primary_color', 9)->default('#059669');
-            $table->string('primary_light', 9)->default('#34D399');
-            $table->string('primary_dark', 9)->default('#047857');
+            $table->string('primary_color', 9)->default('#2E5C8A');
+            $table->string('primary_light', 9)->default('#5DADE2');
+            $table->string('primary_dark', 9)->default('#0F3A6E');
 
             // Signal colors
-            $table->string('gain_color', 9)->default('#22C55E');
+            $table->string('gain_color', 9)->default('#1A3A7F');
             $table->string('loss_color', 9)->default('#EF4444');
             $table->string('warning_color', 9)->default('#F59E0B');
             $table->string('info_color', 9)->default('#3B82F6');
