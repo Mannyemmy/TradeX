@@ -26,7 +26,7 @@
     }
     .fid-btn {
         width: 100%;
-        background: #00754A;
+        background: #2E5C8A;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -36,7 +36,7 @@
         cursor: pointer;
         transition: background 0.15s;
     }
-    .fid-btn:hover { background: #005c3a; }
+    .fid-btn:hover { background: #1a3a7f; }
     .fid-label {
         display: block;
         font-size: 0.875rem;
@@ -45,7 +45,7 @@
         margin-bottom: 0.375rem;
     }
     .fid-link {
-        color: #00754A;
+        color: #2E5C8A;
         text-decoration: none;
     }
     .fid-link:hover { text-decoration: underline; }
@@ -86,7 +86,7 @@
 
             {{-- Username / Email --}}
             <div style="margin-bottom: 1rem;">
-                <label for="fid-email" class="fid-label">Username</label>
+                <label for="fid-email" class="fid-label">Email</label>
                 <input
                     type="text"
                     id="fid-email"
@@ -146,7 +146,7 @@
         {{-- Forgot password --}}
         <div style="margin-top: 1.25rem;">
             <a href="{{ route('password.request') }}" class="fid-link" style="font-size: 0.875rem;">
-                Forgot username or password?
+                Forgot password?
             </a>
         </div>
 
