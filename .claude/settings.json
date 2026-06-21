@@ -5,7 +5,8 @@
       "Read(//d/Dev/wealthwise-redesign/**)",
       "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"D:\\\\Dev\\\\wealthwise-redesign\\\\register.html\"\\); $text = [System.Text.Encoding]::UTF8.GetString\\($bytes\\); $bodyStart = $text.IndexOf\\('<body'\\); $text.Substring\\($bodyStart + 15000, 15000\\))",
       "Bash(ls \"C:/Users/DELL/Downloads/\" | grep -i \"fidelity\\\\|log.in\\\\|login\")",
-      "Read(//c/Users/DELL/Downloads/**)"
+      "Read(//c/Users/DELL/Downloads/**)",
+      "Bash(node -e ' *)"
     ],
     "defaultMode": "bypassPermissions"
   }
