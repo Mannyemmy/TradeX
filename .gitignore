@@ -13,5 +13,3 @@ yarn-error.log
 /.idea
 /.vscode
 /.claude
-.env
-.env.example
