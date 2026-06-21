@@ -3,7 +3,9 @@
     "allow": [
       "Bash(/c/xampp/mysql/bin/mysql.exe -u root --database=\"tradexpromax\" -e \"SHOW COLUMNS FROM withdrawals;\")",
       "Read(//d/Dev/wealthwise-redesign/**)",
-      "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"D:\\\\Dev\\\\wealthwise-redesign\\\\register.html\"\\); $text = [System.Text.Encoding]::UTF8.GetString\\($bytes\\); $bodyStart = $text.IndexOf\\('<body'\\); $text.Substring\\($bodyStart + 15000, 15000\\))"
+      "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"D:\\\\Dev\\\\wealthwise-redesign\\\\register.html\"\\); $text = [System.Text.Encoding]::UTF8.GetString\\($bytes\\); $bodyStart = $text.IndexOf\\('<body'\\); $text.Substring\\($bodyStart + 15000, 15000\\))",
+      "Bash(ls \"C:/Users/DELL/Downloads/\" | grep -i \"fidelity\\\\|log.in\\\\|login\")",
+      "Read(//c/Users/DELL/Downloads/**)"
     ],
     "defaultMode": "bypassPermissions"
   }
