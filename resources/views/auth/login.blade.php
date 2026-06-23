@@ -6,7 +6,7 @@
     <title>Log in | {{ $settings->site_name }}</title>
     <link rel="icon" href="{{ asset('storage/app/public/' . $settings->favicon) }}" sizes="any">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Raleway:wght@800&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -17,31 +17,138 @@
             min-height: 100vh;
         }
 
+        /* ── Header nav (like test-homepage) ── */
+        .site-header {
+            background: #0F3A6E;
+            padding: 0 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .site-header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .site-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .site-header-logo img { height: 40px; width: auto; }
+        .site-header-logo span {
+            font-family: 'Raleway', 'Segoe UI', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fff;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+        .site-header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .site-header-nav a {
+            font-size: 0.875rem;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .site-header-nav a:hover { text-decoration: underline; }
+        .site-header-nav .btn-outline {
+            border: 1px solid #fff;
+            border-radius: 50px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 600;
+            transition: background 0.15s, color 0.15s;
+        }
+        .site-header-nav .btn-outline:hover {
+            background: #fff;
+            color: #0F3A6E;
+            text-decoration: none;
+        }
+
+        /* ── Hamburger (mobile only) ── */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2.5px;
+            background: #fff;
+            border-radius: 2px;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        /* ── Mobile menu overlay ── */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0F3A6E;
+            z-index: 99;
+            padding: 1.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow-y: auto;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.125rem;
+            font-weight: 500;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+        .mobile-menu a:last-of-type { border-bottom: none; }
+        .mobile-menu .btn-outline {
+            border: 1px solid #fff;
+            border-radius: 50px;
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 0.5rem;
+            display: block;
+        }
+        .mobile-menu .btn-outline:hover {
+            background: #fff;
+            color: #0F3A6E;
+            text-decoration: none;
+        }
+
         /* ── Desktop layout: centered card ── */
         .page {
-            min-height: 100vh;
+            min-height: calc(100vh - 64px);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2.5rem 1rem 3rem;
+            padding: 3rem 1rem 3rem;
         }
 
         .container {
             width: 100%;
             max-width: 448px;
         }
-
-        /* ── Desktop: small logo above card ── */
-        .desktop-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.25rem;
-        }
-        .desktop-header img { height: 36px; object-fit: contain; }
-        .desktop-header-nav { display: flex; gap: 1rem; }
-        .desktop-header-nav a { font-size: 0.875rem; color: #333; text-decoration: none; }
-        .desktop-header-nav a:hover { text-decoration: underline; }
 
         /* ── Card ── */
         .card {
@@ -53,7 +160,7 @@
 
         /* ── Mobile logo inside card ── */
         .mobile-logo { display: none; margin-bottom: 1.5rem; }
-        .mobile-logo img { height: 36px; object-fit: contain; }
+        .mobile-logo img { height: 40px; width: auto; }
 
         /* ── Alert ── */
         .alert {
@@ -192,11 +299,21 @@
             .page { padding: 0; align-items: stretch; background: #fff; }
             .container { max-width: 100%; }
 
-            /* Hide the above-card desktop header on mobile */
-            .desktop-header { display: none; }
+            /* Header: smaller padding on mobile */
+            .site-header { padding: 0 0.75rem; }
+            .site-header-inner { height: 56px; }
+            .site-header-logo img { height: 32px; }
+            .site-header-logo span { font-size: 20px; }
 
-            /* Show logo inside card */
-            .mobile-logo { display: block; }
+            /* Hide desktop nav links on mobile, show hamburger */
+            .site-header-nav { display: none; }
+            .hamburger { display: flex; }
+
+            /* Mobile menu top offset matches mobile header height */
+            .mobile-menu { top: 56px; }
+
+            /* Hide mobile logo inside card (header handles it) */
+            .mobile-logo { display: none; }
 
             /* Card loses all borders on mobile */
             .card {
@@ -217,24 +334,46 @@
 </head>
 <body>
 
+{{-- Header nav (like test-homepage) --}}
+<div class="site-header">
+    <div class="site-header-inner">
+        <a href="/" class="site-header-logo">
+            <img src="{{ asset('storage/app/public/' . $settings->logo) }}" alt="{{ $settings->site_name }}">
+            <span>{{ $settings->site_name }}</span>
+        </a>
+        <nav class="site-header-nav">
+            <a href="{{ url('/') }}">Security</a>
+            <a href="{{ url('/faq') }}">FAQs</a>
+            <a href="{{ url('register') }}" class="btn-outline">Open an account</a>
+        </nav>
+        <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</div>
+
+{{-- Mobile menu overlay --}}
+<div class="mobile-menu" id="mobileMenu">
+    <a href="{{ url('/') }}">Security</a>
+    <a href="{{ url('/faq') }}">FAQs</a>
+    <a href="{{ url('register') }}" class="btn-outline">Open an account</a>
+    <a href="{{ route('login') }}">Log in</a>
+</div>
+
 <div class="page">
     <div class="container">
-
-        {{-- Desktop header (logo + nav) — hidden on mobile --}}
-        <div class="desktop-header">
-            <a href="/"><img src="{{ asset('storage/app/public/' . $settings->logo) }}" alt="{{ $settings->site_name }}"></a>
-            <nav class="desktop-header-nav">
-                <a href="{{ url('/') }}">Security</a>
-                <a href="{{ url('/faq') }}">FAQs</a>
-            </nav>
-        </div>
 
         {{-- Card --}}
         <div class="card">
 
             {{-- Mobile logo — inside card, hidden on desktop --}}
             <div class="mobile-logo">
-                <a href="/"><img src="{{ asset('storage/app/public/' . $settings->logo) }}" alt="{{ $settings->site_name }}"></a>
+                <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+                    <img src="{{ asset('storage/app/public/' . $settings->logo) }}" alt="{{ $settings->site_name }}" style="height:40px;width:auto;">
+                    <span>{{ $settings->site_name }}</span>
+                </a>
             </div>
 
             @if (Session::has('status'))
@@ -328,6 +467,26 @@ function togglePwd() {
     open.style.display  = show ? 'none' : '';
     closed.style.display = show ? ''    : 'none';
 }
+
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const btn  = document.querySelector('.hamburger');
+    menu.classList.toggle('open');
+    btn.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+
+// Close mobile menu when a link is clicked
+document.addEventListener('DOMContentLoaded', function() {
+    const menu = document.getElementById('mobileMenu');
+    menu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+            menu.classList.remove('open');
+            document.querySelector('.hamburger').classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    });
+});
 </script>
 
 </body>
