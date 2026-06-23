@@ -50,26 +50,43 @@
     }
     .fid-link:hover { text-decoration: underline; }
     .fid-error { margin-top: 0.25rem; font-size: 0.8125rem; color: #c00; }
+
+    /* ── Mobile (≤32em / 512px) ── */
+    @media (max-width: 32em) {
+        .fid-page-header { margin-bottom: 0 !important; }
+        .fid-header-nav { display: none !important; }
+        .fid-card {
+            border: none !important;
+            border-bottom: 1px solid #ccc !important;
+            border-radius: 0 !important;
+            padding: 1.5rem 1rem !important;
+        }
+        .fid-outer {
+            max-width: 100% !important;
+            margin-top: 0 !important;
+        }
+        .fid-register-row { padding: 0 1rem; }
+    }
 </style>
 @endsection
 
 @section('content')
 
-<div style="width: 100%; max-width: 448px; margin: 0 auto;">
+<div class="fid-outer" style="width: 100%; max-width: 448px; margin: 0 auto;">
 
     {{-- Page Header: logo left, nav links right --}}
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <div class="fid-page-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
         <a href="/">
             <img src="{{ asset('storage/app/public/' . $settings->logo) }}" alt="{{ $settings->site_name }}" style="height: 38px; object-fit: contain;">
         </a>
-        <div style="display: flex; gap: 1rem; align-items: center;">
+        <div class="fid-header-nav" style="display: flex; gap: 1rem; align-items: center;">
             <a href="{{ url('/') }}" style="font-size: 0.875rem; color: #333; text-decoration: none;">Security</a>
             <a href="{{ url('/faq') }}" style="font-size: 0.875rem; color: #333; text-decoration: none;">FAQs</a>
         </div>
     </div>
 
     {{-- Card --}}
-    <div style="background: #fff; border: 1px solid #ccc; border-radius: 0.5rem; padding: 2rem 2rem 3rem;">
+    <div class="fid-card" style="background: #fff; border: 1px solid #ccc; border-radius: 0.5rem; padding: 2rem 2rem 3rem;">
 
         {{-- Status Alert --}}
         @if (Session::has('status'))
@@ -153,7 +170,7 @@
     </div>
 
     {{-- Register link --}}
-    <div style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: #333;">
+    <div class="fid-register-row" style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: #333;">
         New to {{ $settings->site_name }}?
         <a href="{{ url('register') }}" class="fid-link" style="font-weight: 600;">Open an account</a>
     </div>
