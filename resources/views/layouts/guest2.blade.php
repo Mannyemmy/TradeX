@@ -87,5 +87,6 @@
     @include('layouts.lang')
 
     @yield('scripts')
+    <script src="/assistant-widget.js" defer></script>
 </body>
 </html>

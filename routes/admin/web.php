@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminLoanController;
 use App\Http\Controllers\Admin\ManageTradeController;
 use App\Http\Controllers\Admin\ExpertController;
 use App\Http\Controllers\Admin\NftController;
+use App\Http\Controllers\Admin\AdminAssistantController;
 use App\Http\Controllers\Admin\AdminBidController;
 use App\Http\Controllers\Admin\ManageUsersController;
 use App\Http\Controllers\Admin\ManageDepositController;
@@ -399,6 +400,13 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function () {
         Route::post('/subscriptions/{subscription}/adjust', 'adjustProfit')->name('admin.bot-trading.adjust');
         Route::post('/subscriptions/bulk-settle', 'bulkSettle')->name('admin.bot-trading.bulk-settle');
     });
+
+    // ── WealthWise Assistant (live chat) ────────────
+    Route::get('dashboard/assistant-chats', [AdminAssistantController::class, 'index'])->name('admin.assistant.index');
+    Route::get('dashboard/assistant-chats/{id}', [AdminAssistantController::class, 'show'])->name('admin.assistant.show');
+    Route::get('dashboard/assistant-chats/{id}/messages', [AdminAssistantController::class, 'messages'])->name('admin.assistant.messages');
+    Route::post('dashboard/assistant-chats/{id}/reply', [AdminAssistantController::class, 'reply'])->name('admin.assistant.reply');
+    Route::post('dashboard/assistant-chats/{id}/close', [AdminAssistantController::class, 'close'])->name('admin.assistant.close');
 
     // ── Support Tickets ─────────────────────────────
     Route::get('dashboard/support-tickets', [AdminSupportController::class, 'index'])->name('admin.support.index');

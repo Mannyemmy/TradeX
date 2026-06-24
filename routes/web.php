@@ -7,6 +7,7 @@ use Laravel\Fortify\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\AutoTaskController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\CaptchaController;
+use App\Http\Controllers\AssistantController;
 use App\Jobs\CalculateCopyTradeProfit;
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,13 @@ use App\Jobs\CalculateCopyTradeProfit;
 require __DIR__ . '/admin/web.php';
 require __DIR__ . '/user/web.php';
 require __DIR__ . '/botman.php';
+
+// ─── WealthWise Assistant (public: works for guests + logged-in users) ───
+Route::prefix('assistant')->middleware('throttle:40,1')->group(function () {
+    Route::post('message', [AssistantController::class, 'message'])->name('assistant.message');
+    Route::post('escalate', [AssistantController::class, 'escalate'])->name('assistant.escalate');
+    Route::get('poll', [AssistantController::class, 'poll'])->name('assistant.poll');
+});
 
 // ─── All-in-one cron endpoint for cPanel / wget / curl ─────────────
 // Set CRON_SECRET in your .env to a long random string, then call:

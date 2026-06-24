@@ -44,8 +44,13 @@
       "Bash(awk '/function validate_admin/{f=1} f{print} f&&/^    }/{exit}' app/Http/Controllers/Admin/Auth/LoginController.php)",
       "Bash(cd /d/Dev/TradeX *)",
       "Bash(grep -vE '^\\\\s*$')",
-      "Bash(awk 'length<160')"
+      "Bash(awk 'length<160')",
+      "Bash(awk '/function reply/{f=1} f{print} f&&/^ }/{exit}' app/Http/Controllers/Admin/AdminSupportController.php)",
+      "Bash(cat > *)"
     ],
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "bypassPermissions",
+    "additionalDirectories": [
+      "C:\\Users\\DELL\\Downloads"
+    ]
   }
 }

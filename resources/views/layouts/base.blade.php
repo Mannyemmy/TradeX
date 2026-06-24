@@ -126,5 +126,6 @@
     @include('layouts.livechat')
 
     @stack('scripts')
+    <script src="/assistant-widget.js" defer></script>
 </body>
 </html>

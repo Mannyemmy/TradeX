@@ -258,6 +258,14 @@
             Support Tickets
         </x-admin.sidebar-item>
 
+        <x-admin.sidebar-item
+            href="{{ route('admin.assistant.index') }}"
+            :active="request()->routeIs('admin.assistant.*')"
+            icon='<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4-.8L3 20l1.3-3.9A7.96 7.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>'
+        >
+            Assistant Chats
+        </x-admin.sidebar-item>
+
         {{-- <x-admin.sidebar-group
             label="Manage Accounts"
             :active="request()->routeIs('msubtrade') || request()->routeIs('subview')"
