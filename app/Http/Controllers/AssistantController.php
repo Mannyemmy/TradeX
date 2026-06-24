@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Auth;
 class AssistantController extends Controller
 {
     /** Send a message; get an AI reply, unless the chat has been handed to a human. */
+    /** Guardrails to protect AI quota/cost from abuse. */
+    const MAX_AI_PER_CONVERSATION = 30;   // AI replies in a single chat
+    const MAX_USER_MESSAGES_PER_DAY = 60; // user messages per visitor per 24h
+
     public function message(Request $request, GeminiService $gemini)
     {
         $data = $request->validate([
@@ -24,13 +28,30 @@ class AssistantController extends Controller
             'conversation_id' => ['nullable', 'integer'],
         ]);
 
+        $text = trim($data['message']);
+        if ($text === '') {
+            return response()->json(['error' => 'Message is empty'], 422);
+        }
+
         $conv = $this->resolveConversation($request);
+
+        // Anti double-send: ignore an identical message sent seconds apart.
+        $lastUser = $conv->messages()->where('sender_type', 'user')->latest('id')->first();
+        if ($lastUser && $lastUser->message === $text && $lastUser->created_at && $lastUser->created_at->gt(now()->subSeconds(8))) {
+            return response()->json([
+                'conversation_id' => $conv->id,
+                'handed_off'      => (bool) $conv->handed_off,
+                'user_message_id' => $lastUser->id,
+                'reply'           => null,
+                'duplicate'       => true,
+            ]);
+        }
 
         $userMsg = AssistantMessage::create([
             'conversation_id' => $conv->id,
             'sender_type'     => 'user',
             'sender_id'       => Auth::guard('web')->id(),
-            'message'         => $data['message'],
+            'message'         => $text,
         ]);
         $conv->last_message_at = now();
         $conv->save();
@@ -45,6 +66,24 @@ class AssistantController extends Controller
                 'handed_off'      => true,
                 'user_message_id' => $userMsg->id,
                 'reply'           => null,
+            ]);
+        }
+
+        // Guardrails: cap AI usage so a user/bot can't burn quota.
+        $limitMsg = $this->aiLimitMessage($conv, $request);
+        if ($limitMsg !== null) {
+            $botMsg = AssistantMessage::create([
+                'conversation_id' => $conv->id,
+                'sender_type'     => 'assistant',
+                'message'         => $limitMsg,
+            ]);
+            return response()->json([
+                'conversation_id' => $conv->id,
+                'handed_off'      => false,
+                'user_message_id' => $userMsg->id,
+                'reply'           => $limitMsg,
+                'reply_id'        => $botMsg->id,
+                'suggest_handoff' => true,
             ]);
         }
 
@@ -70,6 +109,35 @@ class AssistantController extends Controller
             'reply_id'         => $botMsg->id,
             'suggest_handoff'  => (bool) $ai['handoff'],
         ]);
+    }
+
+    /** Returns a limit message if a guardrail is hit, otherwise null. */
+    private function aiLimitMessage(AssistantConversation $conv, Request $request): ?string
+    {
+        // Per-conversation AI reply cap.
+        $aiCount = $conv->messages()->where('sender_type', 'assistant')->count();
+        if ($aiCount >= self::MAX_AI_PER_CONVERSATION) {
+            return "We've covered a lot in this chat! To keep things fast, please start a new chat or tap \"Talk to a human\" and our team will help.";
+        }
+
+        // Per-visitor daily message cap (across this visitor's conversations).
+        $userId  = Auth::guard('web')->id();
+        $guestId = $request->input('guest_id');
+        $convIds = AssistantConversation::when($userId, fn ($q) => $q->where('user_id', $userId))
+            ->when(!$userId && $guestId, fn ($q) => $q->where('guest_id', $guestId))
+            ->pluck('id');
+
+        if ($convIds->isNotEmpty()) {
+            $dayCount = AssistantMessage::whereIn('conversation_id', $convIds)
+                ->where('sender_type', 'user')
+                ->where('created_at', '>=', now()->subDay())
+                ->count();
+            if ($dayCount >= self::MAX_USER_MESSAGES_PER_DAY) {
+                return "You've reached today's message limit for the assistant. Please try again later, or tap \"Talk to a human\" to reach our team.";
+            }
+        }
+
+        return null;
     }
 
     /** Escalate the conversation to a human agent and notify admins. */

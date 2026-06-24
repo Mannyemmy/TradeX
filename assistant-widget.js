@@ -46,7 +46,10 @@
   ".wwa-pills{display:flex;flex-direction:column;gap:8px;margin-top:4px}" +
   ".wwa-pill{background:#eef3f9;border:1px solid #dbe6f3;border-radius:18px;padding:9px 14px;font-size:13px;color:#1a3a7f;cursor:pointer;text-align:left;font-family:inherit;transition:background .12s}" +
   ".wwa-pill:hover{background:#e0eaf6}" +
-  ".wwa-msg{max-width:85%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}" +
+  ".wwa-msg{max-width:85%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.5;word-wrap:break-word;overflow-wrap:anywhere}" +
+  ".wwa-msg p{margin:0 0 8px}.wwa-msg p:last-child{margin-bottom:0}" +
+  ".wwa-msg ol,.wwa-msg ul{margin:6px 0 8px;padding-left:20px}.wwa-msg li{margin:3px 0}" +
+  ".wwa-msg strong{font-weight:700}.wwa-msg a{color:inherit;text-decoration:underline}" +
   ".wwa-msg.user{align-self:flex-end;background:#2E5C8A;color:#fff;border-bottom-right-radius:4px}" +
   ".wwa-msg.bot{align-self:flex-start;background:#fff;color:#1f2937;border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.05)}" +
   ".wwa-msg.system{align-self:center;background:#dce7f4;color:#33506f;font-size:12.5px;border-radius:10px;text-align:center}" +
@@ -104,9 +107,31 @@
   function scroll() { body.scrollTop = body.scrollHeight; }
   function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
+  // Minimal, safe Markdown -> HTML for bot/agent replies (escapes first).
+  function fmt(raw) {
+    var s = esc(raw)
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/__([^_]+)__/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>")
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    var lines = s.split(/\r?\n/), out = [], list = null, para = [];
+    function flushPara() { if (para.length) { out.push("<p>" + para.join("<br>") + "</p>"); para = []; } }
+    function flushList() { if (list) { out.push("<" + list.t + ">" + list.items.join("") + "</" + list.t + ">"); list = null; } }
+    lines.forEach(function (l) {
+      var ol = l.match(/^\s*\d+[.)]\s+(.*)$/), ul = l.match(/^\s*[-*•]\s+(.*)$/);
+      if (ol) { flushPara(); if (!list || list.t !== "ol") { flushList(); list = { t: "ol", items: [] }; } list.items.push("<li>" + ol[1] + "</li>"); }
+      else if (ul) { flushPara(); if (!list || list.t !== "ul") { flushList(); list = { t: "ul", items: [] }; } list.items.push("<li>" + ul[1] + "</li>"); }
+      else if (l.trim() === "") { flushPara(); flushList(); }
+      else { flushList(); para.push(l); }
+    });
+    flushPara(); flushList();
+    return out.join("");
+  }
+
   function addMsg(sender, text, who) {
     if (who) { var w = el("div", "wwa-who", esc(who)); body.appendChild(w); }
-    var m = el("div", "wwa-msg " + sender, esc(text));
+    var rich = (sender === "assistant" || sender === "admin");
+    var m = el("div", "wwa-msg " + sender, rich ? fmt(text) : esc(text).replace(/\n/g, "<br>"));
     body.appendChild(m); scroll();
     return m;
   }

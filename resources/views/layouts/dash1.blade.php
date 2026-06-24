@@ -635,6 +635,6 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
     @livewireScripts
     @yield('scripts')
     @include('layouts.livechat')
-    <script src="/assistant-widget.js?v=3" defer></script>
+    <script src="/assistant-widget.js?v=4" defer></script>
 </body>
 </html>
