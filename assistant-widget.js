@@ -130,7 +130,7 @@
 
   function addMsg(sender, text, who) {
     if (who) { var w = el("div", "wwa-who", esc(who)); body.appendChild(w); }
-    var rich = (sender === "assistant" || sender === "admin");
+    var rich = (sender === "bot" || sender === "admin");
     var m = el("div", "wwa-msg " + sender, rich ? fmt(text) : esc(text).replace(/\n/g, "<br>"));
     body.appendChild(m); scroll();
     return m;

@@ -142,7 +142,7 @@ document.getElementById('asset_type').addEventListener('change', function() {
 });
 </script>
 
-    <script src="/assistant-widget.js?v=4" defer></script>
+    <script src="/assistant-widget.js?v=5" defer></script>
 </body>
 
 </html>
