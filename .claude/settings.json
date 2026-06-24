@@ -41,7 +41,10 @@
       "Bash(awk '/INSERT IGNORE INTO `nfts`/{f=1} f{print; n++} n>1{exit}' merge.sql)",
       "Bash(grep -cE '\\\\\\);[ \\\\t]*$' merge.sql)",
       "Bash(echo \"lines ending with \\); : $\\(grep -cE '\\\\\\);[ \\\\t]*$' merge.sql\\)\")",
-      "Bash(awk '/function validate_admin/{f=1} f{print} f&&/^    }/{exit}' app/Http/Controllers/Admin/Auth/LoginController.php)"
+      "Bash(awk '/function validate_admin/{f=1} f{print} f&&/^    }/{exit}' app/Http/Controllers/Admin/Auth/LoginController.php)",
+      "Bash(cd /d/Dev/TradeX *)",
+      "Bash(grep -vE '^\\\\s*$')",
+      "Bash(awk 'length<160')"
     ],
     "defaultMode": "bypassPermissions"
   }
