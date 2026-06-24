@@ -49,7 +49,6 @@ Route::prefix('adminlogin')->group(function () {
         Route::post('login', 'adminlogin')->name('adminlogin');
         Route::post('logout', 'adminlogout')->name('adminlogout');
         Route::get('dashboard', 'validate_admin')->name('validate_admin');
-         Route::get(' validate_admin', 'showLoginForm')->name('adminloginform')->middleware('adminguest');
     });
 });
 
