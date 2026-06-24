@@ -407,6 +407,8 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function () {
     Route::get('dashboard/assistant-chats/{id}/messages', [AdminAssistantController::class, 'messages'])->name('admin.assistant.messages');
     Route::post('dashboard/assistant-chats/{id}/reply', [AdminAssistantController::class, 'reply'])->name('admin.assistant.reply');
     Route::post('dashboard/assistant-chats/{id}/close', [AdminAssistantController::class, 'close'])->name('admin.assistant.close');
+    Route::get('dashboard/assistant-knowledge', [AdminAssistantController::class, 'settings'])->name('admin.assistant.settings');
+    Route::post('dashboard/assistant-knowledge', [AdminAssistantController::class, 'updateSettings'])->name('admin.assistant.settings.update');
 
     // ── Support Tickets ─────────────────────────────
     Route::get('dashboard/support-tickets', [AdminSupportController::class, 'index'])->name('admin.support.index');

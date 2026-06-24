@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AssistantConversation;
 use App\Models\AssistantMessage;
 use App\Models\Settings;
+use App\Services\GeminiService;
 use App\Mail\NewNotification;
 use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
@@ -143,5 +144,30 @@ class AdminAssistantController extends Controller
             return response()->json(['ok' => true]);
         }
         return back()->with('success', 'Conversation closed.');
+    }
+
+    /** Show the AI knowledge-base editor. */
+    public function settings()
+    {
+        $settings = Settings::find(1);
+        $knowledge = $settings && !empty($settings->assistant_knowledge)
+            ? $settings->assistant_knowledge
+            : GeminiService::defaultKnowledge($settings->site_name ?? 'WealthWise');
+
+        return view('admin.assistant.settings', compact('settings', 'knowledge'));
+    }
+
+    /** Save the AI knowledge base. */
+    public function updateSettings(Request $request)
+    {
+        $request->validate([
+            'assistant_knowledge' => ['nullable', 'string', 'max:20000'],
+        ]);
+
+        $settings = Settings::find(1);
+        $settings->assistant_knowledge = $request->input('assistant_knowledge');
+        $settings->save();
+
+        return back()->with('success', 'Assistant knowledge updated. The AI will use it on the next message.');
     }
 }
