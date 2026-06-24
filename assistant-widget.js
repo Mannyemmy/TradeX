@@ -24,7 +24,7 @@
   if (!guestId) { guestId = "g_" + Math.random().toString(36).slice(2) + Date.now().toString(36); store("ww_guest_id", guestId); }
   var convId = load("ww_conv_id");
   var lastId = parseInt(load("ww_last_id") || "0", 10) || 0;
-  var handedOff = false, pollTimer = null, greeted = false, busy = false;
+  var handedOff = false, pollTimer = null, greeted = false, busy = false, awaitingHandoff = false;
 
   // ---- styles ----
   var css = "" +
@@ -170,6 +170,18 @@
     text = (text || input.value || "").trim();
     if (!text || busy) return;
     input.value = "";
+
+    // Route human-agent requests straight to handoff — no AI call needed
+    // (works even when the AI is rate-limited/down).
+    var wantsHuman = /\b(human|agent|representative|real person|live (chat|agent|person)|customer (service|care|support)|speak (to|with)|talk (to|with)|connect me)\b/i.test(text);
+    var affirmHuman = awaitingHandoff && /^\s*(yes|yeah|yea|yep|yup|sure|ok|okay|please|connect( me)?|go ahead|do it|sounds good)\b/i.test(text);
+    if (wantsHuman || affirmHuman) {
+      addMsg("user", text);
+      awaitingHandoff = false;
+      showHandoff();
+      return;
+    }
+
     addMsg("user", text);
     busy = true;
     var typing = el("div", "wwa-typing", "Assistant is typing…"); body.appendChild(typing); scroll();
@@ -187,10 +199,12 @@
         return;
       }
       if (d.reply) { addMsg("bot", d.reply); if (d.reply_id) setLastId(d.reply_id); }
+      awaitingHandoff = !!d.suggest_handoff;
       if (d.suggest_handoff) addTalkButton();
     }).catch(function () {
       typing.remove(); busy = false;
       addMsg("system", "Network error. Please try again, or tap below to reach a human.");
+      awaitingHandoff = true;
       addTalkButton();
     });
   }
