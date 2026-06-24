@@ -12,21 +12,27 @@
 
   var API = { msg: "/assistant/message", esc: "/assistant/escalate", poll: "/assistant/poll" };
   var SITE = "WealthWise";
+  try { console.info("[WW Assistant] script running"); } catch (e) {}
+
+  // ---- safe storage (localStorage can throw in some browser/privacy modes) ----
+  var mem = {};
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) { mem[k] = v; } }
+  function load(k) { try { var v = localStorage.getItem(k); return v != null ? v : (mem[k] || null); } catch (e) { return mem[k] || null; } }
 
   // ---- identity / state ----
-  var guestId = localStorage.getItem("ww_guest_id");
-  if (!guestId) { guestId = "g_" + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem("ww_guest_id", guestId); }
-  var convId = localStorage.getItem("ww_conv_id");
-  var lastId = parseInt(localStorage.getItem("ww_last_id") || "0", 10) || 0;
+  var guestId = load("ww_guest_id");
+  if (!guestId) { guestId = "g_" + Math.random().toString(36).slice(2) + Date.now().toString(36); store("ww_guest_id", guestId); }
+  var convId = load("ww_conv_id");
+  var lastId = parseInt(load("ww_last_id") || "0", 10) || 0;
   var handedOff = false, pollTimer = null, greeted = false, busy = false;
 
   // ---- styles ----
   var css = "" +
-  ".wwa-bubble{position:fixed;right:20px;bottom:20px;z-index:2147483000;width:60px;height:60px;border-radius:50%;background:#0F3A6E;color:#fff;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(15,58,110,.35);display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s}" +
+  ".wwa-bubble{position:fixed!important;right:20px!important;bottom:20px!important;z-index:2147483000!important;width:60px!important;height:60px!important;border-radius:50%;background:#0F3A6E!important;color:#fff;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(15,58,110,.35);display:flex!important;align-items:center;justify-content:center;transition:transform .15s,background .15s;visibility:visible!important;opacity:1!important;margin:0!important}" +
   ".wwa-bubble:hover{background:#2E5C8A;transform:translateY(-2px)}" +
   ".wwa-bubble svg{width:28px;height:28px}" +
   ".wwa-panel{position:fixed;right:20px;bottom:20px;z-index:2147483001;width:390px;max-width:calc(100vw - 32px);height:620px;max-height:calc(100vh - 40px);background:#eef1f5;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.3);display:none;flex-direction:column;overflow:hidden;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}" +
-  ".wwa-panel.open{display:flex}" +
+  ".wwa-panel.open{display:flex!important}" +
   ".wwa-head{background:#0F3A6E;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}" +
   ".wwa-head img{height:26px;width:auto}" +
   ".wwa-head .wwa-title{font-weight:700;font-size:15px;letter-spacing:.3px}" +
@@ -105,8 +111,8 @@
     return m;
   }
 
-  function setLastId(id) { if (id > lastId) { lastId = id; localStorage.setItem("ww_last_id", String(lastId)); } }
-  function setConv(id) { if (id) { convId = id; localStorage.setItem("ww_conv_id", String(id)); } }
+  function setLastId(id) { if (id > lastId) { lastId = id; store("ww_last_id", String(lastId)); } }
+  function setConv(id) { if (id) { convId = id; store("ww_conv_id", String(id)); } }
 
   function greet() {
     if (greeted) return; greeted = true;

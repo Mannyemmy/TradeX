@@ -109,7 +109,7 @@
         integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous">
     </script>
     @livewireScripts
-    <script src="/assistant-widget.js" defer></script>
+    <script src="/assistant-widget.js?v=3" defer></script>
 </body>
 
 </html>
