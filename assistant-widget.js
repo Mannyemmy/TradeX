@@ -244,20 +244,28 @@
   panel.querySelector("#wwaSend").onclick = function () { send(); };
   input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); send(); } });
 
-  // expose + wire triggers
+  // expose
   window.openAssistant = open;
-  document.addEventListener("DOMContentLoaded", wireTriggers);
-  wireTriggers();
-  function wireTriggers() {
-    document.querySelectorAll("[data-wealthwise-assistant]").forEach(function (n) {
-      if (n.__wwa) return; n.__wwa = true; n.addEventListener("click", function (e) { e.preventDefault(); open(); });
-    });
-    document.querySelectorAll("a,button").forEach(function (n) {
-      if (n.__wwa) return;
-      var t = (n.textContent || "").trim().toLowerCase();
-      if (t === "assistant" || t.indexOf("wealthwise assistant") > -1 || t.indexOf("fidelity assistant") > -1) {
-        n.__wwa = true; n.addEventListener("click", function (e) { e.preventDefault(); open(); });
+
+  // Trigger detection via document-level CAPTURE delegation. This survives
+  // SPA/Angular re-renders of the nav and beats the framework's own click
+  // handlers (which is why direct binding on load wasn't reliable).
+  function isTrigger(node) {
+    var el = node;
+    while (el && el !== document) {
+      if (el.nodeType === 1) {
+        if (el.hasAttribute("data-wealthwise-assistant")) return true;
+        if (el.getAttribute("data-utility") === "WealthWiseAssistant") return true;
+        if (el.tagName === "A" || el.tagName === "BUTTON") {
+          var t = (el.textContent || "").trim().toLowerCase();
+          if (t === "wealthwise assistant" || t === "fidelity assistant" || t === "assistant") return true;
+        }
       }
-    });
+      el = el.parentNode;
+    }
+    return false;
   }
+  document.addEventListener("click", function (e) {
+    if (isTrigger(e.target)) { e.preventDefault(); e.stopPropagation(); open(); }
+  }, true);
 })();
