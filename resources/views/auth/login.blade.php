@@ -344,7 +344,7 @@
         <nav class="site-header-nav">
             <a href="{{ url('/') }}">Security</a>
             <a href="{{ url('/faq') }}">FAQs</a>
-            <a href="{{ url('register') }}" class="btn-outline">Open an account</a>
+            <a href="{{ url('open-account.html') }}" class="btn-outline">Open an account</a>
         </nav>
         <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
             <span></span>
@@ -447,7 +447,7 @@
 
         {{-- Footer --}}
         <div class="footer">
-            <span>New to {{ $settings->site_name }}? <a href="{{ url('register') }}">Open an account</a></span>
+            <span>New to {{ $settings->site_name }}? <a href="{{ url('open-account.html') }}">Open an account</a></span>
             <div class="footer-nav">
                 <a href="{{ url('/') }}">Security</a>
                 <a href="{{ url('/faq') }}">FAQs</a>

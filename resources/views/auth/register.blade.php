@@ -204,22 +204,31 @@
         </section>
 
         {{-- Section 4: Account Type --}}
-        <section class="py-6 border-t border-surface-border" x-data="{ selected: [] }">
+        <section class="py-6 border-t border-surface-border">
 
             <h2 class="text-base font-bold text-content-primary mb-1">Account Type</h2>
-            <p class="text-sm text-content-tertiary mb-4">Select one or more trading interests.</p>
+            <p class="text-sm text-content-tertiary mb-4">Select one or more account types you're interested in.</p>
+
+            @php
+                // Keys are the slugs passed from open-account.html (?account=<slug>);
+                // values are the labels stored against the user.
+                $accountTypes = [
+                    'cash-management' => 'Cash Management',
+                    'retirement'      => 'Retirement & IRAs',
+                    'crypto'          => 'Crypto Account',
+                    'brokerage'       => 'Brokerage Account',
+                    'hsa'             => 'Health Savings Account (HSA)',
+                    '529'             => '529 College Savings',
+                ];
+                $oldAccounts = (array) old('account', []);
+                $preselect = $accountTypes[request('account')] ?? null;
+            @endphp
 
             <div class="flex flex-wrap gap-2">
-                @foreach([
-                    'Binary Option Trading' => 'Binary Options',
-                    'Forex Trading'          => 'Forex',
-                    'Stock Trading'          => 'Stocks',
-                    'CryptoCurrency Investment' => 'Crypto',
-                    'NFT Trading'            => 'NFTs',
-                ] as $value => $label)
+                @foreach($accountTypes as $slug => $label)
                 <label class="cursor-pointer">
-                    <input type="checkbox" name="account[]" value="{{ $value }}" class="peer sr-only"
-                        x-on:change="$event.target.checked ? selected.push('{{ $value }}') : selected = selected.filter(v => v !== '{{ $value }}')">
+                    <input type="checkbox" name="account[]" value="{{ $label }}" class="peer sr-only"
+                        {{ in_array($label, $oldAccounts, true) || $preselect === $label ? 'checked' : '' }}>
                     <span class="inline-flex items-center px-3.5 py-1.5 rounded-full text-sm border transition-all
                                  border-surface-border text-content-tertiary
                                  peer-checked:border-primary/60 peer-checked:text-primary-light peer-checked:bg-primary/8

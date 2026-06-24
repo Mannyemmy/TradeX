@@ -6,7 +6,18 @@
       "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"D:\\\\Dev\\\\wealthwise-redesign\\\\register.html\"\\); $text = [System.Text.Encoding]::UTF8.GetString\\($bytes\\); $bodyStart = $text.IndexOf\\('<body'\\); $text.Substring\\($bodyStart + 15000, 15000\\))",
       "Bash(ls \"C:/Users/DELL/Downloads/\" | grep -i \"fidelity\\\\|log.in\\\\|login\")",
       "Read(//c/Users/DELL/Downloads/**)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(php artisan *)",
+      "Bash(awk '{print $5}')",
+      "Bash(xxd)",
+      "Bash(python3 - C:/Users/DELL/AppData/Local/Temp/claude/d--Dev-TradeX/d6bae139-cf54-412a-8694-ce0843521a10/scratchpad/open-account-clean.html)",
+      "Bash(grep -v '^[[:space:]]*$')",
+      "Bash(grep -rl \"Select one or more\" storage/framework/views/)",
+      "Bash(grep -rl \"Binary Option Trading\\\\|trading interests\" storage/framework/views/)",
+      "Bash(grep -rl \"account types you're interested\\\\|cash-management\" storage/framework/views/)",
+      "Bash(grep -rl \"Tell us about yourself\" storage/framework/views/)",
+      "Bash(grep -rl \"Account Type\" storage/framework/views/)",
+      "Bash(php -v)"
     ],
     "defaultMode": "bypassPermissions"
   }
