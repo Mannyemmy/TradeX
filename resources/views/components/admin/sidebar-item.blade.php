@@ -3,8 +3,8 @@
 <a href="{{ $href }}"
    class="mx-3 flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer
           {{ $active
-              ? 'bg-sidebar-active text-content-inverse relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-0.5 before:rounded-full before:bg-primary'
-              : 'text-sidebar-text hover:bg-sidebar-hover' }}">
+              ? 'bg-sidebar-active text-primary font-medium relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-0.5 before:rounded-full before:bg-primary'
+              : 'text-sidebar-text hover:bg-sidebar-hover hover:text-content' }}">
     @if($icon)
         {!! $icon !!}
     @endif

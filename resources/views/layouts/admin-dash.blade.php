@@ -36,12 +36,12 @@
             --surface-alt: 241 245 249;
             --surface-raised: 255 255 255;
             --surface-overlay: 15 23 42;
-            --sidebar: 15 23 42;
-            --sidebar-text: 203 213 225;
-            --sidebar-muted: 100 116 139;
-            --sidebar-active: 30 41 59;
-            --sidebar-hover: 30 41 59;
-            --sidebar-border: 30 41 59;
+            --sidebar: 255 255 255;
+            --sidebar-text: 71 85 105;
+            --sidebar-muted: 133 147 163;
+            --sidebar-active: 230 240 250;
+            --sidebar-hover: 237 242 247;
+            --sidebar-border: 220 227 236;
             --header: 255 255 255;
             --border: 226 232 240;
             --border-strong: 203 213 225;

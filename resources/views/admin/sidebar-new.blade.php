@@ -1,14 +1,14 @@
 {{-- Admin Sidebar — Tailwind + Alpine.js --}}
 <aside
     :class="mobileSidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-    class="fixed top-0 left-0 z-50 h-full w-64 bg-sidebar flex flex-col transition-transform duration-200 ease-in-out overflow-hidden"
+    class="fixed top-0 left-0 z-50 h-full w-64 bg-sidebar border-r border-sidebar-border shadow-sm flex flex-col transition-transform duration-200 ease-in-out overflow-hidden"
 >
     {{-- Logo --}}
     <div class="flex items-center justify-between h-16 px-5 border-b border-sidebar-border shrink-0">
-        <a href="{{ url('/admin/dashboard') }}" class="text-base font-semibold text-content-inverse truncate">
+        <a href="{{ url('/admin/dashboard') }}" class="text-base font-semibold text-primary truncate">
             {{ $settings->site_name }}
         </a>
-        <button @click="mobileSidebar = false" class="lg:hidden text-sidebar-muted hover:text-content-inverse">
+        <button @click="mobileSidebar = false" class="lg:hidden text-sidebar-muted hover:text-primary">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
     </div>
@@ -16,7 +16,7 @@
     {{-- Admin Info --}}
     <div class="px-4 py-4 border-b border-sidebar-border shrink-0">
         <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-primary text-primary-foreground text-xs font-medium flex items-center justify-center shrink-0">
+            <div class="w-9 h-9 rounded-full bg-primary text-primary-foreground text-xs font-medium flex items-center justify-center shrink-0 shadow-sm shadow-primary/20">
                 {{ strtoupper(substr(Auth('admin')->User()->firstName, 0, 1)) }}{{ strtoupper(substr(Auth('admin')->User()->lastName, 0, 1)) }}
             </div>
             <div class="min-w-0">

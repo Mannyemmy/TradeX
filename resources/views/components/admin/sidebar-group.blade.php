@@ -4,7 +4,7 @@
     {{-- Group Trigger --}}
     <button @click="expanded = !expanded"
             class="mx-3 w-[calc(100%-1.5rem)] flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer
-                   {{ $active ? 'text-content-inverse' : 'text-sidebar-text hover:bg-sidebar-hover' }}">
+                   {{ $active ? 'bg-sidebar-active text-primary font-medium' : 'text-sidebar-text hover:bg-sidebar-hover hover:text-content' }}">
         @if($icon)
             {!! $icon !!}
         @endif
