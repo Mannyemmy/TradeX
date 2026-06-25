@@ -48,5 +48,7 @@ return [
     'gemini' => [
         'key' => env('GEMINI_API_KEY'),
         'model' => env('GEMINI_MODEL', 'gemini-2.0-flash'),
+        // Optional secondary model tried when the primary is overloaded (503).
+        'fallback_model' => env('GEMINI_FALLBACK_MODEL', 'gemini-1.5-flash'),
     ],
 ];

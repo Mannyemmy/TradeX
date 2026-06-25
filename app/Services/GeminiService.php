@@ -27,8 +27,12 @@ class GeminiService
             ];
         }
 
-        $model = config('services.gemini.model', 'gemini-2.0-flash');
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent";
+        // Primary model, plus an optional fallback tried only when the primary
+        // is overloaded/unavailable (e.g. 503 "high demand").
+        $models = array_values(array_unique(array_filter([
+            config('services.gemini.model', 'gemini-2.0-flash'),
+            config('services.gemini.fallback_model'),
+        ])));
 
         $contents = [];
         foreach ($history as $m) {
@@ -46,13 +50,22 @@ class GeminiService
         ];
 
         try {
-            $res = Http::timeout(25)
-                ->withHeaders(['x-goog-api-key' => $key])
-                ->post($url, $payload);
+            $res = null;
+            foreach ($models as $model) {
+                $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent";
+                $res = $this->send($url, $key, $payload);
 
-            if (!$res->successful()) {
-                Log::warning('Gemini API non-200: ' . $res->status() . ' ' . $res->body());
-                return $this->fallback();
+                // Got a usable answer, or a permanent error: stop trying models.
+                if ($res->successful() || !$this->retryable($res->status())) {
+                    break;
+                }
+                Log::warning("Gemini model {$model} unavailable ({$res->status()}); trying next option.");
+            }
+
+            if (!$res || !$res->successful()) {
+                $status = $res ? $res->status() : null;
+                Log::warning('Gemini API non-200: ' . ($res ? $status . ' ' . $res->body() : 'no response'));
+                return $this->fallback($status);
             }
 
             $text = data_get($res->json(), 'candidates.0.content.parts.0.text');
@@ -72,8 +85,63 @@ class GeminiService
         }
     }
 
-    private function fallback(): array
+    /**
+     * POST to Gemini with a few retries and exponential backoff. Retries only
+     * on transient failures (connection errors and 429/5xx). Returns the last
+     * Response; rethrows if every attempt raised a connection error.
+     */
+    private function send(string $url, string $key, array $payload)
     {
+        $attempts = 3;
+        $response = null;
+        $error = null;
+
+        for ($i = 0; $i < $attempts; $i++) {
+            if ($i > 0) {
+                // ~0.5s then ~1s, plus jitter to avoid thundering-herd retries.
+                usleep((int) ((1 << ($i - 1)) * 500_000 + random_int(0, 250_000)));
+            }
+
+            try {
+                $response = Http::timeout(25)
+                    ->withHeaders(['x-goog-api-key' => $key])
+                    ->post($url, $payload);
+                $error = null;
+            } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                $error = $e;
+                $response = null;
+                continue; // network hiccup / timeout — retry
+            }
+
+            // Success or a non-retryable status: done.
+            if ($response->successful() || !$this->retryable($response->status())) {
+                break;
+            }
+        }
+
+        if ($response === null && $error !== null) {
+            throw $error;
+        }
+
+        return $response;
+    }
+
+    /** Transient statuses worth retrying (rate limit / overload / gateway). */
+    private function retryable(int $status): bool
+    {
+        return in_array($status, [429, 500, 502, 503, 504], true);
+    }
+
+    private function fallback(?int $status = null): array
+    {
+        // Overloaded/rate-limited: tell the user it's temporary so they retry.
+        if ($status === 503 || $status === 429) {
+            return [
+                'text' => "Our assistant is experiencing high demand right now. Please try again in a moment — or I can connect you with a human agent.",
+                'handoff' => true,
+            ];
+        }
+
         return [
             'text' => "Sorry, I couldn't process that just now. Would you like me to connect you with a human agent?",
             'handoff' => true,
