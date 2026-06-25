@@ -47,10 +47,10 @@
         }
         .site-header-logo img { height: 40px; width: auto; }
         .site-header-logo span {
-            font-family: 'Raleway', 'Segoe UI', sans-serif;
+            font-family: 'WealthWise Slab', serif;
             font-size: 26px;
-            font-weight: 800;
-            letter-spacing: 2px;
+            font-weight: 300;
+            letter-spacing: -1px;
             color: #fff;
             white-space: nowrap;
             vertical-align: middle;
