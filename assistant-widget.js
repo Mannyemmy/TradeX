@@ -2,8 +2,10 @@
  * WealthWise Assistant — self-contained chat widget.
  * Works on the static marketing pages and inside the logged-in app.
  * Include with:  <script src="/assistant-widget.js" defer></script>
- * Opens from: a floating bubble, any element with [data-wealthwise-assistant],
- * or any nav link whose text contains "Assistant".
+ * Opens ONLY from the header "WealthWise Assistant" trigger: any element with
+ * [data-wealthwise-assistant], [data-utility="WealthWiseAssistant"], or any
+ * nav link/button whose text is "WealthWise Assistant"/"Assistant".
+ * There is no always-on floating bubble — nothing is shown until tapped.
  */
 (function () {
   "use strict";
@@ -28,9 +30,6 @@
 
   // ---- styles ----
   var css = "" +
-  ".wwa-bubble{position:fixed!important;right:20px!important;bottom:20px!important;z-index:2147483000!important;width:60px!important;height:60px!important;border-radius:50%;background:#0F3A6E!important;color:#fff;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(15,58,110,.35);display:flex!important;align-items:center;justify-content:center;transition:transform .15s,background .15s;visibility:visible!important;opacity:1!important;margin:0!important}" +
-  ".wwa-bubble:hover{background:#2E5C8A;transform:translateY(-2px)}" +
-  ".wwa-bubble svg{width:28px;height:28px}" +
   ".wwa-panel{position:fixed;right:20px;bottom:20px;z-index:2147483001;width:390px;max-width:calc(100vw - 32px);height:620px;max-height:calc(100vh - 40px);background:#eef1f5;border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.3);display:none;flex-direction:column;overflow:hidden;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif}" +
   ".wwa-panel.open{display:flex!important}" +
   ".wwa-head{background:#0F3A6E;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}" +
@@ -69,16 +68,13 @@
   ".wwa-btn:hover{background:#1a3a7f}" +
   ".wwa-talk{background:none;border:1px solid #2E5C8A;color:#2E5C8A;border-radius:18px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;align-self:flex-start;font-family:inherit;margin-top:2px}" +
   ".wwa-talk:hover{background:#eef3f9}" +
-  "@media(max-width:480px){.wwa-panel{right:0;bottom:0;width:100vw;height:100vh;max-height:100vh;border-radius:0}.wwa-bubble{right:16px;bottom:16px}}";
+  "@media(max-width:480px){.wwa-panel{right:0;bottom:0;width:100vw;height:100vh;max-height:100vh;border-radius:0}}";
 
   var style = document.createElement("style");
   style.textContent = css;
   document.head.appendChild(style);
 
   // ---- DOM ----
-  var bubble = el("button", "wwa-bubble", '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4-.8L3 20l1.3-3.9A7.96 7.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>');
-  bubble.setAttribute("aria-label", "Open " + SITE + " Assistant");
-
   var panel = el("div", "wwa-panel", "");
   panel.setAttribute("role", "dialog");
   panel.setAttribute("aria-label", SITE + " Assistant");
@@ -96,7 +92,7 @@
       '</div>' +
     '</div>';
 
-  document.body.appendChild(bubble);
+  // No floating bubble — the widget is opened only from the header trigger.
   document.body.appendChild(panel);
 
   var body = panel.querySelector("#wwaBody");
@@ -277,14 +273,13 @@
 
   // ---- open/close ----
   function open() {
-    panel.classList.add("open"); bubble.style.display = "none";
+    panel.classList.add("open");
     greet();
     if (convId) startPolling();
     setTimeout(function () { input.focus(); }, 100);
   }
-  function close() { panel.classList.remove("open"); bubble.style.display = "flex"; }
+  function close() { panel.classList.remove("open"); }
 
-  bubble.onclick = open;
   panel.querySelector(".wwa-x").onclick = close;
   panel.querySelector("#wwaSend").onclick = function () { send(); };
   input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); send(); } });
