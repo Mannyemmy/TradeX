@@ -16,7 +16,7 @@
             "showSymbolLogo": true,
             "isTransparent": true,
             "displayMode": "adaptive",
-            "colorTheme": "dark",
+            "colorTheme": "light",
             "locale": "en"
         }
         </script>

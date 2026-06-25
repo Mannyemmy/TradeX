@@ -364,16 +364,16 @@
                 "symbol": "{{ $asset->symbol }}",
                 "interval": "15",
                 "timezone": "Etc/UTC",
-                "theme": "dark",
+                "theme": "light",
                 "style": "1",
                 "locale": "en",
-                "toolbar_bg": "#0F1115",
+                "toolbar_bg": "#FFFFFF",
                 "enable_publishing": false,
                 "hide_side_toolbar": true,
                 "allow_symbol_change": false,
                 "container_id": "tradingview_chart",
-                "backgroundColor": "#0F1115",
-                "gridColor": "rgba(255,255,255,0.04)"
+                "backgroundColor": "#FFFFFF",
+                "gridColor": "rgba(15,27,45,0.06)"
             });
         };
         document.head.appendChild(script);

@@ -80,7 +80,7 @@
                         @if ($lesson->is_preview)
                             <div class="modal fade" tabindex="-1" id="preview{{ $lesson->id }}">
                                 <div class="modal-dialog modal-lg">
-                                    <div class="modal-content" style="background: #161A1E; border: 1px solid #2A2F36;">
+                                    <div class="modal-content" style="background: #FFFFFF; border: 1px solid #DCE3EC;">
                                         <div class="embed-responsive embed-responsive-16by9">
                                             <iframe class="embed-responsive-item" src="{{ $lesson->video_link }}" allowfullscreen></iframe>
                                         </div>
@@ -130,11 +130,11 @@
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#2E5C8A',
-            cancelButtonColor: '#2A2F36',
+            cancelButtonColor: '#64748B',
             confirmButtonText: 'Confirm Purchase',
             cancelButtonText: 'Cancel',
-            background: '#161A1E',
-            color: '#E8EAED'
+            background: '#FFFFFF',
+            color: '#0F1B2D'
         }).then((result) => {
             if (result.isConfirmed) document.getElementById('buyForm').submit();
         });

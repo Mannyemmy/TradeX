@@ -85,11 +85,11 @@ function transferForm() {
                 input: 'password',
                 inputLabel: 'Enter your account password to complete transfer',
                 inputPlaceholder: 'Enter your account password',
-                background: '#161A1E',
-                color: '#E8EAED',
+                background: '#FFFFFF',
+                color: '#0F1B2D',
                 confirmButtonColor: '#2E5C8A',
                 showCancelButton: true,
-                cancelButtonColor: '#2A2F36'
+                cancelButtonColor: '#64748B'
             });
 
             if (!password) {
@@ -97,8 +97,8 @@ function transferForm() {
                     title: 'Error!',
                     text: 'Password is required',
                     icon: 'error',
-                    background: '#161A1E',
-                    color: '#E8EAED',
+                    background: '#FFFFFF',
+                    color: '#0F1B2D',
                     confirmButtonColor: '#2E5C8A'
                 });
                 return;
@@ -126,8 +126,8 @@ function transferForm() {
                         title: 'Success!',
                         text: data.message,
                         icon: 'success',
-                        background: '#161A1E',
-                        color: '#E8EAED',
+                        background: '#FFFFFF',
+                        color: '#0F1B2D',
                         confirmButtonColor: '#2E5C8A'
                     });
                     setTimeout(() => {
@@ -138,8 +138,8 @@ function transferForm() {
                         title: 'Error!',
                         text: data.message,
                         icon: 'error',
-                        background: '#161A1E',
-                        color: '#E8EAED',
+                        background: '#FFFFFF',
+                        color: '#0F1B2D',
                         confirmButtonColor: '#2E5C8A'
                     });
                 }
@@ -149,8 +149,8 @@ function transferForm() {
                     title: 'Error!',
                     text: 'An unexpected error occurred.',
                     icon: 'error',
-                    background: '#161A1E',
-                    color: '#E8EAED',
+                    background: '#FFFFFF',
+                    color: '#0F1B2D',
                     confirmButtonColor: '#2E5C8A'
                 });
             } finally {

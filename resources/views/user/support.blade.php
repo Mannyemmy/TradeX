@@ -23,7 +23,7 @@
                 </div>
                 <h3 class="text-xl font-bold text-content-primary">{{ $settings->site_name }} Support</h3>
                 <p class="text-sm text-content-secondary mt-2">For inquiries, suggestions or complaints, mail us at</p>
-                <a href="mailto:{{ $settings->contact_email }}" class="text-primary hover:text-primary-light text-sm font-medium transition-colors">
+                <a href="mailto:{{ $settings->contact_email }}" class="text-primary hover:text-primary text-sm font-medium transition-colors">
                     {{ $settings->contact_email }}
                 </a>
             </div>

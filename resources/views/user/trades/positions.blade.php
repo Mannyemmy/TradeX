@@ -159,7 +159,7 @@
                                         &middot; {{ \Carbon\Carbon::parse($trade->created_at)->diffForHumans(null, true) }} ago
                                     </span>
                                     <div class="flex items-center gap-2">
-                                        <a href="{{ route('user.trades.show', $trade->id) }}" class="text-xs text-primary hover:text-primary-light transition-colors font-medium">
+                                        <a href="{{ route('user.trades.show', $trade->id) }}" class="text-xs text-primary hover:text-primary transition-colors font-medium">
                                             View Details
                                         </a>
                                         @if(!$trade->close_requested_at)
@@ -245,7 +245,7 @@
                                         @include('user.trades.partials.pnl-display', ['value' => $trade->unrealized_pl])
                                     </td>
                                     <td class="px-4 py-3 text-right">
-                                        <a href="{{ route('user.trades.show', $trade->id) }}" class="text-xs text-primary hover:text-primary-light font-medium" onclick="event.stopPropagation()">
+                                        <a href="{{ route('user.trades.show', $trade->id) }}" class="text-xs text-primary hover:text-primary font-medium" onclick="event.stopPropagation()">
                                             <x-icon name="eye" class="w-4 h-4" />
                                         </a>
                                     </td>

@@ -337,7 +337,7 @@
     var elements = stripe.elements();
     var style = {
         base: {
-            color: '#E8EAED',
+            color: '#0F1B2D',
             fontFamily: 'Inter, sans-serif',
             fontSize: '14px',
             '::placeholder': { color: '#6B7280' }
@@ -351,7 +351,7 @@
 
     card.on('change', function(event) {
         if (event.error) {
-            Swal.fire({ icon: 'error', title: 'Card Error', text: event.error.message, background: '#161A1E', color: '#E8EAED' });
+            Swal.fire({ icon: 'error', title: 'Card Error', text: event.error.message, background: '#FFFFFF', color: '#0F1B2D' });
             paybtn.disabled = true;
         } else {
             paybtn.disabled = false;
@@ -373,7 +373,7 @@
             }
         }).then(function(result) {
             if (result.error) {
-                Swal.fire({ icon: 'error', title: 'Payment Failed', text: 'There was an error processing your payment. Please try again from the deposit page.', background: '#161A1E', color: '#E8EAED' });
+                Swal.fire({ icon: 'error', title: 'Payment Failed', text: 'There was an error processing your payment. Please try again from the deposit page.', background: '#FFFFFF', color: '#0F1B2D' });
                 document.getElementById('spinner').classList.add('hidden');
                 document.getElementById('buttontext').classList.remove('hidden');
                 paybtn.disabled = false;
@@ -389,11 +389,11 @@
                 })
                 .then(r => r.json())
                 .then(data => {
-                    Swal.fire({ icon: 'success', title: 'Success', text: data.success || 'Payment completed!', background: '#161A1E', color: '#E8EAED' });
+                    Swal.fire({ icon: 'success', title: 'Success', text: data.success || 'Payment completed!', background: '#FFFFFF', color: '#0F1B2D' });
                     setTimeout(() => window.location.replace(@json(route('accounthistory'))), 3000);
                 })
                 .catch(() => {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'Error submitting payment data.', background: '#161A1E', color: '#E8EAED' });
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Error submitting payment data.', background: '#FFFFFF', color: '#0F1B2D' });
                 });
             }
         });

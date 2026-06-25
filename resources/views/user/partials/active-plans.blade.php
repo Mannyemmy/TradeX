@@ -9,7 +9,7 @@
             <span class="w-2 h-2 rounded-full bg-primary"></span>
             <h3 class="text-sm font-semibold text-content-primary">Active Plan(s)</h3>
         </div>
-        <a href="{{ url('dashboard/mplans') }}" class="text-xs text-primary hover:text-primary-light font-medium transition-colors">
+        <a href="{{ url('dashboard/mplans') }}" class="text-xs text-primary hover:text-primary font-medium transition-colors">
             View All &rarr;
         </a>
     </div>

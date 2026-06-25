@@ -89,11 +89,11 @@
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#2E5C8A',
-            cancelButtonColor: '#2A2F36',
+            cancelButtonColor: '#64748B',
             confirmButtonText: 'Yes, Subscribe!',
             cancelButtonText: 'Cancel',
-            background: '#161A1E',
-            color: '#E8EAED'
+            background: '#FFFFFF',
+            color: '#0F1B2D'
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('subscribe-form-' + planId).submit();

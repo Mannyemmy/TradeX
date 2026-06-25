@@ -23,17 +23,17 @@ class CreateThemeColorsTable extends Migration
             $table->string('warning_color', 9)->default('#F59E0B');
             $table->string('info_color', 9)->default('#3B82F6');
 
-            // Surface colors (dark theme backgrounds)
-            $table->string('surface_base', 9)->default('#0F1115');
-            $table->string('surface_raised', 9)->default('#161A1E');
-            $table->string('surface_overlay', 9)->default('#1C2127');
-            $table->string('surface_border', 9)->default('#2A2F36');
-            $table->string('surface_border_light', 9)->default('#363C44');
+            // Surface colors (light theme backgrounds — white/blue)
+            $table->string('surface_base', 9)->default('#F4F7FA');
+            $table->string('surface_raised', 9)->default('#FFFFFF');
+            $table->string('surface_overlay', 9)->default('#EDF2F7');
+            $table->string('surface_border', 9)->default('#DCE3EC');
+            $table->string('surface_border_light', 9)->default('#C8D3E0');
 
             // Content / text colors
-            $table->string('content_primary', 9)->default('#E8EAED');
-            $table->string('content_secondary', 9)->default('#9AA0AB');
-            $table->string('content_tertiary', 9)->default('#6B7280');
+            $table->string('content_primary', 9)->default('#0F1B2D');
+            $table->string('content_secondary', 9)->default('#475569');
+            $table->string('content_tertiary', 9)->default('#8593A3');
 
             // Body colors (public pages - light theme)
             $table->string('body_bg', 9)->default('#F5F7F9');

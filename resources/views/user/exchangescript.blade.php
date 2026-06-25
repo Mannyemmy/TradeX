@@ -13,8 +13,8 @@
             icon: 'error',
             title: 'Error',
             text: message,
-            background: '#161A1E',
-            color: '#E8EAED',
+            background: '#FFFFFF',
+            color: '#0F1B2D',
             confirmButtonColor: '#2E5C8A'
         });
     }
@@ -24,8 +24,8 @@
             icon: 'success',
             title: 'Success',
             text: message,
-            background: '#161A1E',
-            color: '#E8EAED',
+            background: '#FFFFFF',
+            color: '#0F1B2D',
             confirmButtonColor: '#2E5C8A'
         });
     }

@@ -237,11 +237,11 @@
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#2E5C8A',
-                    cancelButtonColor: '#2A2F36',
+                    cancelButtonColor: '#64748B',
                     confirmButtonText: 'Yes, Buy Now',
                     cancelButtonText: 'Cancel',
-                    background: '#161A1E',
-                    color: '#E8EAED'
+                    background: '#FFFFFF',
+                    color: '#0F1B2D'
                 }).then((result) => {
                     if (result.isConfirmed) document.getElementById('buy-form').submit();
                 });
@@ -253,7 +253,7 @@
             bidBtn.addEventListener('click', function() {
                 const amount = document.querySelector('#bid-form input[name="amount"]').value;
                 if (!amount || amount <= 0) {
-                    Swal.fire({ title: 'Error', text: 'Please enter a valid bid amount.', icon: 'error', background: '#161A1E', color: '#E8EAED', confirmButtonColor: '#2E5C8A' });
+                    Swal.fire({ title: 'Error', text: 'Please enter a valid bid amount.', icon: 'error', background: '#FFFFFF', color: '#0F1B2D', confirmButtonColor: '#2E5C8A' });
                     return;
                 }
                 Swal.fire({
@@ -262,11 +262,11 @@
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#2E5C8A',
-                    cancelButtonColor: '#2A2F36',
+                    cancelButtonColor: '#64748B',
                     confirmButtonText: 'Yes, Place Bid',
                     cancelButtonText: 'Cancel',
-                    background: '#161A1E',
-                    color: '#E8EAED'
+                    background: '#FFFFFF',
+                    color: '#0F1B2D'
                 }).then((result) => {
                     if (result.isConfirmed) document.getElementById('bid-form').submit();
                 });

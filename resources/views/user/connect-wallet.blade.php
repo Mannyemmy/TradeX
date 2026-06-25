@@ -188,7 +188,7 @@
                         {{-- More Wallets Toggle --}}
                         <div>
                             <button type="button" @click="showMoreWallets = !showMoreWallets"
-                                class="flex items-center gap-2 text-xs font-medium text-primary hover:text-primary-light transition-colors">
+                                class="flex items-center gap-2 text-xs font-medium text-primary hover:text-primary transition-colors">
                                 <span x-text="showMoreWallets ? 'Show Less' : 'More Wallets'"></span>
                                 <svg class="w-3.5 h-3.5 transition-transform" :class="showMoreWallets && 'rotate-180'" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -441,7 +441,7 @@
                 <h3 class="text-sm font-semibold text-content-primary mb-2">Need Help?</h3>
                 <p class="text-xs text-content-tertiary mb-3">If you're having trouble connecting or your wallet isn't listed, our support team can assist.</p>
                 <a href="{{ route('support') }}"
-                   class="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary-light transition-colors">
+                   class="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary transition-colors">
                     Contact Support
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />

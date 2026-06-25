@@ -37,17 +37,17 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
                 },
                 colors: {
                     surface: {
-                        base: '{{ $themeColors->surface_base ?? '#0F1115' }}',
-                        raised: '{{ $themeColors->surface_raised ?? '#161A1E' }}',
-                        overlay: '{{ $themeColors->surface_overlay ?? '#1C2127' }}',
-                        border: '{{ $themeColors->surface_border ?? '#2A2F36' }}',
-                        'border-light': '{{ $themeColors->surface_border_light ?? '#363C44' }}',
+                        base: '{{ $themeColors->surface_base ?? '#F4F7FA' }}',
+                        raised: '{{ $themeColors->surface_raised ?? '#FFFFFF' }}',
+                        overlay: '{{ $themeColors->surface_overlay ?? '#EDF2F7' }}',
+                        border: '{{ $themeColors->surface_border ?? '#DCE3EC' }}',
+                        'border-light': '{{ $themeColors->surface_border_light ?? '#C8D3E0' }}',
                     },
                     content: {
-                        primary: '{{ $themeColors->content_primary ?? '#E8EAED' }}',
-                        secondary: '{{ $themeColors->content_secondary ?? '#9AA0AB' }}',
-                        tertiary: '{{ $themeColors->content_tertiary ?? '#6B7280' }}',
-                        inverse: '{{ $themeColors->surface_base ?? '#0F1115' }}',
+                        primary: '{{ $themeColors->content_primary ?? '#0F1B2D' }}',
+                        secondary: '{{ $themeColors->content_secondary ?? '#475569' }}',
+                        tertiary: '{{ $themeColors->content_tertiary ?? '#8593A3' }}',
+                        inverse: '#FFFFFF',
                     },
                     primary: {
                         DEFAULT: '{{ $themeColors->primary_color ?? '#2E5C8A' }}',
@@ -68,17 +68,17 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
     <style type="text/tailwindcss">
     @layer base {
         [x-cloak] { display: none !important; }
-        html { background-color: #0F1115; }
-        body { font-family: 'Inter', system-ui, sans-serif; color: #9AA0AB; -webkit-font-smoothing: antialiased; }
+        html { background-color: #F4F7FA; }
+        body { font-family: 'Inter', system-ui, sans-serif; color: #475569; -webkit-font-smoothing: antialiased; }
         /* Scrollbar styling */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0F1115; }
-        ::-webkit-scrollbar-thumb { background: #2A2F36; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #363C44; }
+        ::-webkit-scrollbar-track { background: #EDF2F7; }
+        ::-webkit-scrollbar-thumb { background: #C8D3E0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A9B7C7; }
     }
     @layer components {
         .nav-link-active {
-            @apply bg-primary-subtle text-primary-light border-l-2 border-primary;
+            @apply bg-primary-subtle text-primary font-medium border-l-2 border-primary;
         }
         .nav-link-item {
             @apply flex items-center gap-3 px-4 py-2.5 text-sm text-content-secondary hover:bg-surface-overlay hover:text-content-primary transition-colors duration-150 border-l-2 border-transparent;
@@ -329,7 +329,7 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
                          class="absolute right-0 mt-2 w-80 bg-surface-raised border border-surface-border rounded-xl shadow-xl z-50 overflow-hidden">
                         <div class="flex items-center justify-between px-4 py-3 border-b border-surface-border">
                             <h4 class="text-sm font-semibold text-content-primary">Notifications</h4>
-                            <button x-show="count > 0" @click="markAllRead()" class="text-xs text-primary hover:text-primary-light transition-colors">Mark all read</button>
+                            <button x-show="count > 0" @click="markAllRead()" class="text-xs text-primary hover:text-primary transition-colors">Mark all read</button>
                         </div>
                         <div class="max-h-72 overflow-y-auto divide-y divide-surface-border">
                             <template x-if="notifs.length === 0">
@@ -348,7 +348,7 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
                                 </a>
                             </template>
                         </div>
-                        <a href="{{ route('notification') }}" class="block text-center text-xs text-primary hover:text-primary-light py-3 border-t border-surface-border transition-colors">View all notifications</a>
+                        <a href="{{ route('notification') }}" class="block text-center text-xs text-primary hover:text-primary py-3 border-t border-surface-border transition-colors">View all notifications</a>
                     </div>
                 </div>
 
@@ -449,7 +449,7 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
         {{-- Footer --}}
         <footer class="border-t border-surface-border py-6 px-6 mt-8">
             <p class="text-sm text-content-tertiary text-center">
-                &copy; {{ date('Y') }} <a href="#" class="text-primary hover:text-primary-light transition-colors">{{ $settings->site_name }}</a>. All rights reserved.
+                &copy; {{ date('Y') }} <a href="#" class="text-primary hover:text-primary transition-colors">{{ $settings->site_name }}</a>. All rights reserved.
             </p>
         </footer>
     </main>
@@ -479,7 +479,7 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
 
                 {{-- QR + Address --}}
                 <div class="flex items-start gap-4">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data={{ $item->wallet_address }}&bgcolor=1C2127&color=E8EAED"
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data={{ $item->wallet_address }}&bgcolor=FFFFFF&color=0F1B2D"
                          alt="QR Code" class="w-24 h-24 rounded-lg border border-surface-border shrink-0">
                     <div class="min-w-0 flex-1">
                         <p class="text-xs text-content-tertiary mb-1.5">Send {{ $item->name }} to this address</p>
@@ -488,7 +488,7 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
                         </div>
                         <button type="button"
                                 @click="navigator.clipboard.writeText('{{ $item->wallet_address }}'); copied = true; setTimeout(() => copied = false, 2000)"
-                                class="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary-light transition-colors">
+                                class="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary transition-colors">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-.621-.504-1.125-1.125-1.125h-2.25" />
                             </svg>

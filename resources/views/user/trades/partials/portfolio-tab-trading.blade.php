@@ -116,7 +116,7 @@
         <div class="bg-surface-raised border border-surface-border rounded-xl p-5">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-semibold text-content-primary">Recent Activity</h3>
-                <a href="{{ route('user.trades.history') }}" class="text-xs text-primary hover:text-primary-light transition-colors">View All</a>
+                <a href="{{ route('user.trades.history') }}" class="text-xs text-primary hover:text-primary transition-colors">View All</a>
             </div>
             @if($recentClosed->count() > 0)
                 <div class="space-y-3">

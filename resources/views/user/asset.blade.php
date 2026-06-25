@@ -162,7 +162,7 @@
                     <x-icon name="arrows-right-left" class="w-5 h-5 text-primary" />
                     <h3 class="text-sm font-semibold text-content-primary">Swap</h3>
                 </div>
-                <a href="{{ route('swaphistory') }}" class="text-xs text-primary hover:text-primary-light transition-colors">
+                <a href="{{ route('swaphistory') }}" class="text-xs text-primary hover:text-primary transition-colors">
                     History &rarr;
                 </a>
             </div>
@@ -253,10 +253,10 @@
             "symbol": "COINBASE:BTCUSD",
             "interval": "1",
             "timezone": "Etc/UTC",
-            "theme": "dark",
+            "theme": "light",
             "style": "9",
             "locale": "en",
-            "toolbar_bg": "#161A1E",
+            "toolbar_bg": "#FFFFFF",
             "enable_publishing": false,
             "hide_side_toolbar": false,
             "allow_symbol_change": true,

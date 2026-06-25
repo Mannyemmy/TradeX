@@ -33,8 +33,8 @@
                     title: 'Payment method: ' + response,
                     showConfirmButton: false,
                     timer: 2000,
-                    background: '#161A1E',
-                    color: '#E8EAED'
+                    background: '#FFFFFF',
+                    color: '#0F1B2D'
                 });
             })
             .catch(err => console.log(err));
@@ -50,8 +50,8 @@
                 title: 'Please choose a payment method',
                 showConfirmButton: false,
                 timer: 3000,
-                background: '#161A1E',
-                color: '#E8EAED'
+                background: '#FFFFFF',
+                color: '#0F1B2D'
             });
         } else {
             let makepayurl = "{{ url('/dashboard/newdeposit') }}";

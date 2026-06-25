@@ -96,8 +96,8 @@
             title: 'Cancel Account',
             text: 'Send an email to {{ $settings->contact_email }} to have your MT4 details cancelled.',
             icon: 'info',
-            background: '#161A1E',
-            color: '#E8EAED',
+            background: '#FFFFFF',
+            color: '#0F1B2D',
             confirmButtonColor: '#2E5C8A',
             confirmButtonText: 'Okay'
         });

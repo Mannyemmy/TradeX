@@ -26,7 +26,7 @@
             <span class="text-sm font-semibold text-content-primary">Filters</span>
         </div>
         <button @click="showAdvanced = !showAdvanced"
-                class="text-xs text-primary hover:text-primary-light font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
+                class="text-xs text-primary hover:text-primary font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded"
                 :aria-expanded="showAdvanced"
                 aria-controls="advanced-filters">
             <span x-text="showAdvanced ? 'Less Filters' : 'More Filters'"></span>

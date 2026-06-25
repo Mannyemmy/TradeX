@@ -189,11 +189,11 @@ if (stopBtn) {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#EF4444',
-            cancelButtonColor: '#2A2F36',
+            cancelButtonColor: '#64748B',
             confirmButtonText: 'Yes, Stop',
             cancelButtonText: 'Cancel',
-            background: '#161A1E',
-            color: '#E8EAED'
+            background: '#FFFFFF',
+            color: '#0F1B2D'
         }).then((result) => {
             if (result.isConfirmed) document.getElementById('stop-position-form').submit();
         });

@@ -186,7 +186,7 @@
     <div class="bg-surface-raised border border-surface-border rounded-xl p-5 mb-6">
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-sm font-semibold text-content-primary">Recent Trades</h2>
-            <a href="{{ route('user.trades.history') }}" class="text-xs text-primary hover:text-primary-light transition-colors font-medium">View Full History</a>
+            <a href="{{ route('user.trades.history') }}" class="text-xs text-primary hover:text-primary transition-colors font-medium">View Full History</a>
         </div>
 
         @if($recentTrades->count() > 0)

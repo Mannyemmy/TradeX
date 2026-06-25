@@ -93,8 +93,8 @@
                 title: 'Copied!',
                 text: 'Referral link copied to clipboard.',
                 icon: 'success',
-                background: '#161A1E',
-                color: '#E8EAED',
+                background: '#FFFFFF',
+                color: '#0F1B2D',
                 confirmButtonColor: '#2E5C8A',
                 timer: 2000,
                 timerProgressBar: true

@@ -611,11 +611,11 @@
 
             confirmTrade(action) {
                 if (!this.selectedAssetId) {
-                    Swal.fire({ title: 'Select an Asset', text: 'Please choose an asset before placing a trade.', icon: 'info', background: '#161A1E', color: '#E8EAED' });
+                    Swal.fire({ title: 'Select an Asset', text: 'Please choose an asset before placing a trade.', icon: 'info', background: '#FFFFFF', color: '#0F1B2D' });
                     return;
                 }
                 if (!this.amount || this.amount <= 0) {
-                    Swal.fire({ title: 'Enter Amount', text: 'Please enter a valid trade amount.', icon: 'info', background: '#161A1E', color: '#E8EAED' });
+                    Swal.fire({ title: 'Enter Amount', text: 'Please enter a valid trade amount.', icon: 'info', background: '#FFFFFF', color: '#0F1B2D' });
                     return;
                 }
 
@@ -640,11 +640,11 @@
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: action === 'buy' ? '#1A3A7F' : '#EF4444',
-                    cancelButtonColor: '#2A2F36',
+                    cancelButtonColor: '#64748B',
                     confirmButtonText: `${action.toUpperCase()} Now`,
                     cancelButtonText: "Cancel",
-                    background: '#161A1E',
-                    color: '#E8EAED'
+                    background: '#FFFFFF',
+                    color: '#0F1B2D'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         this.$refs.tradeAction.value = action;
@@ -708,10 +708,10 @@
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#EF4444',
-            cancelButtonColor: '#2A2F36',
+            cancelButtonColor: '#64748B',
             confirmButtonText: 'Yes, Request Close',
-            background: '#161A1E',
-            color: '#E8EAED'
+            background: '#FFFFFF',
+            color: '#0F1B2D'
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch("{{ route('trades.requestClose') }}", {
@@ -722,10 +722,10 @@
                 .then(r => r.json())
                 .then(data => {
                     if (data.success) {
-                        Swal.fire({ title: 'Submitted', text: data.message, icon: 'success', background: '#161A1E', color: '#E8EAED' })
+                        Swal.fire({ title: 'Submitted', text: data.message, icon: 'success', background: '#FFFFFF', color: '#0F1B2D' })
                             .then(() => location.reload());
                     } else {
-                        Swal.fire({ title: 'Error', text: data.message, icon: 'error', background: '#161A1E', color: '#E8EAED' });
+                        Swal.fire({ title: 'Error', text: data.message, icon: 'error', background: '#FFFFFF', color: '#0F1B2D' });
                     }
                 });
             }

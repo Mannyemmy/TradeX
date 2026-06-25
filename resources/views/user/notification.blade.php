@@ -15,7 +15,7 @@
             <span class="font-medium text-content-primary">{{ $unreadCount }}</span> unread notification{{ $unreadCount !== 1 ? 's' : '' }}
         </p>
         @if($unreadCount > 0)
-        <button type="button" onclick="markAllRead()" class="text-sm text-primary hover:text-primary-light transition-colors font-medium">
+        <button type="button" onclick="markAllRead()" class="text-sm text-primary hover:text-primary transition-colors font-medium">
             Mark all as read
         </button>
         @endif
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     @if(!empty($notification->data['action_url']))
-                        <a href="{{ $notification->data['action_url'] }}" class="inline-flex items-center gap-1 text-xs text-primary hover:text-primary-light mt-2 font-medium transition-colors">
+                        <a href="{{ $notification->data['action_url'] }}" class="inline-flex items-center gap-1 text-xs text-primary hover:text-primary mt-2 font-medium transition-colors">
                             View details <x-icon name="chevron-right" class="w-3 h-3" />
                         </a>
                     @endif

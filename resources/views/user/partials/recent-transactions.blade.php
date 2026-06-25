@@ -9,7 +9,7 @@
             <span class="w-2 h-2 rounded-full bg-info"></span>
             <h3 class="text-sm font-semibold text-content-primary">Recent Transactions</h3>
         </div>
-        <a href="{{ route('accounthistory') }}" class="text-xs text-primary hover:text-primary-light font-medium transition-colors">
+        <a href="{{ route('accounthistory') }}" class="text-xs text-primary hover:text-primary font-medium transition-colors">
             View All &rarr;
         </a>
     </div>

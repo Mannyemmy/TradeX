@@ -1,10 +1,10 @@
 {{-- Submit MT4 Subscription Modal --}}
 <div id="submitmt4modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-        <div class="modal-content" style="background: #161A1E; border: 1px solid #2A2F36; border-radius: 12px;">
-            <div class="modal-header" style="border-bottom: 1px solid #2A2F36;">
-                <h4 class="modal-title" style="color: #E8EAED; font-size: 16px; font-weight: 600;">Subscribe to Trading</h4>
-                <button type="button" class="close" data-dismiss="modal" style="color: #9AA0AB;">&times;</button>
+        <div class="modal-content" style="background: #FFFFFF; border: 1px solid #DCE3EC; border-radius: 12px;">
+            <div class="modal-header" style="border-bottom: 1px solid #DCE3EC;">
+                <h4 class="modal-title" style="color: #0F1B2D; font-size: 16px; font-weight: 600;">Subscribe to Trading</h4>
+                <button type="button" class="close" data-dismiss="modal" style="color: #475569;">&times;</button>
             </div>
             <div class="modal-body" style="padding: 24px;">
                 <form role="form" method="post" action="{{ route('savemt4details') }}">

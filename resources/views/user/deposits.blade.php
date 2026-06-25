@@ -57,7 +57,7 @@
                     <p class="text-sm text-warning mb-2">Flexible payment methods available</p>
                     <p class="text-xs text-content-secondary leading-relaxed">
                         Once payment is made, send your proof to
-                        <a href="mailto:{{ $settings->contact_email }}" class="text-primary hover:text-primary-light">{{ $settings->contact_email }}</a>.
+                        <a href="mailto:{{ $settings->contact_email }}" class="text-primary hover:text-primary">{{ $settings->contact_email }}</a>.
                         You will receive payment details via support email.
                     </p>
                 </div>
