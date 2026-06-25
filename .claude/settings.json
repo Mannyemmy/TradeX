@@ -53,7 +53,8 @@
       "Bash(export LC_ALL=C)",
       "Bash(grep -oP '.{800}Research that makes a difference.{500}' test-homepage.html)",
       "Read(//c/Users/DELL/AppData/Local/Temp/claude/d--Dev-TradeX/be3fdfd5-9691-434b-918a-ac5d98e20249/scratchpad/**)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(python -)"
     ],
     "defaultMode": "bypassPermissions",
     "additionalDirectories": [
