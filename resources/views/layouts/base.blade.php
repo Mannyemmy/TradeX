@@ -24,17 +24,17 @@
                 },
                 colors: {
                     surface: {
-                        base: '{{ $themeColors->surface_base ?? '#0F1115' }}',
-                        raised: '{{ $themeColors->surface_raised ?? '#161A1E' }}',
-                        overlay: '{{ $themeColors->surface_overlay ?? '#1C2127' }}',
-                        border: '{{ $themeColors->surface_border ?? '#2A2F36' }}',
-                        'border-light': '{{ $themeColors->surface_border_light ?? '#363C44' }}',
+                        base: '{{ $themeColors->surface_base ?? '#F4F7FA' }}',
+                        raised: '{{ $themeColors->surface_raised ?? '#FFFFFF' }}',
+                        overlay: '{{ $themeColors->surface_overlay ?? '#EDF2F7' }}',
+                        border: '{{ $themeColors->surface_border ?? '#DCE3EC' }}',
+                        'border-light': '{{ $themeColors->surface_border_light ?? '#C8D3E0' }}',
                     },
                     content: {
-                        primary: '{{ $themeColors->content_primary ?? '#E8EAED' }}',
-                        secondary: '{{ $themeColors->content_secondary ?? '#9AA0AB' }}',
+                        primary: '{{ $themeColors->content_primary ?? '#0F1B2D' }}',
+                        secondary: '{{ $themeColors->content_secondary ?? '#475569' }}',
                         tertiary: '{{ $themeColors->content_tertiary ?? '#6B7280' }}',
-                        inverse: '{{ $themeColors->surface_base ?? '#0F1115' }}',
+                        inverse: '#FFFFFF',
                     },
                     primary: {
                         DEFAULT: '{{ $themeColors->primary_color ?? '#2E5C8A' }}',

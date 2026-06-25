@@ -59,7 +59,6 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
                     loss: '{{ $themeColors->loss_color ?? '#EF4444' }}',
                     warning: '{{ $themeColors->warning_color ?? '#F59E0B' }}',
                     info: '{{ $themeColors->info_color ?? '#3B82F6' }}',
-                    info: '#3B82F6',
                 },
             },
         },

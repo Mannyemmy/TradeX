@@ -5,17 +5,17 @@
 @layer base {
     :root {
         /* Surface Colors */
-        --color-surface-base: 15 17 21;
-        --color-surface-raised: 22 26 30;
-        --color-surface-overlay: 28 33 39;
-        --color-surface-border: 42 47 54;
-        --color-surface-border-light: 54 60 68;
+        --color-surface-base: 244 247 250;
+        --color-surface-raised: 255 255 255;
+        --color-surface-overlay: 237 242 247;
+        --color-surface-border: 220 227 236;
+        --color-surface-border-light: 200 211 224;
 
         /* Content Colors */
-        --color-content-primary: 232 234 237;
-        --color-content-secondary: 154 160 171;
-        --color-content-tertiary: 107 114 128;
-        --color-content-inverse: 15 17 21;
+        --color-content-primary: 15 27 45;
+        --color-content-secondary: 71 85 105;
+        --color-content-tertiary: 133 147 163;
+        --color-content-inverse: 255 255 255;
 
         /* Primary / Accent (Blue) */
         --color-primary: 46 92 138;
