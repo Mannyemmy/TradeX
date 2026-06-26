@@ -30,6 +30,10 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 
         <link rel="stylesheet" href="{{ asset('themes/purposeTheme/assets/libs/flatpickr/dist/flatpickr.min.css') }}">
+        {{-- Poppins font for brand name consistency --}}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     @show
     @livewireStyles
 </head>
@@ -55,7 +59,7 @@
             <div class="pt-5 pb-4 footer footer-light sticky-bottom" id="footer-main">
                 <div class="text-center row text-sm-left align-items-sm-center">
                     <div class="col-sm-6">
-                        <p class="mb-0 text-sm">All Rights Reserved &copy; {{ $settings->site_name }}
+                        <p class="mb-0 text-sm">All Rights Reserved &copy; <span style="font-family: 'Poppins', sans-serif">{{ $settings->site_name }}</span>
                             {{ date('Y') }}</p>
                     </div>
                     @if ($settings->google_translate == 'on')

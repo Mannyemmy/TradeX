@@ -50,6 +50,10 @@
             var PAYPAL_ORDER_API = 'https://api.paypal.com/v2/checkout/orders/';
         </script>
         <script src="https://www.paypal.com/sdk/js?client-id={{ $settings->pp_ci }}"></script>
+        {{-- Poppins font for brand name consistency --}}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     @show
     @livewireStyles
 </head>
@@ -63,7 +67,7 @@
                 <footer class="footer mt-4">
                     <div class="container-fluid">
                         <div class="text-center row copyright text-align-center gap-3">
-                            <p>All Rights Reserved &copy; {{ $settings->site_name }} {{ date('Y') }}</p> <br>
+                            <p>All Rights Reserved &copy; <span style="font-family: 'Poppins', sans-serif">{{ $settings->site_name }}</span> {{ date('Y') }}</p> <br>
                             @if ($settings->google_translate == 'on')
                                 <div class="text-center">
                                     <div id="google_translate_element"></div>

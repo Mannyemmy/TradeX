@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     {{-- Tailwind CSS (Play CDN) --}}
     <script src="https://cdn.tailwindcss.com"></script>
@@ -262,7 +263,7 @@
         {{-- Footer --}}
         <footer class="border-t border-border py-6 px-6 mt-8">
             <p class="text-sm text-content-muted text-center">
-                &copy; {{ date('Y') }} {{ $settings->site_name }}. All rights reserved.
+                &copy; {{ date('Y') }} <span style="font-family: 'Poppins', sans-serif">{{ $settings->site_name }}</span>. All rights reserved.
             </p>
         </footer>
     </main>

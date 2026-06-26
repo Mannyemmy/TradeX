@@ -119,7 +119,7 @@
                             @endif
 
                             <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #6B7280;">
-                                &copy; {{ date('Y') }} {{ $settings->site_name ?? config('app.name') }}. All rights reserved.
+                                &copy; {{ date('Y') }} <span style="font-family: 'Poppins', sans-serif">{{ $settings->site_name ?? config('app.name') }}</span>. All rights reserved.
                             </p>
 
                         </td>

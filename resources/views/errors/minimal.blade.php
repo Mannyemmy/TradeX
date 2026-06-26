@@ -103,7 +103,7 @@
         {{-- Decorative border --}}
         <div class="mt-12 border-t border-surface-border pt-6">
             <p class="text-content-tertiary text-xs">
-                {{ $settings->site_name ?? config('app.name', 'TradexPro') }}
+                <span style="font-family: 'Poppins', sans-serif">{{ $settings->site_name ?? config('app.name', 'TradexPro') }}</span>
             </p>
         </div>
     </div>

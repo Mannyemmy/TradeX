@@ -56,7 +56,7 @@
         {{-- Bottom bar --}}
         <div class="border-t border-surface-border mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between">
             <p class="text-content-tertiary text-xs">
-                &copy; {{ date('Y') }} {{ $settings->site_name }}. All Rights Reserved.
+                &copy; {{ date('Y') }} <span class="font-sans">{{ $settings->site_name }}</span>. All Rights Reserved.
             </p>
             <div class="flex items-center space-x-4 mt-3 sm:mt-0">
                 <a href="{{ route('terms') }}" class="text-content-tertiary hover:text-content-secondary text-xs transition">Terms</a>

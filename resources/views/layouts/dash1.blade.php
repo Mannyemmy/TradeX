@@ -25,6 +25,7 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
     {{-- Tailwind CSS (Play CDN) — TODO: replace with pre-built CSS for production --}}
     <script src="https://cdn.tailwindcss.com"></script>
@@ -448,7 +449,7 @@ $unreadTicketCount = \App\Models\SupportTicket::where('user_id', Auth::id())->wh
         {{-- Footer --}}
         <footer class="border-t border-surface-border py-6 px-6 mt-8">
             <p class="text-sm text-content-tertiary text-center">
-                &copy; {{ date('Y') }} <a href="#" class="text-primary hover:text-primary transition-colors">{{ $settings->site_name }}</a>. All rights reserved.
+                &copy; {{ date('Y') }} <a href="#" class="text-primary hover:text-primary transition-colors" style="font-family: 'Poppins', sans-serif">{{ $settings->site_name }}</a>. All rights reserved.
             </p>
         </footer>
     </main>
