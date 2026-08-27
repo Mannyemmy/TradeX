@@ -1,0 +1,4 @@
+# cPanel's YAML parser and shell scripts break on CRLF - force LF regardless of platform.
+.cpanel.yml text eol=lf
+*.sh        text eol=lf
+.htaccess   text eol=lf
