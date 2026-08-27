@@ -20,8 +20,9 @@ SRC="$PWD"
 BEFORE=$(stat -c %s "$DEPLOYPATH/test-homepage.html" 2>/dev/null || echo 0)
 
 # Secrets and runtime state that exist only on the server, plus local-only dirs.
-# -m on extract stamps files with the current time, so File Manager timestamps
-# actually change (tar otherwise restores the source mtime).
+# -m stamps files with the current time so File Manager timestamps actually
+# change. --no-overwrite-dir leaves EXISTING directories' permissions alone;
+# new directories are still created normally.
 tar -cf - -C "$SRC" \
   --exclude='./.git' \
   --exclude='./.gitignore' \
@@ -41,7 +42,14 @@ tar -cf - -C "$SRC" \
   --exclude='./server-config' \
   --exclude='./deploy.sh' \
   --exclude='.DS_Store' \
-  . | tar -xmf - -C "$DEPLOYPATH" || { echo "ABORT - tar sync failed"; exit 1; }
+  . | tar -xmf - --no-overwrite-dir -C "$DEPLOYPATH" || { echo "ABORT - tar sync failed"; exit 1; }
+
+# The docroot must stay 0750 user:nobody - Apache runs as 'nobody' and needs
+# the group execute bit to traverse it. Without --no-overwrite-dir above, tar
+# stamps the repo directory's 0700 onto the docroot and every request falls
+# back to a directory listing. Belt and braces: assert it afterwards too.
+chmod 750 "$DEPLOYPATH"
+[ -f "$DEPLOYPATH/.env" ] && chmod 600 "$DEPLOYPATH/.env"
 
 # Only clears. config:cache / route:cache are deliberately NOT run: this app's
 # config/app.php uses env('TIMEZONE','UTC'), and a blank TIMEZONE in the server
