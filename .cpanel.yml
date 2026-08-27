@@ -1,32 +1,8 @@
 ---
 deployment:
   tasks:
-    # Every task is a single line - cPanel's YAML parser is unreliable with
-    # multi-line folded scalars. Any task containing a colon must be quoted.
-    # Every command that can block is wrapped in `timeout`, because a hung task
-    # leaves the deployment sitting in "queued" forever.
-
-    - export DEPLOYPATH=/home/wealthw5/tradexpromax
-    - export SRC="$PWD"
-
-    # Refuse to run if the target or the source look wrong, rather than
-    # rsyncing the wrong tree into the docroot.
-    - '[ -d "$DEPLOYPATH" ] || { echo "ABORT - deploy path missing"; exit 1; }'
-    - '[ -f "$SRC/index.php" ] && [ -f "$SRC/.cpanel.yml" ] || { echo "ABORT - not the repo root"; exit 1; }'
-
-    # Sync into the docroot. No --delete, so server-only files are never removed.
-    # Excludes are secrets and runtime state that exist ONLY on the server.
-    - timeout 600 rsync -rlptD --timeout=30 --no-perms --chmod=D755,F644 --exclude='.git/' --exclude='.gitignore' --exclude='.cpanel.yml' --exclude='.env' --exclude='.env.*' --exclude='.htaccess' --exclude='web.config' --exclude='storage/' --exclude='bootstrap/cache/' --exclude='vendor/' --exclude='node_modules/' --exclude='.claude/' --exclude='.agents/' --exclude='tests/' --exclude='.DS_Store' --exclude='deploy.sh' --exclude='server-config/' "$SRC/" "$DEPLOYPATH/"
-
-    # Clear stale compiled config/routes/views. Individual clears rather than
-    # `optimize`, so one failure cannot take the whole deploy down.
-    - cd "$DEPLOYPATH" && timeout 30 php artisan config:clear || true
-    - cd "$DEPLOYPATH" && timeout 30 php artisan cache:clear || true
-    - cd "$DEPLOYPATH" && timeout 30 php artisan view:clear || true
-    - cd "$DEPLOYPATH" && timeout 30 php artisan route:clear || true
-
-    # Re-cache config and routes. Skipped silently if the DB or cache is slow.
-    - cd "$DEPLOYPATH" && timeout 60 php artisan config:cache || true
-    - cd "$DEPLOYPATH" && timeout 60 php artisan route:cache || true
-
-    - echo "Deploy finished"
+    # All real work lives in server-config/deploy-sync.sh. Keeping it in a
+    # script instead of inline tasks avoids cPanel's fragile YAML parsing of
+    # long quoted commands, and lets the same logic run by hand when the
+    # cPanel task runner misbehaves (it reports failed tasks as successful).
+    - bash "$PWD/server-config/deploy-sync.sh"
