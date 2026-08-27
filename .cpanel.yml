@@ -10,19 +10,17 @@ deployment:
     # Guard against $PWD ever not being the repo root, or rsync would copy the wrong tree.
     - test -f "$SRC/index.php" -a -f "$SRC/.cpanel.yml" || { echo "FATAL - not the repo root"; exit 1; }
 
-    # Keep a timestamped copy of the live .htaccess (cPanel writes its PHP handler into it).
-    - cp -p "$DEPLOYPATH/.htaccess" "$DEPLOYPATH/.htaccess.bak-$(date +%F-%H%M%S)" 2>/dev/null || true
-
     # Sync tracked files into the docroot.
     #   no --delete means files that exist only on the server are never removed
     #   excludes are secrets and runtime state that live ONLY on the server
     - rsync -rlptD --no-perms --chmod=D755,F644
         --exclude '.git/' --exclude '.gitignore' --exclude '.cpanel.yml'
         --exclude '.env' --exclude '.env.*'
+        --exclude '.htaccess' --exclude 'web.config'
         --exclude 'storage/' --exclude 'bootstrap/cache/'
         --exclude 'vendor/' --exclude 'node_modules/'
         --exclude '.claude/' --exclude '.agents/' --exclude 'tests/'
-        --exclude '.DS_Store' --exclude 'deploy.sh'
+        --exclude '.DS_Store' --exclude 'deploy.sh' --exclude 'server-config/'
         "$SRC/" "$DEPLOYPATH/"
 
     # Rebuild Laravel caches with whichever PHP this account actually has.

@@ -16,3 +16,10 @@ yarn-error.log
 /.idea
 /.vscode
 /.claude
+
+# Server-owned config - edited directly on the server, never deploy from local.
+# These are excluded in .cpanel.yml too, so a deploy cannot overwrite them.
+# Performance rules that belong in the live .htaccess live in
+# server-config/htaccess-performance.conf (tracked, for reference only).
+.htaccess
+web.config
