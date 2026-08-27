@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 80 80">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #65c754;
+      }
+
+      .cls-2 {
+        fill: #141414;
+        isolation: isolate;
+        opacity: .7;
+      }
+
+      .cls-3 {
+        display: none;
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.6.0, SVG Export Plug-In . SVG Version: 1.2.0 Build 709)  -->
+  <g>
+    <g id="Layer_1">
+      <g id="Layer_1-2" data-name="Layer_1">
+        <g id="Layer_1-2">
+          <circle class="cls-2" cx="40" cy="40" r="40"/>
+        </g>
+      </g>
+      <path class="cls-3" d="M24.2,25.4c0-1.5,1.2-2.7,2.7-2.7h7c1.5,0,2.6,1.2,2.6,2.7v33.2c0,1.5-1.2,2.7-2.6,2.7h-7c-1.5,0-2.7-1.2-2.7-2.7V25.4Z"/>
+      <path class="cls-3" d="M43.5,25.4c0-1.5,1.2-2.7,2.6-2.7h7c1.5,0,2.6,1.2,2.6,2.7v33.2c0,1.5-1.2,2.7-2.6,2.7h-7c-1.5,0-2.6-1.2-2.6-2.7V25.4Z"/>
+      <path class="cls-1" d="M24.2,25.4c0-1.5,1.2-2.7,2.7-2.7h7c1.5,0,2.6,1.2,2.6,2.7v33.2c0,1.5-1.2,2.7-2.6,2.7h-7c-1.5,0-2.7-1.2-2.7-2.7V25.4Z"/>
+      <path class="cls-1" d="M43.5,25.4c0-1.5,1.2-2.7,2.6-2.7h7c1.5,0,2.6,1.2,2.6,2.7v33.2c0,1.5-1.2,2.7-2.6,2.7h-7c-1.5,0-2.6-1.2-2.6-2.7V25.4Z"/>
+    </g>
+  </g>
+</svg>
