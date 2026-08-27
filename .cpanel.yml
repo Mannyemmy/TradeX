@@ -1,0 +1,33 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/wealthw5/tradexpromax
+    - export SRC="$PWD"
+
+    # Stop if the target is missing, rather than silently building a new tree somewhere.
+    - test -d "$DEPLOYPATH" || { echo "FATAL - deploy path not found"; exit 1; }
+    - command -v rsync >/dev/null || { echo "FATAL - rsync not available"; exit 1; }
+    # Guard against $PWD ever not being the repo root, or rsync would copy the wrong tree.
+    - test -f "$SRC/index.php" -a -f "$SRC/.cpanel.yml" || { echo "FATAL - not the repo root"; exit 1; }
+
+    # Keep a timestamped copy of the live .htaccess (cPanel writes its PHP handler into it).
+    - cp -p "$DEPLOYPATH/.htaccess" "$DEPLOYPATH/.htaccess.bak-$(date +%F-%H%M%S)" 2>/dev/null || true
+
+    # Sync tracked files into the docroot.
+    #   no --delete means files that exist only on the server are never removed
+    #   excludes are secrets and runtime state that live ONLY on the server
+    - rsync -rlptD --no-perms --chmod=D755,F644
+        --exclude '.git/' --exclude '.gitignore' --exclude '.cpanel.yml'
+        --exclude '.env' --exclude '.env.*'
+        --exclude 'storage/' --exclude 'bootstrap/cache/'
+        --exclude 'vendor/' --exclude 'node_modules/'
+        --exclude '.claude/' --exclude '.agents/' --exclude 'tests/'
+        --exclude '.DS_Store' --exclude 'deploy.sh'
+        "$SRC/" "$DEPLOYPATH/"
+
+    # Rebuild Laravel caches with whichever PHP this account actually has.
+    - export PHPBIN="$(command -v php || echo /opt/cpanel/ea-php81/root/usr/bin/php)"
+    - cd "$DEPLOYPATH" && "$PHPBIN" artisan optimize:clear || true
+    - cd "$DEPLOYPATH" && "$PHPBIN" artisan optimize || true
+
+    - echo "Deploy finished"
