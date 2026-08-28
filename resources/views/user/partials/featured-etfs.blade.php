@@ -3,9 +3,18 @@
     Displays stock assets with logos, names, prices.
 --}}
 @php
+    // Some symbols have more than one row (e.g. a manual override alongside
+    // the twelvedata-sourced one). Dedup to the most recently updated row per
+    // symbol so a stale duplicate can't win over fresher data, while keeping
+    // the original id-based ordering that decides which symbols are featured.
     $stockAssets = \App\Models\TradingAsset::where('is_active', true)
         ->where('asset_class', 'stock')->whereNotNull('price')->where('price', '>', 0)
-        ->take(3)->get();
+        ->orderBy('id')
+        ->get()
+        ->groupBy('symbol')
+        ->map(fn ($rows) => $rows->sortByDesc('updated_at')->first())
+        ->values()
+        ->take(3);
 @endphp
 
 @if ($stockAssets->isNotEmpty())
@@ -37,7 +46,7 @@
                     </div>
 
                     <div class="text-right flex-shrink-0">
-                        <p class="text-sm font-bold text-content-primary">${{ $etf->formatted_price }}</p>
+                        <p class="text-sm font-bold text-content-primary">{{ $etf->formatted_price }}</p>
                         <span class="text-[10px] font-medium {{ $isPositive ? 'text-gain' : 'text-loss' }}">
                             {{ $isPositive ? '+' : '' }}{{ round($changePct, 2) }}%
                         </span>
