@@ -38,8 +38,8 @@ class DefaultDataSeeder extends Seeder
         DB::table('settings')->updateOrInsert(
             ['id' => 1],
             [
-                'site_name' => env('APP_NAME', 'TradeXpromax'),
-                'site_title' => env('APP_NAME', 'TradeXpromax'),
+                'site_name' => env('APP_NAME', 'WealthWise'),
+                'site_title' => env('APP_NAME', 'WealthWise'),
                 'description' => 'Online trading & investment platform',
                 'keywords' => 'trading, investment, crypto, forex',
                 'currency' => 'USD',
@@ -75,7 +75,7 @@ class DefaultDataSeeder extends Seeder
                 'admin_nft_user_id' => 1,
                 'mail_server' => 'smtp',
                 'emailfrom' => env('MAIL_FROM_ADDRESS', 'support@example.com'),
-                'emailfromname' => env('APP_NAME', 'TradeXpromax'),
+                'emailfromname' => env('APP_NAME', 'WealthWise'),
                 'smtp_host' => env('MAIL_HOST'),
                 'smtp_port' => env('MAIL_PORT'),
                 'smtp_user' => env('MAIL_USERNAME'),

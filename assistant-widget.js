@@ -298,7 +298,7 @@
         if (el.getAttribute("data-utility") === "WealthWiseAssistant") return true;
         if (el.tagName === "A" || el.tagName === "BUTTON") {
           var t = (el.textContent || "").trim().toLowerCase();
-          if (t === "wealthwise assistant" || t === "fidelity assistant" || t === "assistant") return true;
+          if (t === "wealthwise assistant" || t === "assistant") return true;
         }
       }
       el = el.parentNode;
