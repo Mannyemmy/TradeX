@@ -101,7 +101,7 @@ class TwelveDataService
     public function getTotalSymbolCount(): int
     {
         $count = 0;
-        foreach ($this->assetSymbols as $symbols) {
+        foreach ($this->getAssetSymbols() as $symbols) {
             $count += count($symbols);
         }
         return $count;
@@ -130,7 +130,7 @@ class TwelveDataService
 
         // Collect all symbols across all classes, then process in rate-limited chunks
         $allSymbols = [];
-        foreach ($this->assetSymbols as $assetClass => $symbols) {
+        foreach ($this->getAssetSymbols() as $assetClass => $symbols) {
             foreach ($symbols as $symbol) {
                 $allSymbols[] = ['symbol' => $symbol, 'asset_class' => $assetClass];
             }
@@ -154,6 +154,29 @@ class TwelveDataService
         }
 
         return $counts;
+    }
+
+    /**
+     * Include active admin-managed stocks in addition to the default symbols.
+     */
+    protected function getAssetSymbols(): array
+    {
+        $symbols = $this->assetSymbols;
+        $activeStocks = TradingAsset::active()
+            ->ofClass('stock')
+            ->pluck('symbol')
+            ->map(function ($symbol) {
+                return strtoupper(trim($symbol));
+            })
+            ->filter()
+            ->all();
+
+        $symbols['stock'] = array_values(array_unique(array_merge(
+            $symbols['stock'],
+            $activeStocks
+        )));
+
+        return $symbols;
     }
 
     /**
@@ -208,23 +231,41 @@ class TwelveDataService
 
                 $name = $quote['name'] ?? ($this->symbolNames[$symbol] ?? $symbol);
 
-                TradingAsset::updateOrCreate(
-                    [
+                $asset = TradingAsset::where('symbol', $symbol)
+                    ->where('asset_class', $assetClass)
+                    ->where('data_source', 'twelvedata')
+                    ->first();
+
+                if (!$asset && $assetClass === 'stock') {
+                    $asset = TradingAsset::where('symbol', $symbol)
+                        ->where('asset_class', $assetClass)
+                        ->first();
+                }
+
+                $attributes = [
+                    'name' => $asset && $asset->data_source === 'manual' ? $asset->name : $name,
+                    'symbol' => $symbol,
+                    'asset_class' => $assetClass,
+                    'price' => floatval($quote['close']),
+                    'price_change_24h' => isset($quote['change']) ? floatval($quote['change']) : null,
+                    'price_change_pct_24h' => isset($quote['percent_change']) ? floatval($quote['percent_change']) : null,
+                    'high_24h' => isset($quote['high']) ? floatval($quote['high']) : null,
+                    'low_24h' => isset($quote['low']) ? floatval($quote['low']) : null,
+                    'volume_24h' => isset($quote['volume']) ? floatval($quote['volume']) : null,
+                ];
+
+                if ($asset) {
+                    $asset->fill($attributes);
+                    $asset->data_source = 'twelvedata';
+                    $asset->save();
+                } else {
+                    TradingAsset::create(array_merge([
                         'external_id' => $symbol,
                         'data_source' => 'twelvedata',
-                    ],
-                    [
-                        'name' => $name,
-                        'symbol' => $symbol,
-                        'asset_class' => $assetClass,
-                        'price' => floatval($quote['close']),
-                        'price_change_24h' => isset($quote['change']) ? floatval($quote['change']) : null,
-                        'price_change_pct_24h' => isset($quote['percent_change']) ? floatval($quote['percent_change']) : null,
-                        'high_24h' => isset($quote['high']) ? floatval($quote['high']) : null,
-                        'low_24h' => isset($quote['low']) ? floatval($quote['low']) : null,
-                        'volume_24h' => isset($quote['volume']) ? floatval($quote['volume']) : null,
-                    ]
-                );
+                        'is_active' => true,
+                    ], $attributes));
+                }
+
                 $counts[$assetClass] = ($counts[$assetClass] ?? 0) + 1;
             }
 

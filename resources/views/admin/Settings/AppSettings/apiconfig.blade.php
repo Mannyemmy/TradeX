@@ -70,7 +70,7 @@
                     </li>
                     <li class="flex items-start gap-2">
                         <svg class="w-3.5 h-3.5 text-content-muted mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>
-                        Cron URL: <code class="bg-surface-alt px-1.5 py-0.5 rounded text-xs text-primary">/run-crypto-prices</code>
+                        Scheduled automatically; manual cron runs use <code class="bg-surface-alt px-1.5 py-0.5 rounded text-xs text-primary">/allcron?token=YOUR_SECRET</code>
                     </li>
                 </ul>
             </div>
@@ -91,8 +91,12 @@
                         Uses batched symbol requests (~5 calls per run)
                     </li>
                     <li class="flex items-start gap-2">
+                        <svg class="w-3.5 h-3.5 text-content-muted mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375" /></svg>
+                        Refreshes active stocks, including custom stock listings
+                    </li>
+                    <li class="flex items-start gap-2">
                         <svg class="w-3.5 h-3.5 text-content-muted mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>
-                        Cron URL: <code class="bg-surface-alt px-1.5 py-0.5 rounded text-xs text-primary">/run-market-prices</code>
+                        Scheduled automatically; manual cron runs use <code class="bg-surface-alt px-1.5 py-0.5 rounded text-xs text-primary">/allcron?token=YOUR_SECRET</code>
                     </li>
                 </ul>
             </div>
