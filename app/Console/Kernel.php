@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
         // Price update schedules
         $schedule->command('prices:crypto')->everyFiveMinutes();
         $schedule->command('prices:market')->everyFifteenMinutes();
+        $schedule->command('stocks:sync-catalog')->dailyAt('02:00')->withoutOverlapping();
     }
 
     /**

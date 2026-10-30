@@ -27,9 +27,7 @@
     @if($errors->any())
         <x-admin.alert type="danger" :dismissible="true">{{ $errors->first() }}</x-admin.alert>
     @endif
-    <div id="stock-catalog-sync-status" role="status" aria-live="polite"
-         class="hidden rounded-lg border border-info/30 bg-info/10 px-4 py-3 text-sm text-info"></div>
-    <p class="text-xs text-content-muted">The TwelveData stock catalog syncs automatically when this page opens. Catalog stocks remain inactive until enabled with a valid quote.</p>
+    <p class="text-xs text-content-muted">The TwelveData stock catalog syncs automatically each day in the background. Catalog stocks remain inactive until enabled with a valid quote.</p>
     @if($needsPriceRefresh)
         <div id="stock-price-refresh-status" role="status" aria-live="polite"
              class="hidden rounded-lg border border-info/30 bg-info/10 px-4 py-3 text-sm text-info"></div>
@@ -116,54 +114,6 @@
 </div>
 @endsection
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var status = document.getElementById('stock-catalog-sync-status');
-        var csrfToken = @json(csrf_token());
-        var syncUrl = @json(route('admin.stocks.import-catalog'));
-
-        fetch(syncUrl, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': csrfToken
-            }
-        })
-        .then(function (response) {
-            return response.json().then(function (data) {
-                if (!response.ok) {
-                    throw new Error(data.message || 'The stock catalog could not be synced.');
-                }
-                return data;
-            });
-        })
-        .then(function (result) {
-            if (result.status === 'running') {
-                window.setTimeout(function () {
-                    window.location.reload();
-                }, 5000);
-                return;
-            }
-
-            if (result.status === 'imported' && result.imported > 0) {
-                status.textContent = result.message;
-                status.classList.remove('hidden');
-                window.setTimeout(function () {
-                    window.location.reload();
-                }, 1200);
-            }
-        })
-        .catch(function (error) {
-            status.textContent = error.message;
-            status.classList.remove('hidden', 'border-info/30', 'bg-info/10', 'text-info');
-            status.classList.add('border-danger/30', 'bg-danger/10', 'text-danger');
-        });
-    });
-</script>
-@endpush
-
 @if($needsPriceRefresh)
     @push('scripts')
     <script>
@@ -187,40 +137,55 @@
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
                         'X-CSRF-TOKEN': csrfToken
                     }
                 })
                 .then(function (response) {
-                    return response.json().then(function (data) {
-                        return { response: response, data: data };
+                    return response.text().then(function (body) {
+                        var data;
+                        try {
+                            data = JSON.parse(body);
+                        } catch (error) {
+                            if (response.redirected) {
+                                throw new Error('Your admin session may have expired. Reload the page and sign in again.');
+                            }
+                            throw new Error('The stock price refresh returned an invalid response (HTTP ' + response.status + ').');
+                        }
+
+                        if (!response.ok) {
+                            throw new Error(data.message || 'The stock price refresh failed (HTTP ' + response.status + ').');
+                        }
+
+                        return data;
                     });
                 })
-                .then(function (result) {
-                    if (result.data.status === 'running') {
+                .then(function (data) {
+                    if (data.status === 'running') {
                         showStatus('Stock prices are being refreshed. Waiting for the update to finish...', false);
                         window.setTimeout(refreshPrices, 10000);
                         return;
                     }
 
-                    if (result.data.status === 'fresh') {
+                    if (data.status === 'fresh') {
                         window.location.reload();
                         return;
                     }
 
-                    if (result.data.status === 'updated') {
-                        showStatus('Updated ' + result.data.updated + ' stock prices. Reloading...', false);
+                    if (data.status === 'updated') {
+                        showStatus('Updated ' + data.updated + ' stock prices. Reloading...', false);
                         window.setTimeout(function () {
                             window.location.reload();
                         }, 1000);
                         return;
                     }
 
-                    if (result.data.status === 'cooldown') {
+                    if (data.status === 'cooldown') {
                         status.classList.add('hidden');
                         return;
                     }
 
-                    throw new Error(result.data.message || 'Stock prices could not be refreshed.');
+                    throw new Error(data.message || 'Stock prices could not be refreshed.');
                 })
                 .catch(function (error) {
                     showStatus(error.message || 'Stock prices could not be refreshed.', true);
