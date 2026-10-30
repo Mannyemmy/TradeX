@@ -83,11 +83,7 @@
                     <tr class="border-b border-border last:border-0 hover:bg-surface-alt/50 transition-colors">
                         <td class="px-4 py-3.5">
                             <div class="flex items-center gap-3">
-                                @if($stock->logo_url)
-                                    <img src="{{ $stock->logo_url }}" alt="{{ $stock->symbol }}" class="w-8 h-8 rounded-lg object-cover border border-border">
-                                @else
-                                    <div class="w-8 h-8 rounded-lg bg-primary-light flex items-center justify-center text-primary text-xs font-bold">{{ substr($stock->symbol, 0, 2) }}</div>
-                                @endif
+                                <x-stock-logo :asset="$stock" size="h-8 w-8" shape="rounded-lg" border="border border-border" />
                                 <div>
                                     <span class="text-sm font-medium text-content">{{ $stock->symbol }}</span>
                                     <p class="text-xs text-content-muted">{{ $stock->name }}</p>

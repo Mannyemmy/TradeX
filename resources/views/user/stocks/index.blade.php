@@ -37,13 +37,7 @@
                      class="bg-surface-raised border border-surface-border rounded-xl p-5 hover:border-primary/30 transition-colors">
                     <div class="flex items-start justify-between mb-3">
                         <div class="flex items-center gap-3">
-                            @if($stock->logo_url)
-                                <img src="{{ $stock->logo_url }}" alt="{{ $stock->symbol }}" class="w-10 h-10 rounded-full object-cover bg-surface-overlay">
-                            @else
-                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
-                                    {{ substr($stock->symbol, 0, 2) }}
-                                </div>
-                            @endif
+                            <x-stock-logo :asset="$stock" size="h-10 w-10" text-size="text-sm" />
                             <div>
                                 <h3 class="text-sm font-semibold text-content-primary">{{ $stock->symbol }}</h3>
                                 <p class="text-xs text-content-tertiary truncate max-w-[120px]">{{ $stock->name }}</p>

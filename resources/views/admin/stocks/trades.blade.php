@@ -61,8 +61,8 @@
                         </td>
                         <td class="px-4 py-3.5">
                             <div class="flex items-center gap-2">
-                                @if($trade->asset && $trade->asset->logo_url)
-                                    <img src="{{ $trade->asset->logo_url }}" alt="{{ $trade->asset->symbol }}" class="w-6 h-6 rounded object-cover">
+                                @if($trade->asset)
+                                    <x-stock-logo :asset="$trade->asset" size="h-6 w-6" shape="rounded" />
                                 @endif
                                 <span class="text-sm font-medium text-content">{{ $trade->asset->symbol ?? 'N/A' }}</span>
                             </div>

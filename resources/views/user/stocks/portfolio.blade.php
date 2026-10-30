@@ -63,11 +63,7 @@
                         <tr class="hover:bg-surface-overlay/50 transition-colors">
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
-                                    @if($pos->asset->logo_url)
-                                        <img src="{{ $pos->asset->logo_url }}" alt="{{ $pos->asset->symbol }}" class="w-8 h-8 rounded-full object-cover">
-                                    @else
-                                        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">{{ substr($pos->asset->symbol, 0, 2) }}</div>
-                                    @endif
+                                    <x-stock-logo :asset="$pos->asset" size="h-8 w-8" />
                                     <div>
                                         <p class="font-medium text-content-primary">{{ $pos->asset->symbol }}</p>
                                         <p class="text-xs text-content-tertiary">{{ $pos->asset->name }}</p>
@@ -101,11 +97,7 @@
                 <div class="bg-surface-raised border border-surface-border rounded-xl p-4">
                     <div class="flex items-center justify-between mb-3">
                         <div class="flex items-center gap-2">
-                            @if($pos->asset->logo_url)
-                                <img src="{{ $pos->asset->logo_url }}" alt="{{ $pos->asset->symbol }}" class="w-8 h-8 rounded-full object-cover">
-                            @else
-                                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">{{ substr($pos->asset->symbol, 0, 2) }}</div>
-                            @endif
+                            <x-stock-logo :asset="$pos->asset" size="h-8 w-8" />
                             <div>
                                 <p class="text-sm font-semibold text-content-primary">{{ $pos->asset->symbol }}</p>
                                 <p class="text-xs text-content-tertiary">{{ $pos->asset->name }}</p>

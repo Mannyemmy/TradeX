@@ -87,8 +87,8 @@
                     <tr class="border-b border-border last:border-0 hover:bg-surface-alt/50 transition-colors">
                         <td class="px-4 py-3.5">
                             <div class="flex items-center gap-2">
-                                @if($pos->asset && $pos->asset->logo_url)
-                                    <img src="{{ $pos->asset->logo_url }}" alt="{{ $pos->asset->symbol }}" class="w-7 h-7 rounded object-cover border border-border">
+                                @if($pos->asset)
+                                    <x-stock-logo :asset="$pos->asset" size="h-7 w-7" shape="rounded" border="border border-border" />
                                 @endif
                                 <div>
                                     <span class="text-sm font-medium text-content">{{ $pos->asset->symbol ?? 'N/A' }}</span>

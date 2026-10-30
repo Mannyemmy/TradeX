@@ -20,13 +20,7 @@
     {{-- Stock Header --}}
     <div class="bg-surface-raised border border-surface-border rounded-xl p-6 mb-6">
         <div class="flex items-center gap-4 mb-4">
-            @if($asset->logo_url)
-                <img src="{{ $asset->logo_url }}" alt="{{ $asset->symbol }}" class="w-14 h-14 rounded-full object-cover bg-surface-overlay">
-            @else
-                <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
-                    {{ substr($asset->symbol, 0, 2) }}
-                </div>
-            @endif
+            <x-stock-logo :asset="$asset" size="h-14 w-14" text-size="text-lg" />
             <div>
                 <h1 class="text-xl font-bold text-content-primary">{{ $asset->name }}</h1>
                 <p class="text-sm text-content-tertiary">{{ $asset->symbol }}</p>

@@ -58,10 +58,10 @@
                         <tr class="hover:bg-surface-overlay/50 transition-colors">
                             <td class="px-5 py-4">
                                 <div class="flex items-center gap-3">
-                                    @if($trade->asset && $trade->asset->logo_url)
-                                        <img src="{{ $trade->asset->logo_url }}" alt="{{ $trade->asset->symbol }}" class="w-8 h-8 rounded-full object-cover">
+                                    @if($trade->asset)
+                                        <x-stock-logo :asset="$trade->asset" size="h-8 w-8" />
                                     @else
-                                        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">{{ $trade->asset ? substr($trade->asset->symbol, 0, 2) : '??' }}</div>
+                                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">??</div>
                                     @endif
                                     <div>
                                         <p class="font-medium text-content-primary">{{ $trade->asset->symbol ?? 'N/A' }}</p>
@@ -91,8 +91,10 @@
                 <div class="bg-surface-raised border border-surface-border rounded-xl p-4">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center gap-2">
-                            @if($trade->asset && $trade->asset->logo_url)
-                                <img src="{{ $trade->asset->logo_url }}" alt="{{ $trade->asset->symbol }}" class="w-7 h-7 rounded-full object-cover">
+                            @if($trade->asset)
+                                <x-stock-logo :asset="$trade->asset" size="h-7 w-7" />
+                            @else
+                                <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">??</div>
                             @endif
                             <span class="text-sm font-semibold text-content-primary">{{ $trade->asset->symbol ?? 'N/A' }}</span>
                         </div>
