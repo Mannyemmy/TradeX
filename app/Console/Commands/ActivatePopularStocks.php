@@ -81,14 +81,28 @@ class ActivatePopularStocks extends Command
                 continue;
             }
 
-            Cache::increment($dailyKey);
-            $dailyAttempts++;
-            try {
-                $twelveData->importStock($symbol, $asset->id);
-            } catch (\RuntimeException $e) {
-                $this->error("Stopped while requesting {$symbol}: {$e->getMessage()}");
-                $this->line("Activated {$activated} stocks in this run. You can rerun this command to resume; if the error was a rate limit, wait for the quota to reset first.");
-                return 1;
+            $retryCount = 0;
+            while (true) {
+                Cache::increment($dailyKey);
+                $dailyAttempts++;
+
+                try {
+                    $twelveData->importStock($symbol, $asset->id);
+                    break;
+                } catch (\RuntimeException $e) {
+                    if ($this->isRateLimitError($e->getMessage())
+                        && $retryCount < 2
+                        && $dailyAttempts < $this->dailyQuoteLimit) {
+                        $retryCount++;
+                        $this->warn("TwelveData minute quota reached for {$symbol}; waiting 61 seconds before retry {$retryCount}/2.");
+                        sleep(61);
+                        continue;
+                    }
+
+                    $this->error("Stopped while requesting {$symbol}: {$e->getMessage()}");
+                    $this->line("Activated {$activated} stocks in this run. You can rerun this command to resume after the quota resets.");
+                    return 1;
+                }
             }
 
             $activeSymbols[$symbol] = true;
@@ -112,5 +126,12 @@ class ActivatePopularStocks extends Command
         }
 
         return 0;
+    }
+
+    protected function isRateLimitError(string $message): bool
+    {
+        return stripos($message, '429') !== false
+            || stripos($message, 'rate limit') !== false
+            || stripos($message, 'run out of API credits') !== false;
     }
 }
