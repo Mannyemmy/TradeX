@@ -124,7 +124,7 @@
                     }
 
                     if (result.status === 'cooldown') {
-                        showStatus(result.message, true);
+                        hideStatus();
                         return;
                     }
 

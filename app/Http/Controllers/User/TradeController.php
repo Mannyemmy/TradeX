@@ -562,10 +562,12 @@ class TradeController extends Controller
             });
         }
 
-        $assets = $query->orderBy('asset_class')->orderBy('market_cap', 'desc')->orderBy('name')->get();
+        $assets = TradingAsset::preferProviderBySymbol(
+            $query->orderBy('asset_class')->orderBy('market_cap', 'desc')->orderBy('name')->get()
+        );
 
         // Stats
-        $allActive = TradingAsset::active()->get();
+        $allActive = TradingAsset::preferProviderBySymbol(TradingAsset::active()->get());
         $topGainer = $allActive->sortByDesc('price_change_pct_24h')->first();
         $topLoser = $allActive->sortBy('price_change_pct_24h')->first();
 
@@ -835,10 +837,9 @@ class TradeController extends Controller
             });
         }
 
-        $assets = $query->orderBy('name')->get();
+        $assets = TradingAsset::preferProviderBySymbol($query->orderBy('name')->get());
 
         return response()->json($assets);
     }
 }
-
 

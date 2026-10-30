@@ -162,7 +162,7 @@
                     }
 
                     if (result.data.status === 'cooldown') {
-                        showStatus(result.data.message, true);
+                        status.classList.add('hidden');
                         return;
                     }
 

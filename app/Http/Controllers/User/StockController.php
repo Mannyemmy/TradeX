@@ -35,11 +35,24 @@ class StockController extends Controller
         $settings = Settings::find(1);
         $user = Auth::user();
 
-        $stocks = TradingAsset::active()->ofClass('stock')->orderBy('name')->get();
+        $stocks = TradingAsset::preferProviderBySymbol(
+            TradingAsset::active()->ofClass('stock')->orderBy('name')->get()
+        )->unique(function ($stock) {
+            return strtoupper(trim((string) $stock->symbol));
+        })->values();
 
-        // Get user's existing positions keyed by trading_asset_id
         $userPositions = StockPosition::where('user_id', $user->id)
-            ->pluck('shares', 'trading_asset_id');
+            ->with('asset')
+            ->get()
+            ->filter(function ($position) {
+                return $position->asset !== null;
+            })
+            ->groupBy(function ($position) {
+                return strtoupper($position->asset->symbol);
+            })
+            ->map(function ($positions) {
+                return $positions->sum('shares');
+            });
 
         return view('user.stocks.index')->with([
             'title' => 'Stock Shares',
@@ -264,6 +277,41 @@ class StockController extends Controller
         $positions = StockPosition::where('user_id', $user->id)
             ->with('asset')
             ->get();
+
+        $preferredAssets = TradingAsset::preferProviderBySymbol(
+            TradingAsset::ofClass('stock')->get()
+        )->keyBy(function ($asset) {
+            return strtoupper($asset->symbol);
+        });
+
+        $positions = $positions
+            ->filter(function ($position) {
+                return $position->asset !== null;
+            })
+            ->groupBy(function ($position) {
+                return strtoupper($position->asset->symbol);
+            })
+            ->map(function ($symbolPositions, $symbol) use ($preferredAssets) {
+                $asset = $preferredAssets->get($symbol);
+                if ($asset === null) {
+                    $asset = TradingAsset::preferProviderBySymbol(
+                        $symbolPositions->pluck('asset')
+                    )->first();
+                }
+                $shares = $symbolPositions->sum('shares');
+                $totalInvested = $symbolPositions->sum('total_invested');
+                $position = new StockPosition([
+                    'user_id' => $symbolPositions->first()->user_id,
+                    'trading_asset_id' => $asset->id,
+                    'shares' => $shares,
+                    'avg_buy_price' => $shares > 0 ? $totalInvested / $shares : 0,
+                    'total_invested' => $totalInvested,
+                ]);
+                $position->setRelation('asset', $asset);
+
+                return $position;
+            })
+            ->values();
 
         $totalInvested = $positions->sum('total_invested');
         $totalCurrentValue = $positions->sum(function ($p) {

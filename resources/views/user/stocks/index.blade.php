@@ -49,7 +49,7 @@
                                 <p class="text-xs text-content-tertiary truncate max-w-[120px]">{{ $stock->name }}</p>
                             </div>
                         </div>
-                        @if(isset($userPositions[$stock->id]))
+                        @if(isset($userPositions[strtoupper($stock->symbol)]))
                             <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-primary/10 text-primary">HOLDING</span>
                         @endif
                     </div>
@@ -65,8 +65,8 @@
                         </div>
                     </div>
 
-                    @if(isset($userPositions[$stock->id]))
-                        <p class="text-xs text-content-tertiary mb-3">You hold {{ number_format($userPositions[$stock->id], 4) }} shares</p>
+                    @if(isset($userPositions[strtoupper($stock->symbol)]))
+                        <p class="text-xs text-content-tertiary mb-3">You hold {{ number_format($userPositions[strtoupper($stock->symbol)], 4) }} shares</p>
                     @endif
 
                     <a href="{{ route('user.stocks.show', $stock->id) }}"
