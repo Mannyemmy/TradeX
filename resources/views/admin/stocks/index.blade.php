@@ -24,6 +24,12 @@
     @if(session('message'))
         <x-admin.alert type="danger" :dismissible="true">{{ session('message') }}</x-admin.alert>
     @endif
+    @if($errors->any())
+        <x-admin.alert type="danger" :dismissible="true">{{ $errors->first() }}</x-admin.alert>
+    @endif
+    <div id="stock-catalog-sync-status" role="status" aria-live="polite"
+         class="hidden rounded-lg border border-info/30 bg-info/10 px-4 py-3 text-sm text-info"></div>
+    <p class="text-xs text-content-muted">The TwelveData stock catalog syncs automatically when this page opens. Catalog stocks remain inactive until enabled with a valid quote.</p>
     @if($needsPriceRefresh)
         <div id="stock-price-refresh-status" role="status" aria-live="polite"
              class="hidden rounded-lg border border-info/30 bg-info/10 px-4 py-3 text-sm text-info"></div>
@@ -109,6 +115,54 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var status = document.getElementById('stock-catalog-sync-status');
+        var csrfToken = @json(csrf_token());
+        var syncUrl = @json(route('admin.stocks.import-catalog'));
+
+        fetch(syncUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(function (response) {
+            return response.json().then(function (data) {
+                if (!response.ok) {
+                    throw new Error(data.message || 'The stock catalog could not be synced.');
+                }
+                return data;
+            });
+        })
+        .then(function (result) {
+            if (result.status === 'running') {
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 5000);
+                return;
+            }
+
+            if (result.status === 'imported' && result.imported > 0) {
+                status.textContent = result.message;
+                status.classList.remove('hidden');
+                window.setTimeout(function () {
+                    window.location.reload();
+                }, 1200);
+            }
+        })
+        .catch(function (error) {
+            status.textContent = error.message;
+            status.classList.remove('hidden', 'border-info/30', 'bg-info/10', 'text-info');
+            status.classList.add('border-danger/30', 'bg-danger/10', 'text-danger');
+        });
+    });
+</script>
+@endpush
 
 @if($needsPriceRefresh)
     @push('scripts')

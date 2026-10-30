@@ -191,6 +191,164 @@ class TwelveDataService
     }
 
     /**
+     * Fetch a stock quote and add or update the matching trading asset.
+     *
+     * @throws \RuntimeException When the provider cannot return a valid quote.
+     */
+    public function importStock(string $symbol, ?int $assetId = null): TradingAsset
+    {
+        if (!$this->apiKey) {
+            throw new \RuntimeException('TwelveData API key is not configured.');
+        }
+
+        $symbol = strtoupper(trim($symbol));
+
+        try {
+            $response = Http::timeout(30)->get($this->baseUrl . '/quote', [
+                'symbol' => $symbol,
+                'apikey' => $this->apiKey,
+            ]);
+        } catch (\Exception $e) {
+            Log::error("TwelveData stock import request failed for {$symbol}: " . $e->getMessage());
+            throw new \RuntimeException('Could not connect to TwelveData. Please try again.');
+        }
+
+        if (!$response->successful()) {
+            Log::error("TwelveData stock import HTTP error for {$symbol}: " . $response->status());
+            throw new \RuntimeException('TwelveData returned an HTTP error. Please try again later.');
+        }
+
+        $quote = $response->json();
+        if (!is_array($quote)
+            || (isset($quote['code']) && (int) $quote['code'] !== 200)
+            || empty($quote['close'])
+            || (float) $quote['close'] <= 0) {
+            $providerMessage = is_array($quote) ? ($quote['message'] ?? null) : null;
+            throw new \RuntimeException($providerMessage
+                ? "TwelveData could not find a valid quote for {$symbol}: {$providerMessage}"
+                : "TwelveData could not find a valid quote for {$symbol}.");
+        }
+
+        $matchingAssets = TradingAsset::ofClass('stock')
+            ->whereRaw('UPPER(symbol) = ?', [$symbol])
+            ->when($assetId !== null, function ($query) use ($assetId) {
+                $query->where('id', $assetId);
+            })
+            ->orderByRaw("CASE WHEN data_source = 'twelvedata' THEN 0 ELSE 1 END")
+            ->orderByDesc('updated_at');
+        $asset = $matchingAssets->first();
+
+        $asset = $asset ?? new TradingAsset([
+            'external_id' => $symbol,
+            'asset_class' => 'stock',
+        ]);
+        $asset->fill([
+            'name' => $quote['name'] ?? ($this->symbolNames[$symbol] ?? $symbol),
+            'symbol' => $symbol,
+            'asset_class' => 'stock',
+            'price' => (float) $quote['close'],
+            'price_change_24h' => isset($quote['change']) ? (float) $quote['change'] : null,
+            'price_change_pct_24h' => isset($quote['percent_change']) ? (float) $quote['percent_change'] : null,
+            'high_24h' => isset($quote['high']) ? (float) $quote['high'] : null,
+            'low_24h' => isset($quote['low']) ? (float) $quote['low'] : null,
+            'volume_24h' => isset($quote['volume']) ? (float) $quote['volume'] : null,
+            'data_source' => 'twelvedata',
+            'is_active' => true,
+        ]);
+        $asset->save();
+
+        return $asset;
+    }
+
+    /**
+     * Import the provider's stock catalog without activating unquoted listings.
+     *
+     * @throws \RuntimeException When the provider cannot return a valid catalog.
+     */
+    public function importStockCatalog(): int
+    {
+        if (!$this->apiKey) {
+            throw new \RuntimeException('TwelveData API key is not configured.');
+        }
+
+        try {
+            $response = Http::timeout(60)->get($this->baseUrl . '/stocks', [
+                'apikey' => $this->apiKey,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('TwelveData stock catalog request failed: ' . $e->getMessage());
+            throw new \RuntimeException('Could not connect to TwelveData. Please try again.');
+        }
+
+        if (!$response->successful()) {
+            Log::error('TwelveData stock catalog HTTP error: ' . $response->status());
+            throw new \RuntimeException('TwelveData returned an HTTP error. Please try again later.');
+        }
+
+        $catalog = $response->json('data');
+        if (!is_array($catalog)) {
+            $payload = $response->json();
+            $message = is_array($payload) ? ($payload['message'] ?? null) : null;
+            throw new \RuntimeException($message
+                ? 'TwelveData could not provide the stock catalog: ' . $message
+                : 'TwelveData returned an invalid stock catalog.');
+        }
+
+        $symbols = [];
+        foreach ($catalog as $item) {
+            if (!is_array($item) || empty($item['symbol'])) {
+                continue;
+            }
+
+            $symbol = strtoupper(trim($item['symbol']));
+            $name = trim($item['name'] ?? '');
+            if ($symbol === '' || strlen($symbol) > 20 || $name === '' || strlen($name) > 100) {
+                continue;
+            }
+
+            if (isset($symbols[$symbol])) {
+                continue;
+            }
+
+            $symbols[$symbol] = [
+                'external_id' => 'stock_catalog_' . strtolower($symbol),
+                'name' => $name,
+                'symbol' => $symbol,
+                'asset_class' => 'stock',
+                'price' => 0,
+                'data_source' => 'twelvedata',
+                'is_active' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        if (empty($symbols)) {
+            $payload = $response->json();
+            $message = is_array($payload) ? ($payload['message'] ?? null) : null;
+            throw new \RuntimeException($message
+                ? 'TwelveData could not provide stock listings: ' . $message
+                : 'TwelveData returned no stock listings to import.');
+        }
+
+        $knownSymbols = TradingAsset::ofClass('stock')
+            ->pluck('symbol')
+            ->map(function ($symbol) {
+                return strtoupper(trim($symbol));
+            })
+            ->flip();
+        $newAssets = array_filter($symbols, function ($asset) use ($knownSymbols) {
+            return !$knownSymbols->has($asset['symbol']);
+        });
+
+        foreach (array_chunk(array_values($newAssets), 500) as $chunk) {
+            TradingAsset::insert($chunk);
+        }
+
+        return count($newAssets);
+    }
+
+    /**
      * Include active admin-managed stocks in addition to the default symbols.
      */
     protected function getAssetSymbols(): array

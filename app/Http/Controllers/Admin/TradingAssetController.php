@@ -7,6 +7,7 @@ use App\Models\TradingAsset;
 use App\Models\Trade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use App\Services\TwelveDataService;
 
 class TradingAssetController extends Controller
 {
@@ -28,10 +29,22 @@ class TradingAssetController extends Controller
     /**
      * Toggle asset active/inactive status.
      */
-    public function toggleActive($id)
+    public function toggleActive($id, TwelveDataService $twelveData)
     {
         $asset = TradingAsset::findOrFail($id);
-        $asset->update(['is_active' => !$asset->is_active]);
+
+        if (!$asset->is_active && $asset->asset_class === 'stock') {
+            try {
+                $asset = $twelveData->importStock($asset->symbol, $asset->id);
+            } catch (\RuntimeException $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 422);
+            }
+        } else {
+            $asset->update(['is_active' => !$asset->is_active]);
+        }
 
         return response()->json([
             'success' => true,

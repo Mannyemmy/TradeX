@@ -491,6 +491,7 @@ Route::middleware(['isadmin', '2fa'])->prefix('admin')->group(function () {
     // Stock Shares Module
     Route::controller(StockAdminController::class)->prefix('admin/stock-shares')->name('admin.stocks.')->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('/import-catalog', 'importStockCatalog')->name('import-catalog');
         Route::post('/refresh-prices', 'refreshPricesIfStale')->name('refresh-prices');
         Route::get('/trades', 'trades')->name('trades');
         Route::get('/user/{userId}', 'userPositions')->name('user-positions');

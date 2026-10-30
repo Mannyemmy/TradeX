@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use App\Services\StockPriceRefreshService;
+use App\Services\TwelveDataService;
 
 class StockAdminController extends Controller
 {
@@ -74,6 +76,41 @@ class StockAdminController extends Controller
     {
         $result = $priceRefresher->refreshIfStale();
         return response()->json($result['data'], $result['status']);
+    }
+
+    public function importStockCatalog(TwelveDataService $twelveData)
+    {
+        if (Cache::has('twelvedata-stock-catalog-imported-at')) {
+            return response()->json([
+                'status' => 'fresh',
+                'message' => 'The TwelveData stock catalog was synced recently.',
+            ]);
+        }
+
+        if (!Cache::add('twelvedata-stock-catalog-import-running', true, 180)) {
+            return response()->json([
+                'status' => 'running',
+                'message' => 'The TwelveData stock catalog is already syncing.',
+            ], 202);
+        }
+
+        try {
+            $imported = $twelveData->importStockCatalog();
+            Cache::put('twelvedata-stock-catalog-imported-at', now()->toDateTimeString(), now()->addDay());
+        } catch (\RuntimeException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 502);
+        } finally {
+            Cache::forget('twelvedata-stock-catalog-import-running');
+        }
+
+        return response()->json([
+            'status' => 'imported',
+            'imported' => $imported,
+            'message' => $imported . ' new stocks imported. They remain inactive until enabled with a valid quote.',
+        ]);
     }
 
     public function trades(Request $request)

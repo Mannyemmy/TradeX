@@ -199,8 +199,17 @@ $(document).ready(function() {
                     checkbox.prop('checked', !checkbox.prop('checked'));
                 }
             },
-            error: function() {
+            error: function(xhr) {
                 checkbox.prop('checked', !checkbox.prop('checked'));
+                Swal.fire({
+                    title: 'Could not activate asset',
+                    text: xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : 'The stock could not be activated because a valid TwelveData quote was not available.',
+                    icon: 'error',
+                    background: '#1E293B',
+                    color: '#E2E8F0'
+                });
             }
         });
     });
