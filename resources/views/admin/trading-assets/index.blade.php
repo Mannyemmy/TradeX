@@ -36,13 +36,20 @@
 
         {{-- Tab Panels --}}
             <div class="mt-5">
-                <form method="GET" action="{{ route('admin.assets.index') }}" class="mb-4 flex gap-2">
+                <form method="GET" action="{{ route('admin.assets.index') }}" class="mb-4 flex flex-wrap items-center gap-2">
                     <input type="hidden" name="class" value="{{ $activeClass }}">
+                    <label for="asset-status" class="text-sm text-content-muted">Status</label>
+                    <select id="asset-status" name="status"
+                            class="bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                        <option value="all" {{ $status === 'all' ? 'selected' : '' }}>All</option>
+                        <option value="active" {{ $status === 'active' ? 'selected' : '' }}>Active</option>
+                        <option value="inactive" {{ $status === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                    </select>
                     <input type="search" name="search" value="{{ request('search') }}"
                            placeholder="Search {{ $activeClass }} by name or symbol"
                            class="w-full max-w-md bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
                     <button type="submit" class="bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-medium">Search</button>
-                    @if(request()->filled('search'))
+                    @if(request()->filled('search') || $status !== 'all')
                         <a href="{{ route('admin.assets.index', ['class' => $activeClass]) }}"
                            class="bg-surface-alt text-content rounded-lg px-4 py-2 text-sm font-medium">Clear</a>
                     @endif

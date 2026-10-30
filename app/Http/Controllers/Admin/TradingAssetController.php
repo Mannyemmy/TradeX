@@ -21,12 +21,19 @@ class TradingAssetController extends Controller
         if (!in_array($activeClass, $assetClasses, true)) {
             $activeClass = $assetClasses[0];
         }
+        $status = request('status', 'all');
+        if (!in_array($status, ['all', 'active', 'inactive'], true)) {
+            $status = 'all';
+        }
 
         $counts = TradingAsset::selectRaw('asset_class, COUNT(*) as aggregate')
             ->groupBy('asset_class')
             ->pluck('aggregate', 'asset_class');
 
         $query = TradingAsset::where('asset_class', $activeClass);
+        if ($status !== 'all') {
+            $query->where('is_active', $status === 'active');
+        }
         if (request()->filled('search')) {
             $search = trim(request('search'));
             $query->where(function ($query) use ($search) {
@@ -41,6 +48,7 @@ class TradingAssetController extends Controller
             'title' => 'Manage Trading Assets',
             'assets' => $assets,
             'activeClass' => $activeClass,
+            'status' => $status,
             'counts' => $counts,
             'assetClasses' => $assetClasses,
         ]);
