@@ -3,16 +3,23 @@
     Displays stock assets with logos, names, prices.
 --}}
 @php
-    // Some symbols have more than one row (e.g. a manual override alongside
-    // the twelvedata-sourced one). Dedup to the most recently updated row per
-    // symbol so a stale duplicate can't win over fresher data, while keeping
-    // the original id-based ordering that decides which symbols are featured.
+    // Prefer provider-sourced quotes when duplicate rows exist for a symbol.
     $stockAssets = \App\Models\TradingAsset::where('is_active', true)
         ->where('asset_class', 'stock')->whereNotNull('price')->where('price', '>', 0)
         ->orderBy('id')
         ->get()
         ->groupBy('symbol')
-        ->map(fn ($rows) => $rows->sortByDesc('updated_at')->first())
+        ->map(fn ($rows) => $rows->sort(function ($left, $right) {
+            $sourceOrder = ($right->data_source === 'twelvedata') <=> ($left->data_source === 'twelvedata');
+            if ($sourceOrder !== 0) {
+                return $sourceOrder;
+            }
+
+            $leftUpdatedAt = $left->updated_at ? $left->updated_at->timestamp : 0;
+            $rightUpdatedAt = $right->updated_at ? $right->updated_at->timestamp : 0;
+
+            return $rightUpdatedAt <=> $leftUpdatedAt;
+        })->first())
         ->values()
         ->take(3);
 @endphp
@@ -23,6 +30,9 @@
         <span class="w-2 h-2 rounded-full bg-primary"></span>
         <h3 class="text-sm font-semibold text-content-primary">Featured Stocks</h3>
     </div>
+
+    <div id="featured-stock-refresh-status" role="status" aria-live="polite"
+         class="hidden px-4 py-2 text-xs text-info"></div>
 
     <div class="p-4">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -56,4 +66,80 @@
         </div>
     </div>
 </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var status = document.getElementById('featured-stock-refresh-status');
+            var refreshUrl = @json(route('user.dashboard.refresh-stock-prices'));
+            var csrfToken = @json(csrf_token());
+            var symbols = @json($stockAssets->pluck('symbol')->values());
+            var refreshInProgress = false;
+
+            function showStatus(message, isError) {
+                status.textContent = message;
+                status.classList.remove('hidden', 'text-info', 'text-danger', 'bg-info/10', 'bg-danger/10');
+                status.classList.add(isError ? 'text-danger' : 'text-info');
+                status.classList.add(isError ? 'bg-danger/10' : 'bg-info/10');
+            }
+
+            function hideStatus() {
+                status.classList.add('hidden');
+            }
+
+            function refreshPrices() {
+                if (refreshInProgress) {
+                    return;
+                }
+
+                refreshInProgress = true;
+
+                fetch(refreshUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ symbols: symbols })
+                })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (result) {
+                    if (result.status === 'running') {
+                        showStatus('Stock prices are updating...', false);
+                        window.setTimeout(refreshPrices, 10000);
+                        return;
+                    }
+
+                    if (result.status === 'fresh') {
+                        hideStatus();
+                        return;
+                    }
+
+                    if (result.status === 'updated') {
+                        showStatus('Featured stock prices updated.', false);
+                        window.location.reload();
+                        return;
+                    }
+
+                    if (result.status === 'cooldown') {
+                        showStatus(result.message, true);
+                        return;
+                    }
+
+                    throw new Error(result.message || 'Stock prices could not be refreshed.');
+                })
+                .catch(function (error) {
+                    showStatus(error.message || 'Stock prices could not be refreshed.', true);
+                })
+                .finally(function () {
+                    refreshInProgress = false;
+                });
+            }
+
+            refreshPrices();
+            window.setInterval(refreshPrices, 120000);
+        });
+    </script>
 @endif

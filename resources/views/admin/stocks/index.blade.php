@@ -6,6 +6,10 @@
     {{-- Page Header --}}
     <x-admin.page-header title="Stock Shares" subtitle="Manage stock listings and user positions">
         <x-slot name="actions">
+            <a href="{{ route('admin.assets.refresh') }}"
+               class="bg-primary text-primary-foreground hover:bg-primary-hover rounded-lg px-4 py-2 text-sm font-medium transition-colors inline-flex items-center gap-2">
+                Refresh Prices
+            </a>
             <a href="{{ route('admin.stocks.trades') }}"
                class="bg-surface-alt text-content border border-border hover:bg-border rounded-lg px-4 py-2 text-sm font-medium transition-colors inline-flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" /></svg>
@@ -19,6 +23,10 @@
     @endif
     @if(session('message'))
         <x-admin.alert type="danger" :dismissible="true">{{ session('message') }}</x-admin.alert>
+    @endif
+    @if($needsPriceRefresh)
+        <div id="stock-price-refresh-status" role="status" aria-live="polite"
+             class="hidden rounded-lg border border-info/30 bg-info/10 px-4 py-3 text-sm text-info"></div>
     @endif
 
     {{-- Stats Row --}}
@@ -37,6 +45,8 @@
                     <th class="px-4 py-3 text-xs font-medium text-content-muted uppercase tracking-wide text-left">Stock</th>
                     <th class="px-4 py-3 text-xs font-medium text-content-muted uppercase tracking-wide text-right">Price</th>
                     <th class="px-4 py-3 text-xs font-medium text-content-muted uppercase tracking-wide text-right">24h Change</th>
+                    <th class="px-4 py-3 text-xs font-medium text-content-muted uppercase tracking-wide text-center">Source</th>
+                    <th class="px-4 py-3 text-xs font-medium text-content-muted uppercase tracking-wide text-right">Last Updated</th>
                     <th class="px-4 py-3 text-xs font-medium text-content-muted uppercase tracking-wide text-right">Holders</th>
                     <th class="px-4 py-3 text-xs font-medium text-content-muted uppercase tracking-wide text-right">Total Shares</th>
                     <th class="px-4 py-3 text-xs font-medium text-content-muted uppercase tracking-wide text-right">Total Invested</th>
@@ -67,9 +77,17 @@
                         </td>
                         <td class="px-4 py-3.5 text-sm text-content text-right font-medium">${{ number_format($stock->price, 2) }}</td>
                         <td class="px-4 py-3.5 text-sm text-right">
-                            <span class="{{ $stock->price_change_pct_24h >= 0 ? 'text-success' : 'text-danger' }}">
-                                {{ $stock->price_change_pct_24h >= 0 ? '+' : '' }}{{ number_format($stock->price_change_pct_24h, 2) }}%
-                            </span>
+                            @if($stock->price_change_pct_24h !== null)
+                                <span class="{{ $stock->price_change_pct_24h >= 0 ? 'text-success' : 'text-danger' }}">
+                                    {{ $stock->price_change_pct_24h >= 0 ? '+' : '' }}{{ number_format($stock->price_change_pct_24h, 2) }}%
+                                </span>
+                            @else
+                                <span class="text-content-muted">—</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-3.5 text-xs text-content-secondary text-center">{{ ucfirst($stock->data_source) }}</td>
+                        <td class="px-4 py-3.5 text-xs text-content-secondary text-right">
+                            {{ $stock->updated_at ? $stock->updated_at->format('M j, Y g:i A') : '—' }}
                         </td>
                         <td class="px-4 py-3.5 text-sm text-content-secondary text-right">{{ $holders }}</td>
                         <td class="px-4 py-3.5 text-sm text-content-secondary text-right">{{ number_format($totalShares, 4) }}</td>
@@ -80,7 +98,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="py-12 text-center text-content-muted">
+                        <td colspan="9" class="py-12 text-center text-content-muted">
                             No stock assets found. Add stocks via <a href="{{ route('admin.assets.index') }}" class="text-primary hover:underline">Trading Assets</a>.
                         </td>
                     </tr>
@@ -91,3 +109,72 @@
 
 </div>
 @endsection
+
+@if($needsPriceRefresh)
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var status = document.getElementById('stock-price-refresh-status');
+            var refreshUrl = @json(route('admin.stocks.refresh-prices'));
+            var csrfToken = @json(csrf_token());
+
+            function showStatus(message, isError) {
+                status.textContent = message;
+                status.classList.remove('hidden', 'text-info', 'text-danger', 'bg-info/10', 'border-info/30');
+                status.classList.add(isError ? 'text-danger' : 'text-info');
+                status.classList.add(isError ? 'bg-danger/10' : 'bg-info/10');
+                status.classList.add(isError ? 'border-danger/30' : 'border-info/30');
+            }
+
+            function refreshPrices() {
+                showStatus('Updating stock prices from TwelveData. This may take a minute due to provider limits.', false);
+
+                fetch(refreshUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                })
+                .then(function (response) {
+                    return response.json().then(function (data) {
+                        return { response: response, data: data };
+                    });
+                })
+                .then(function (result) {
+                    if (result.data.status === 'running') {
+                        showStatus('Stock prices are being refreshed. Waiting for the update to finish...', false);
+                        window.setTimeout(refreshPrices, 10000);
+                        return;
+                    }
+
+                    if (result.data.status === 'fresh') {
+                        window.location.reload();
+                        return;
+                    }
+
+                    if (result.data.status === 'updated') {
+                        showStatus('Updated ' + result.data.updated + ' stock prices. Reloading...', false);
+                        window.setTimeout(function () {
+                            window.location.reload();
+                        }, 1000);
+                        return;
+                    }
+
+                    if (result.data.status === 'cooldown') {
+                        showStatus(result.data.message, true);
+                        return;
+                    }
+
+                    throw new Error(result.data.message || 'Stock prices could not be refreshed.');
+                })
+                .catch(function (error) {
+                    showStatus(error.message || 'Stock prices could not be refreshed.', true);
+                });
+            }
+
+            refreshPrices();
+        });
+    </script>
+    @endpush
+@endif

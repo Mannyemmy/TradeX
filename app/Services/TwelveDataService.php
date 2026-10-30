@@ -157,6 +157,40 @@ class TwelveDataService
     }
 
     /**
+     * Refresh the stock symbols without fetching unrelated market assets.
+     */
+    public function updateStockPrices(?array $requestedSymbols = null): int
+    {
+        if (!$this->apiKey) {
+            Log::warning('TwelveData API key not configured. Skipping stock price update.');
+            return 0;
+        }
+
+        $symbols = $this->getAssetSymbols()['stock'];
+        if ($requestedSymbols !== null) {
+            $symbols = array_values(array_intersect($symbols, $requestedSymbols));
+        }
+
+        $chunks = array_chunk($symbols, $this->creditsPerMinute);
+        $updatedCount = 0;
+
+        foreach ($chunks as $i => $chunk) {
+            if ($i > 0) {
+                sleep(61);
+            }
+
+            $symbolMeta = array_map(function ($symbol) {
+                return ['symbol' => $symbol, 'asset_class' => 'stock'];
+            }, $chunk);
+
+            $updated = $this->fetchAndUpdateBatch($chunk, $symbolMeta);
+            $updatedCount += $updated['stock'] ?? 0;
+        }
+
+        return $updatedCount;
+    }
+
+    /**
      * Include active admin-managed stocks in addition to the default symbols.
      */
     protected function getAssetSymbols(): array

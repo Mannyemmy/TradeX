@@ -14,9 +14,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Services\NotificationService;
 use App\Helpers\CurrencyHelper;
+use App\Services\StockPriceRefreshService;
 
 class StockController extends Controller
 {
+    public function refreshPrices(Request $request, StockPriceRefreshService $priceRefresher)
+    {
+        $validated = $request->validate([
+            'symbols' => 'required|array|min:1|max:3',
+            'symbols.*' => 'required|string|max:20',
+        ]);
+
+        $result = $priceRefresher->refreshIfStale($validated['symbols']);
+
+        return response()->json($result['data'], $result['status']);
+    }
+
     public function index()
     {
         $settings = Settings::find(1);

@@ -5,8 +5,24 @@
 @php
     $marketAssets = \App\Models\TradingAsset::where('is_active', true)
         ->whereNotNull('price')->where('price', '>', 0)
-        ->orderByDesc('market_cap')
-        ->take(5)->get();
+        ->orderBy('id')
+        ->get()
+        ->groupBy('symbol')
+        ->map(fn ($rows) => $rows->sort(function ($left, $right) {
+            $preferredSource = $left->asset_class === 'crypto' ? 'coingecko' : 'twelvedata';
+            $sourceOrder = ($right->data_source === $preferredSource) <=> ($left->data_source === $preferredSource);
+            if ($sourceOrder !== 0) {
+                return $sourceOrder;
+            }
+
+            $leftUpdatedAt = $left->updated_at ? $left->updated_at->timestamp : 0;
+            $rightUpdatedAt = $right->updated_at ? $right->updated_at->timestamp : 0;
+
+            return $rightUpdatedAt <=> $leftUpdatedAt;
+        })->first())
+        ->sortByDesc('market_cap')
+        ->take(5)
+        ->values();
 @endphp
 
 <div class="bg-surface-raised border border-surface-border rounded-xl overflow-hidden">

@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('dashboard')->group(func
     Route::post('support/{ticket}/reply', [SupportController::class, 'reply'])->name('support.reply');
 
     Route::middleware('complete.kyc')->group(function () {
+        Route::post('refresh-stock-prices', [StockController::class, 'refreshPrices'])->name('user.dashboard.refresh-stock-prices');
         Route::get('account-settings', [ViewsController::class, 'profile'])->name('profile');
         Route::get('accountdetails', [ViewsController::class, 'accountdetails'])->name('accountdetails');
         Route::get('notification', [NotificationController::class, 'index'])->name('notification');

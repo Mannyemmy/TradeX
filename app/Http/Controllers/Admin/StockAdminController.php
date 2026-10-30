@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Services\StockPriceRefreshService;
 
 class StockAdminController extends Controller
 {
@@ -21,6 +22,13 @@ class StockAdminController extends Controller
         $settings = Settings::find(1);
 
         $stocks = TradingAsset::ofClass('stock')->orderBy('name')->get();
+        $needsPriceRefresh = TradingAsset::active()
+            ->ofClass('stock')
+            ->where(function ($query) {
+                $query->whereNull('updated_at')
+                    ->orWhere('updated_at', '<', now()->subMinutes(2));
+            })
+            ->exists();
 
         // Aggregate stats per stock
         $positionStats = StockPosition::select('trading_asset_id')
@@ -37,7 +45,14 @@ class StockAdminController extends Controller
             'settings' => $settings,
             'stocks' => $stocks,
             'positionStats' => $positionStats,
+            'needsPriceRefresh' => $needsPriceRefresh,
         ]);
+    }
+
+    public function refreshPricesIfStale(StockPriceRefreshService $priceRefresher)
+    {
+        $result = $priceRefresher->refreshIfStale();
+        return response()->json($result['data'], $result['status']);
     }
 
     public function trades(Request $request)
