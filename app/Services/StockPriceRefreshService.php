@@ -44,7 +44,6 @@ class StockPriceRefreshService
                 'status' => 429,
                 'data' => [
                     'status' => 'cooldown',
-                    'message' => 'A stock price refresh was attempted recently. Check the source and last-updated columns.',
                 ],
             ];
         }
