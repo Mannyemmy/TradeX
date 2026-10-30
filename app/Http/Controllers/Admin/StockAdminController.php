@@ -21,20 +21,26 @@ class StockAdminController extends Controller
     {
         $settings = Settings::find(1);
 
-        $stocks = TradingAsset::ofClass('stock')
-            ->orderBy('id')
-            ->get()
-            ->groupBy('symbol')
-            ->map(function ($assets) {
-                $providerAssets = $assets->where('data_source', 'twelvedata');
-                $assets = $providerAssets->isNotEmpty() ? $providerAssets : $assets;
+        $preferredStockIds = DB::table('trading_assets')
+            ->selectRaw("COALESCE(MAX(CASE WHEN data_source = ? THEN id END), MAX(id)) as asset_id", ['twelvedata'])
+            ->where('asset_class', 'stock')
+            ->groupByRaw('UPPER(symbol)');
 
-                return $assets->sortByDesc(function ($asset) {
-                    return $asset->updated_at ? $asset->updated_at->timestamp : 0;
-                })->first();
-            })
-            ->sortBy('name')
-            ->values();
+        $stocks = TradingAsset::joinSub($preferredStockIds, 'preferred_stock_ids', function ($join) {
+            $join->on('trading_assets.id', '=', 'preferred_stock_ids.asset_id');
+        })
+            ->select('trading_assets.*')
+            ->orderBy('trading_assets.name')
+            ->paginate(50);
+
+        $activeStocksCount = DB::table('trading_assets')
+            ->where('asset_class', 'stock')
+            ->where('is_active', true)
+            ->selectRaw('UPPER(symbol)')
+            ->groupByRaw('UPPER(symbol)')
+            ->get()
+            ->count();
+
         $needsPriceRefresh = TradingAsset::active()
             ->ofClass('stock')
             ->where(function ($query) {
@@ -65,6 +71,7 @@ class StockAdminController extends Controller
             'title' => 'Stock Shares Management',
             'settings' => $settings,
             'stocks' => $stocks,
+            'activeStocksCount' => $activeStocksCount,
             'positionStats' => $positionStats,
             'needsPriceRefresh' => $needsPriceRefresh,
         ]);
