@@ -33,12 +33,13 @@ class StockAdminController extends Controller
             ->orderBy('trading_assets.name')
             ->paginate(50);
 
-        $activeStocksCount = DB::table('trading_assets')
+        $activeStockSymbols = DB::table('trading_assets')
             ->where('asset_class', 'stock')
             ->where('is_active', true)
             ->selectRaw('UPPER(symbol)')
-            ->groupByRaw('UPPER(symbol)')
-            ->get()
+            ->groupByRaw('UPPER(symbol)');
+        $activeStocksCount = DB::query()
+            ->fromSub($activeStockSymbols, 'active_stock_symbols')
             ->count();
 
         $needsPriceRefresh = TradingAsset::active()

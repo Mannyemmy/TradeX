@@ -309,7 +309,10 @@ class ManageTradeController extends Controller
     public function edit(Trade $trade)
     {
         $users = User::all();
-        $assets = TradingAsset::orderBy('name')->get();
+        $assets = TradingAsset::where('is_active', true)
+            ->orWhere('id', $trade->trading_asset_id)
+            ->orderBy('name')
+            ->get();
         $title = "Update User Trades";
         return view('admin.trades.edit', compact('trade', 'users', 'assets', 'title'));
     }

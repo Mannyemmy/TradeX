@@ -278,11 +278,26 @@ class StockController extends Controller
             ->with('asset')
             ->get();
 
-        $preferredAssets = TradingAsset::preferProviderBySymbol(
-            TradingAsset::ofClass('stock')->get()
-        )->keyBy(function ($asset) {
-            return strtoupper($asset->symbol);
-        });
+        $positionSymbols = $positions
+            ->filter(function ($position) {
+                return $position->asset !== null;
+            })
+            ->map(function ($position) {
+                return strtoupper($position->asset->symbol);
+            })
+            ->unique()
+            ->values()
+            ->all();
+
+        $preferredAssets = empty($positionSymbols)
+            ? collect()
+            : TradingAsset::preferProviderBySymbol(
+                TradingAsset::ofClass('stock')
+                    ->whereIn(DB::raw('UPPER(symbol)'), $positionSymbols)
+                    ->get()
+            )->keyBy(function ($asset) {
+                return strtoupper($asset->symbol);
+            });
 
         $positions = $positions
             ->filter(function ($position) {

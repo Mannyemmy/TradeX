@@ -20,24 +20,34 @@
     </x-admin.page-header>
 
     {{-- Asset Class Tabs --}}
-    <div x-data="{ activeTab: '{{ $assetClasses[0] ?? '' }}' }" class="mt-6">
+    <div class="mt-6">
         <div class="flex gap-1 border-b border-border">
-            @foreach($assetClasses as $i => $class)
-                <button @click="activeTab = '{{ $class }}'"
-                        :class="activeTab === '{{ $class }}'
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-content-muted hover:text-content-secondary hover:border-border-strong'"
-                        class="px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px flex items-center gap-2">
+            @foreach($assetClasses as $class)
+                <a href="{{ route('admin.assets.index', array_merge(request()->except('page', 'class'), ['class' => $class])) }}"
+                   class="{{ $activeClass === $class
+                       ? 'border-primary text-primary'
+                       : 'border-transparent text-content-muted hover:text-content-secondary hover:border-border-strong' }}
+                       px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px flex items-center gap-2">
                     {{ ucfirst($class) }}
-                    <span class="bg-surface-alt text-content-muted text-xs font-medium px-2 py-0.5 rounded-full">{{ isset($grouped[$class]) ? $grouped[$class]->count() : 0 }}</span>
-                </button>
+                    <span class="bg-surface-alt text-content-muted text-xs font-medium px-2 py-0.5 rounded-full">{{ $counts[$class] ?? 0 }}</span>
+                </a>
             @endforeach
         </div>
 
         {{-- Tab Panels --}}
-        @foreach($assetClasses as $i => $class)
-            <div x-show="activeTab === '{{ $class }}'" x-transition class="mt-5">
-                @if(isset($grouped[$class]) && $grouped[$class]->count())
+            <div class="mt-5">
+                <form method="GET" action="{{ route('admin.assets.index') }}" class="mb-4 flex gap-2">
+                    <input type="hidden" name="class" value="{{ $activeClass }}">
+                    <input type="search" name="search" value="{{ request('search') }}"
+                           placeholder="Search {{ $activeClass }} by name or symbol"
+                           class="w-full max-w-md bg-surface-card border border-border rounded-lg px-3 py-2 text-sm text-content focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+                    <button type="submit" class="bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-medium">Search</button>
+                    @if(request()->filled('search'))
+                        <a href="{{ route('admin.assets.index', ['class' => $activeClass]) }}"
+                           class="bg-surface-alt text-content rounded-lg px-4 py-2 text-sm font-medium">Clear</a>
+                    @endif
+                </form>
+                @if($assets->count())
                     <x-admin.table-card>
                         <table class="w-full asset-table">
                             <thead>
@@ -54,7 +64,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($grouped[$class] as $asset)
+                                @foreach($assets as $asset)
                                     <tr class="hover:bg-surface-alt/50 transition-colors">
                                         <td class="px-4 py-3.5 border-b border-border">
                                             @if($asset->logo_url)
@@ -110,14 +120,13 @@
                             </tbody>
                         </table>
                     </x-admin.table-card>
+                    <div class="mt-4">{{ $assets->links() }}</div>
                 @else
-                    <x-admin.card class="text-center py-12">
-                        <svg class="w-10 h-10 mx-auto mb-3 text-content-muted/50" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" /></svg>
-                        <p class="text-sm text-content-muted">No {{ $class }} assets found. Run price refresh or add assets manually.</p>
-                    </x-admin.card>
+                    <div class="rounded-lg border border-border bg-surface-card p-8 text-center text-sm text-content-muted">
+                        No {{ $activeClass }} assets match this filter.
+                    </div>
                 @endif
             </div>
-        @endforeach
     </div>
 
     {{-- Add Custom Asset Modal --}}

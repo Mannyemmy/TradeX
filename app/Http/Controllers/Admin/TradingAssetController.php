@@ -16,13 +16,33 @@ class TradingAssetController extends Controller
      */
     public function index()
     {
-        $assets = TradingAsset::orderBy('asset_class')->orderBy('name')->get();
-        $grouped = $assets->groupBy('asset_class');
+        $assetClasses = ['crypto', 'forex', 'stock', 'etf', 'index'];
+        $activeClass = request('class', $assetClasses[0]);
+        if (!in_array($activeClass, $assetClasses, true)) {
+            $activeClass = $assetClasses[0];
+        }
+
+        $counts = TradingAsset::selectRaw('asset_class, COUNT(*) as aggregate')
+            ->groupBy('asset_class')
+            ->pluck('aggregate', 'asset_class');
+
+        $query = TradingAsset::where('asset_class', $activeClass);
+        if (request()->filled('search')) {
+            $search = trim(request('search'));
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('symbol', 'like', '%' . $search . '%');
+            });
+        }
+
+        $assets = $query->orderBy('name')->paginate(50)->appends(request()->query());
 
         return view('admin.trading-assets.index', [
             'title' => 'Manage Trading Assets',
-            'grouped' => $grouped,
-            'assetClasses' => ['crypto', 'forex', 'stock', 'etf', 'index'],
+            'assets' => $assets,
+            'activeClass' => $activeClass,
+            'counts' => $counts,
+            'assetClasses' => $assetClasses,
         ]);
     }
 
