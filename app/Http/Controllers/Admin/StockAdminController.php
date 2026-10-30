@@ -21,7 +21,20 @@ class StockAdminController extends Controller
     {
         $settings = Settings::find(1);
 
-        $stocks = TradingAsset::ofClass('stock')->orderBy('name')->get();
+        $stocks = TradingAsset::ofClass('stock')
+            ->orderBy('id')
+            ->get()
+            ->groupBy('symbol')
+            ->map(function ($assets) {
+                $providerAssets = $assets->where('data_source', 'twelvedata');
+                $assets = $providerAssets->isNotEmpty() ? $providerAssets : $assets;
+
+                return $assets->sortByDesc(function ($asset) {
+                    return $asset->updated_at ? $asset->updated_at->timestamp : 0;
+                })->first();
+            })
+            ->sortBy('name')
+            ->values();
         $needsPriceRefresh = TradingAsset::active()
             ->ofClass('stock')
             ->where(function ($query) {
@@ -31,13 +44,21 @@ class StockAdminController extends Controller
             ->exists();
 
         // Aggregate stats per stock
-        $positionStats = StockPosition::select('trading_asset_id')
-            ->selectRaw('COUNT(*) as holders')
+        $positionStats = StockPosition::join('trading_assets', 'stock_positions.trading_asset_id', '=', 'trading_assets.id')
+            ->where('trading_assets.asset_class', 'stock')
+            ->selectRaw('trading_assets.symbol as symbol')
+            ->selectRaw('COUNT(DISTINCT stock_positions.user_id) as holders')
             ->selectRaw('SUM(shares) as total_shares')
             ->selectRaw('SUM(total_invested) as total_invested')
-            ->selectRaw('CONCAT(COUNT(*), "|", IFNULL(SUM(shares),0), "|", IFNULL(SUM(total_invested),0)) as stats_str')
-            ->groupBy('trading_asset_id')
-            ->pluck('stats_str', 'trading_asset_id')
+            ->groupBy('trading_assets.symbol')
+            ->get()
+            ->mapWithKeys(function ($stats) {
+                return [$stats->symbol => implode('|', [
+                    (int) $stats->holders,
+                    (float) $stats->total_shares,
+                    (float) $stats->total_invested,
+                ])];
+            })
             ->toArray();
 
         return view('admin.stocks.index')->with([

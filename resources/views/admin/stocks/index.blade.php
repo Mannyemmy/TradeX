@@ -56,7 +56,7 @@
             <tbody>
                 @forelse($stocks as $stock)
                     @php
-                        $stats = isset($positionStats[$stock->id]) ? explode('|', $positionStats[$stock->id]) : [0, 0, 0];
+                        $stats = isset($positionStats[$stock->symbol]) ? explode('|', $positionStats[$stock->symbol]) : [0, 0, 0];
                         $holders = (int)$stats[0];
                         $totalShares = (float)$stats[1];
                         $totalInv = (float)$stats[2];
