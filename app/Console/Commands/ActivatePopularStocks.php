@@ -109,7 +109,15 @@ class ActivatePopularStocks extends Command
                     $twelveData->importStock($symbol, $asset->id);
                     break;
                 } catch (\RuntimeException $e) {
-                    if ($this->isRateLimitError($e->getMessage())
+                    $errorMessage = $e->getMessage();
+
+                    if ($this->isDailyQuotaError($errorMessage)) {
+                        $this->error("Stopped while requesting {$symbol}: TwelveData's daily credit limit has been reached. No more activation requests will be made today.");
+                        $this->line("Activated {$activated} stocks in this run. Try again after the provider's daily quota resets.");
+                        return 1;
+                    }
+
+                    if ($this->isMinuteQuotaError($errorMessage)
                         && $retryCount < 2
                         && $dailyAttempts < $this->dailyQuoteLimit) {
                         $retryCount++;
@@ -147,10 +155,20 @@ class ActivatePopularStocks extends Command
         return 0;
     }
 
-    protected function isRateLimitError(string $message): bool
+    protected function isDailyQuotaError(string $message): bool
     {
-        return stripos($message, '429') !== false
-            || stripos($message, 'rate limit') !== false
-            || stripos($message, 'run out of API credits') !== false;
+        return stripos($message, 'for the day') !== false
+            || stripos($message, 'daily limit') !== false
+            || stripos($message, 'per day') !== false;
+    }
+
+    protected function isMinuteQuotaError(string $message): bool
+    {
+        return !$this->isDailyQuotaError($message)
+            && (
+                stripos($message, 'current minute') !== false
+                || stripos($message, 'per minute') !== false
+                || stripos($message, 'minute quota') !== false
+            );
     }
 }
