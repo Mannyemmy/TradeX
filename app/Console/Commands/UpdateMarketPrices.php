@@ -27,10 +27,9 @@ class UpdateMarketPrices extends Command
         $totalSymbols = $service->getTotalSymbolCount();
         $perMinute = $service->getCreditsPerMinute();
         $chunks = ceil($totalSymbols / $perMinute);
-        $this->info("Free tier: {$perMinute} credits/min. {$totalSymbols} symbols in {$chunks} chunk(s).");
+        $this->info("Application budget: {$perMinute} credits/min (one reserved). {$totalSymbols} symbols in {$chunks} chunk(s).");
         if ($chunks > 1) {
-            $estimatedMins = $chunks - 1;
-            $this->info("Rate-limited — will take ~{$estimatedMins} min(s) with pauses between chunks.");
+            $this->info('Requests share the TwelveData credit budget with stock activation and other price refreshes.');
         }
 
         $counts = $service->updatePrices();

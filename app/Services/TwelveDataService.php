@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\TradingAsset;
 use App\Models\SettingsCont;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -113,9 +114,9 @@ class TwelveDataService
     }
 
     /**
-     * Max API credits per minute on free tier.
+     * Keep one credit in reserve for requests outside this application.
      */
-    protected $creditsPerMinute = 8;
+    protected $creditsPerMinute = 7;
 
     /**
      * Fetch and update all market asset prices (forex, stock, etf, index).
@@ -128,7 +129,7 @@ class TwelveDataService
             return ['forex' => 0, 'stock' => 0, 'etf' => 0, 'index' => 0];
         }
 
-        // Collect all symbols across all classes, then process in rate-limited chunks
+        // Collect all symbols across all classes, then process in credit-limited chunks
         $allSymbols = [];
         foreach ($this->getAssetSymbols() as $assetClass => $symbols) {
             foreach ($symbols as $symbol) {
@@ -139,12 +140,7 @@ class TwelveDataService
         $counts = ['forex' => 0, 'stock' => 0, 'etf' => 0, 'index' => 0];
         $chunks = array_chunk($allSymbols, $this->creditsPerMinute);
 
-        foreach ($chunks as $i => $chunk) {
-            // Wait 61 seconds between chunks to respect rate limit
-            if ($i > 0) {
-                sleep(61);
-            }
-
+        foreach ($chunks as $chunk) {
             $symbolList = array_column($chunk, 'symbol');
             $updated = $this->fetchAndUpdateBatch($symbolList, $chunk);
 
@@ -174,11 +170,7 @@ class TwelveDataService
         $chunks = array_chunk($symbols, $this->creditsPerMinute);
         $updatedCount = 0;
 
-        foreach ($chunks as $i => $chunk) {
-            if ($i > 0) {
-                sleep(61);
-            }
-
+        foreach ($chunks as $chunk) {
             $symbolMeta = array_map(function ($symbol) {
                 return ['symbol' => $symbol, 'asset_class' => 'stock'];
             }, $chunk);
@@ -204,6 +196,7 @@ class TwelveDataService
         $symbol = strtoupper(trim($symbol));
 
         try {
+            $this->reserveApiCredits(1);
             $response = Http::timeout(30)->get($this->baseUrl . '/quote', [
                 'symbol' => $symbol,
                 'apikey' => $this->apiKey,
@@ -279,6 +272,7 @@ class TwelveDataService
         }
 
         try {
+            $this->reserveApiCredits(1);
             $response = Http::timeout(60)->get($this->baseUrl . '/stocks', [
                 'apikey' => $this->apiKey,
             ]);
@@ -401,6 +395,7 @@ class TwelveDataService
         try {
             $symbolString = implode(',', $symbols);
 
+            $this->reserveApiCredits(count($symbols));
             $response = Http::timeout(30)->get($this->baseUrl . '/quote', [
                 'symbol' => $symbolString,
                 'apikey' => $this->apiKey,
@@ -498,6 +493,7 @@ class TwelveDataService
         }
 
         try {
+            $this->reserveApiCredits(1);
             $response = Http::timeout(10)->get($this->baseUrl . '/quote', [
                 'symbol' => 'AAPL',
                 'apikey' => $this->apiKey,
@@ -514,6 +510,43 @@ class TwelveDataService
             return 'HTTP ' . $response->status() . ': ' . $response->body();
         } catch (\Exception $e) {
             return $e->getMessage();
+        }
+    }
+
+    /**
+     * Reserve credits across all TwelveData requests made by this application.
+     */
+    protected function reserveApiCredits(int $credits): void
+    {
+        if ($credits < 1 || $credits > $this->creditsPerMinute) {
+            throw new \InvalidArgumentException('TwelveData requests must reserve between 1 and ' . $this->creditsPerMinute . ' credits.');
+        }
+
+        while (true) {
+            $minuteKey = 'twelvedata:credits:' . now()->format('YmdHi');
+            $lock = Cache::lock('twelvedata:credits:lock', 10);
+
+            if (!$lock->get()) {
+                sleep(1);
+                continue;
+            }
+
+            try {
+                $usedCredits = (int) Cache::get($minuteKey, 0);
+                if ($usedCredits + $credits <= $this->creditsPerMinute) {
+                    Cache::put(
+                        $minuteKey,
+                        $usedCredits + $credits,
+                        now()->startOfMinute()->addMinutes(2)
+                    );
+
+                    return;
+                }
+            } finally {
+                $lock->release();
+            }
+
+            sleep(60 - (int) now()->format('s') + 1);
         }
     }
 }

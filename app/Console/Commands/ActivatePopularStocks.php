@@ -26,6 +26,21 @@ class ActivatePopularStocks extends Command
 
     public function handle(TwelveDataService $twelveData)
     {
+        $lock = Cache::lock('stocks:activate-popular:execution', 1800);
+        if (!$lock->get()) {
+            $this->info('Another popular-stock activation run is already in progress.');
+            return 0;
+        }
+
+        try {
+            return $this->activatePopularStocks($twelveData);
+        } finally {
+            $lock->release();
+        }
+    }
+
+    protected function activatePopularStocks(TwelveDataService $twelveData)
+    {
         set_time_limit(1800);
 
         if (!$twelveData->hasApiKey()) {
@@ -51,6 +66,10 @@ class ActivatePopularStocks extends Command
         $dailyKey = 'stocks:activate-popular:quotes:' . now()->toDateString();
         Cache::add($dailyKey, 0, now()->addDay());
         $dailyAttempts = (int) Cache::get($dailyKey, 0);
+        $this->info(
+            "Activation status: {$activeCount}/{$this->targetActiveStocks} active; "
+            . "{$dailyAttempts}/{$this->dailyQuoteLimit} quote attempts used today."
+        );
 
         $assets = TradingAsset::ofClass('stock')
             ->whereIn('symbol', $this->popularSymbols)
@@ -115,7 +134,7 @@ class ActivatePopularStocks extends Command
             }
         }
 
-        if ($activated === 0) {
+        if ($activated === 0 && $dailyAttempts < $this->dailyQuoteLimit) {
             $this->info('No eligible popular stocks were available to activate from the imported catalog.');
         } else {
             $this->info("Activated {$activated} stocks today. {$activeCount} of {$this->targetActiveStocks} active stock symbols.");
