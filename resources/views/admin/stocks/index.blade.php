@@ -110,7 +110,7 @@
             </tbody>
         </table>
     </x-admin.table-card>
-    <div class="mt-4">{{ $stocks->links() }}</div>
+    <div class="mt-4">{{ $stocks->links('vendor.pagination.stock-admin') }}</div>
 
 </div>
 @endsection

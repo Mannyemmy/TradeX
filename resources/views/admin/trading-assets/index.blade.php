@@ -120,7 +120,7 @@
                             </tbody>
                         </table>
                     </x-admin.table-card>
-                    <div class="mt-4">{{ $assets->links() }}</div>
+                    <div class="mt-4">{{ $assets->links('vendor.pagination.stock-admin') }}</div>
                 @else
                     <div class="rounded-lg border border-border bg-surface-card p-8 text-center text-sm text-content-muted">
                         No {{ $activeClass }} assets match this filter.
