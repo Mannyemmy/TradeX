@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\TradingAsset;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class StockPriceRefreshService
 {
@@ -26,11 +27,13 @@ class StockPriceRefreshService
 
         $service = new TwelveDataService();
         if (!$service->hasApiKey()) {
+            Log::warning('Stock price refresh skipped because the TwelveData API key is not configured.');
+
             return [
                 'status' => 503,
                 'data' => [
                     'status' => 'error',
-                    'message' => 'TwelveData API key is not configured.',
+                    'message' => 'Stock prices are temporarily unavailable. Please try again later.',
                 ],
             ];
         }
@@ -58,11 +61,15 @@ class StockPriceRefreshService
             Cache::put('stock-prices-auto-refresh-cooldown', true, 110);
 
             if ($updatedCount === 0) {
+                Log::warning('Stock price refresh completed without updating any prices.', [
+                    'symbols_requested' => $staleSymbols,
+                ]);
+
                 return [
                     'status' => 502,
                     'data' => [
                         'status' => 'error',
-                        'message' => 'No stock prices were updated. Check the application log and TwelveData usage limits.',
+                        'message' => 'Stock prices are temporarily unavailable. Please try again later.',
                     ],
                 ];
             }

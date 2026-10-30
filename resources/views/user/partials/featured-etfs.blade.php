@@ -31,9 +31,6 @@
         <h3 class="text-sm font-semibold text-content-primary">Featured Stocks</h3>
     </div>
 
-    <div id="featured-stock-refresh-status" role="status" aria-live="polite"
-         class="hidden px-4 py-2 text-xs text-info"></div>
-
     <div class="p-4">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             @foreach ($stockAssets as $etf)
@@ -69,22 +66,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var status = document.getElementById('featured-stock-refresh-status');
             var refreshUrl = @json(route('user.dashboard.refresh-stock-prices'));
             var csrfToken = @json(csrf_token());
             var symbols = @json($stockAssets->pluck('symbol')->values());
             var refreshInProgress = false;
-
-            function showStatus(message, isError) {
-                status.textContent = message;
-                status.classList.remove('hidden', 'text-info', 'text-danger', 'bg-info/10', 'bg-danger/10');
-                status.classList.add(isError ? 'text-danger' : 'text-info');
-                status.classList.add(isError ? 'bg-danger/10' : 'bg-info/10');
-            }
-
-            function hideStatus() {
-                status.classList.add('hidden');
-            }
 
             function refreshPrices() {
                 if (refreshInProgress) {
@@ -107,31 +92,16 @@
                 })
                 .then(function (result) {
                     if (result.status === 'running') {
-                        showStatus('Stock prices are updating...', false);
                         window.setTimeout(refreshPrices, 10000);
                         return;
                     }
 
-                    if (result.status === 'fresh') {
-                        hideStatus();
-                        return;
-                    }
-
                     if (result.status === 'updated') {
-                        showStatus('Featured stock prices updated.', false);
                         window.location.reload();
-                        return;
                     }
-
-                    if (result.status === 'cooldown') {
-                        hideStatus();
-                        return;
-                    }
-
-                    throw new Error(result.message || 'Stock prices could not be refreshed.');
                 })
-                .catch(function (error) {
-                    showStatus(error.message || 'Stock prices could not be refreshed.', true);
+                .catch(function () {
+                    console.warn('Could not refresh stock prices in the background. Existing prices remain visible.');
                 })
                 .finally(function () {
                     refreshInProgress = false;
