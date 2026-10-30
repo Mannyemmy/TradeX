@@ -13,6 +13,13 @@ class SyncStockCatalog extends Command
 
     public function handle(TwelveDataService $twelveData)
     {
+        if (ini_set('memory_limit', '512M') === false) {
+            $this->error('Could not raise PHP memory_limit for the stock catalog sync.');
+            return 1;
+        }
+
+        set_time_limit(300);
+
         if (!$twelveData->hasApiKey()) {
             $this->error('TwelveData API key is not configured.');
             return 1;

@@ -286,15 +286,15 @@ class TwelveDataService
         }
 
         $catalog = $response->json('data');
+        unset($response);
+        gc_collect_cycles();
+
         if (!is_array($catalog)) {
-            $payload = $response->json();
-            $message = is_array($payload) ? ($payload['message'] ?? null) : null;
-            throw new \RuntimeException($message
-                ? 'TwelveData could not provide the stock catalog: ' . $message
-                : 'TwelveData returned an invalid stock catalog.');
+            throw new \RuntimeException('TwelveData returned an invalid stock catalog.');
         }
 
-        $symbols = [];
+        $imported = 0;
+        $batch = [];
         foreach ($catalog as $item) {
             if (!is_array($item) || empty($item['symbol'])) {
                 continue;
@@ -306,11 +306,7 @@ class TwelveDataService
                 continue;
             }
 
-            if (isset($symbols[$symbol])) {
-                continue;
-            }
-
-            $symbols[$symbol] = [
+            $batch[$symbol] = [
                 'external_id' => 'stock_catalog_' . strtolower($symbol),
                 'name' => $name,
                 'symbol' => $symbol,
@@ -321,28 +317,45 @@ class TwelveDataService
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
+
+            if (count($batch) >= 500) {
+                $imported += $this->insertNewCatalogStocks($batch);
+                $batch = [];
+            }
         }
 
-        if (empty($symbols)) {
-            $payload = $response->json();
-            $message = is_array($payload) ? ($payload['message'] ?? null) : null;
-            throw new \RuntimeException($message
-                ? 'TwelveData could not provide stock listings: ' . $message
-                : 'TwelveData returned no stock listings to import.');
+        if (!empty($batch)) {
+            $imported += $this->insertNewCatalogStocks($batch);
         }
 
+        if ($imported === 0 && empty($catalog)) {
+            throw new \RuntimeException('TwelveData returned no stock listings to import.');
+        }
+
+        unset($catalog);
+        gc_collect_cycles();
+
+        return $imported;
+    }
+
+    protected function insertNewCatalogStocks(array $batch): int
+    {
+        $symbols = array_keys($batch);
+        $placeholders = implode(',', array_fill(0, count($symbols), '?'));
         $knownSymbols = TradingAsset::ofClass('stock')
+            ->whereRaw('UPPER(symbol) IN (' . $placeholders . ')', $symbols)
             ->pluck('symbol')
             ->map(function ($symbol) {
                 return strtoupper(trim($symbol));
             })
             ->flip();
-        $newAssets = array_filter($symbols, function ($asset) use ($knownSymbols) {
-            return !$knownSymbols->has($asset['symbol']);
-        });
 
-        foreach (array_chunk(array_values($newAssets), 500) as $chunk) {
-            TradingAsset::insert($chunk);
+        $newAssets = array_values(array_filter($batch, function ($asset) use ($knownSymbols) {
+            return !$knownSymbols->has($asset['symbol']);
+        }));
+
+        if (!empty($newAssets)) {
+            TradingAsset::insert($newAssets);
         }
 
         return count($newAssets);
