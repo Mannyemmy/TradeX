@@ -24,7 +24,7 @@ class StockAdminController extends Controller
         $preferredStockIds = DB::table('trading_assets')
             ->selectRaw("COALESCE(MAX(CASE WHEN data_source = ? THEN id END), MAX(id)) as asset_id", ['twelvedata'])
             ->where('asset_class', 'stock')
-            ->groupByRaw('UPPER(symbol)');
+            ->groupBy('symbol');
 
         $stocks = TradingAsset::joinSub($preferredStockIds, 'preferred_stock_ids', function ($join) {
             $join->on('trading_assets.id', '=', 'preferred_stock_ids.asset_id');
@@ -36,8 +36,8 @@ class StockAdminController extends Controller
         $activeStockSymbols = DB::table('trading_assets')
             ->where('asset_class', 'stock')
             ->where('is_active', true)
-            ->selectRaw('UPPER(symbol)')
-            ->groupByRaw('UPPER(symbol)');
+            ->select('symbol')
+            ->groupBy('symbol');
         $activeStocksCount = DB::query()
             ->fromSub($activeStockSymbols, 'active_stock_symbols')
             ->count();
