@@ -37,7 +37,9 @@
                             $isPositive = $changePct >= 0;
                         @endphp
                         <div class="flex shrink-0 items-center gap-2 border-r border-surface-border px-4 py-2.5">
-                            @if ($asset->logo_url)
+                            @if ($asset->asset_class === 'stock')
+                                <x-stock-logo :asset="$asset" size="h-5 w-5" text-size="text-[8px]" />
+                            @elseif ($asset->logo_url)
                                 <img src="{{ $asset->logo_url }}" alt="" class="h-5 w-5 rounded-full object-cover">
                             @else
                                 <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">

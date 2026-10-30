@@ -29,7 +29,9 @@
                 <div class="bg-surface-raised border border-surface-border rounded-xl overflow-hidden">
                     <div class="px-5 py-3 border-b border-surface-border flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            @if($asset && $asset->logo_url)
+                            @if($asset && $asset->asset_class === 'stock')
+                                <x-stock-logo :asset="$asset" size="w-8 h-8" />
+                            @elseif($asset && $asset->logo_url)
                                 <img src="{{ $asset->logo_url }}" alt="" class="w-8 h-8 rounded-full bg-surface-overlay" loading="lazy">
                             @else
                                 <div class="w-8 h-8 rounded-full bg-surface-overlay flex items-center justify-center text-xs font-bold text-content-secondary">
@@ -124,7 +126,9 @@
                         @php $asset = $trade->tradingAsset; @endphp
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2.5 min-w-0">
-                                @if($asset && $asset->logo_url)
+                                @if($asset && $asset->asset_class === 'stock')
+                                    <x-stock-logo :asset="$asset" size="w-7 h-7" />
+                                @elseif($asset && $asset->logo_url)
                                     <img src="{{ $asset->logo_url }}" alt="" class="w-7 h-7 rounded-full bg-surface-overlay shrink-0" loading="lazy">
                                 @else
                                     <div class="w-7 h-7 rounded-full bg-surface-overlay flex items-center justify-center text-[10px] font-bold text-content-secondary shrink-0">

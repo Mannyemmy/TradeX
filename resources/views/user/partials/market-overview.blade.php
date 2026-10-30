@@ -46,7 +46,11 @@
                         : 'bg-surface-overlay border-surface-border hover:border-surface-border-light' }}">
 
                     <div class="flex items-center gap-2 mb-3">
-                        @if ($asset->logo_url)
+                        @if ($asset->asset_class === 'stock')
+                            <x-stock-logo :asset="$asset" size="w-7 h-7" text-size="text-[10px]"
+                                          :background="$isFirst ? 'bg-white/20' : 'bg-primary/20'"
+                                          :text-color="$isFirst ? 'text-white' : 'text-primary'" />
+                        @elseif ($asset->logo_url)
                             <img src="{{ $asset->logo_url }}" alt="{{ $asset->symbol }}" class="w-7 h-7 rounded-full flex-shrink-0">
                         @else
                             <span class="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold

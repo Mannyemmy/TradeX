@@ -66,7 +66,9 @@
     <div class="bg-surface-raised border border-surface-border rounded-xl p-5 mb-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div class="flex items-center gap-3">
-                @if($asset && $asset->logo_url)
+                @if($asset && $asset->asset_class === 'stock')
+                    <x-stock-logo :asset="$asset" size="h-10 w-10" text-size="text-sm" />
+                @elseif($asset && $asset->logo_url)
                     <img src="{{ $asset->logo_url }}" alt="{{ $asset->symbol }}" class="w-10 h-10 rounded-full bg-surface-overlay" loading="lazy">
                 @else
                     <div class="w-10 h-10 rounded-full bg-surface-overlay flex items-center justify-center text-sm font-bold text-content-secondary">

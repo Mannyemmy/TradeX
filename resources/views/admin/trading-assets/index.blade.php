@@ -74,7 +74,9 @@
                                 @foreach($assets as $asset)
                                     <tr class="hover:bg-surface-alt/50 transition-colors">
                                         <td class="px-4 py-3.5 border-b border-border">
-                                            @if($asset->logo_url)
+                                            @if($asset->asset_class === 'stock')
+                                                <x-stock-logo :asset="$asset" size="w-6 h-6" text-size="text-[9px]" />
+                                            @elseif($asset->logo_url)
                                                 <img src="{{ $asset->logo_url }}" alt="{{ $asset->symbol }}"
                                                      class="w-6 h-6 rounded-full object-cover">
                                             @else

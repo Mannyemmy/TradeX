@@ -101,7 +101,9 @@
                             {{-- Asset --}}
                             <td class="px-4 py-3">
                                 <div class="flex items-center gap-3">
-                                    @if($asset->logo_url)
+                                    @if($asset->asset_class === 'stock')
+                                        <x-stock-logo :asset="$asset" size="w-8 h-8" />
+                                    @elseif($asset->logo_url)
                                         <img src="{{ $asset->logo_url }}" alt="" class="w-8 h-8 rounded-full bg-surface-overlay" loading="lazy">
                                     @else
                                         <div class="w-8 h-8 rounded-full bg-surface-overlay flex items-center justify-center text-xs font-bold text-content-secondary">
@@ -159,7 +161,9 @@
                 <a href="{{ route('trade', ['asset' => $asset->id]) }}"
                    class="bg-surface-raised border border-surface-border rounded-xl p-4 hover:bg-surface-overlay/50 transition-colors block">
                     <div class="flex items-center gap-3 mb-3">
-                        @if($asset->logo_url)
+                        @if($asset->asset_class === 'stock')
+                            <x-stock-logo :asset="$asset" size="w-10 h-10" />
+                        @elseif($asset->logo_url)
                             <img src="{{ $asset->logo_url }}" alt="" class="w-10 h-10 rounded-full bg-surface-overlay" loading="lazy">
                         @else
                             <div class="w-10 h-10 rounded-full bg-surface-overlay flex items-center justify-center text-sm font-bold text-content-secondary">

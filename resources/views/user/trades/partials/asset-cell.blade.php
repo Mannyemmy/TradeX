@@ -11,7 +11,9 @@
 @endphp
 
 <div class="flex items-center gap-2.5 min-w-0">
-    @if($logoUrl)
+    @if($asset && $asset->asset_class === 'stock')
+        <x-stock-logo :asset="$asset" size="w-6 h-6" text-size="text-[10px]" />
+    @elseif($logoUrl)
         <img src="{{ $logoUrl }}" alt="{{ $symbol }}" class="w-6 h-6 rounded-full shrink-0 bg-surface-overlay" loading="lazy" />
     @else
         <div class="w-6 h-6 rounded-full bg-surface-overlay flex items-center justify-center shrink-0">

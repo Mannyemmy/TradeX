@@ -135,11 +135,16 @@
                         <input type="hidden" name="trading_asset_id" :value="selectedAssetId">
                         <button type="button" @click="pickerOpen = !pickerOpen"
                                 class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-surface-overlay border border-surface-border text-sm text-content-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors text-left">
-                            <template x-if="selectedAsset && selectedAsset.logo_url">
-                                <img :src="selectedAsset.logo_url" class="w-5 h-5 rounded-full flex-shrink-0" :alt="selectedAsset.symbol">
-                            </template>
-                            <template x-if="selectedAsset && !selectedAsset.logo_url">
-                                <span class="w-5 h-5 rounded-full bg-primary/20 text-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0" x-text="selectedAsset.symbol.substring(0,2)"></span>
+                            <template x-if="selectedAsset">
+                                <span class="relative flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/20 text-[10px] font-bold text-primary">
+                                    <span x-text="selectedAsset.symbol.substring(0,2)"></span>
+                                    <img x-show="selectedAsset.logo_url || selectedAsset.asset_class === 'stock'"
+                                         :src="selectedAsset.logo_url || stockLogoUrl(selectedAsset)"
+                                         :data-fallback-logo="selectedAsset.logo_url && selectedAsset.asset_class === 'stock' ? stockLogoUrl(selectedAsset) : ''"
+                                         x-on:error="handleStockLogoError($event)"
+                                         class="absolute inset-0 h-full w-full rounded-full object-cover"
+                                         :alt="selectedAsset.symbol">
+                                </span>
                             </template>
                             <template x-if="!selectedAsset">
                                 <span class="w-5 h-5 rounded-full bg-surface-border flex-shrink-0"></span>
@@ -154,12 +159,15 @@
                                 <button type="button" @click="selectedAssetId = asset.id; onAssetChange(); pickerOpen = false"
                                         class="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-surface-border/40 transition-colors"
                                         :class="selectedAssetId == asset.id && 'bg-primary/10'">
-                                    <template x-if="asset.logo_url">
-                                        <img :src="asset.logo_url" class="w-5 h-5 rounded-full flex-shrink-0" :alt="asset.symbol">
-                                    </template>
-                                    <template x-if="!asset.logo_url">
-                                        <span class="w-5 h-5 rounded-full bg-primary/20 text-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0" x-text="asset.symbol.substring(0,2)"></span>
-                                    </template>
+                                    <span class="relative flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/20 text-[10px] font-bold text-primary">
+                                        <span x-text="asset.symbol.substring(0,2)"></span>
+                                        <img x-show="asset.logo_url || asset.asset_class === 'stock'"
+                                             :src="asset.logo_url || stockLogoUrl(asset)"
+                                             :data-fallback-logo="asset.logo_url && asset.asset_class === 'stock' ? stockLogoUrl(asset) : ''"
+                                             x-on:error="handleStockLogoError($event)"
+                                             class="absolute inset-0 h-full w-full rounded-full object-cover"
+                                             :alt="asset.symbol">
+                                    </span>
                                     <span class="text-sm text-content-primary font-medium" x-text="asset.symbol"></span>
                                     <span class="text-xs text-content-tertiary truncate" x-text="asset.name"></span>
                                     <span class="ml-auto text-xs font-medium" :class="(asset.price_change_pct_24h ?? 0) >= 0 ? 'text-gain' : 'text-loss'"
@@ -173,8 +181,16 @@
                     {{-- Entry Price Display --}}
                     <div x-show="selectedAsset" x-cloak class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-overlay border border-surface-border">
                         <div class="flex items-center gap-2">
-                            <template x-if="selectedAsset && selectedAsset.logo_url">
-                                <img :src="selectedAsset.logo_url" class="w-5 h-5 rounded-full" :alt="selectedAsset.symbol">
+                            <template x-if="selectedAsset">
+                                <span class="relative flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/20 text-[10px] font-bold text-primary">
+                                    <span x-text="selectedAsset.symbol.substring(0,2)"></span>
+                                    <img x-show="selectedAsset.logo_url || selectedAsset.asset_class === 'stock'"
+                                         :src="selectedAsset.logo_url || stockLogoUrl(selectedAsset)"
+                                         :data-fallback-logo="selectedAsset.logo_url && selectedAsset.asset_class === 'stock' ? stockLogoUrl(selectedAsset) : ''"
+                                         x-on:error="handleStockLogoError($event)"
+                                         class="absolute inset-0 h-full w-full rounded-full object-cover"
+                                         :alt="selectedAsset.symbol">
+                                </span>
                             </template>
                             <span class="text-xs text-content-secondary">Entry Price</span>
                         </div>
@@ -571,6 +587,21 @@
                 if (this.selectedAsset) {
                     this.updateChart(this.selectedAsset);
                 }
+            },
+
+            stockLogoUrl(asset) {
+                return 'https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/' +
+                    encodeURIComponent(asset.symbol.toUpperCase()) + '.png';
+            },
+
+            handleStockLogoError(event) {
+                const image = event.target;
+                if (image.dataset.fallbackLogo && image.src !== image.dataset.fallbackLogo) {
+                    image.src = image.dataset.fallbackLogo;
+                    image.dataset.fallbackLogo = '';
+                    return;
+                }
+                image.remove();
             },
 
             updateChart(asset) {

@@ -196,7 +196,9 @@
                     <a href="{{ route('user.trades.show', $trade->id) }}"
                        class="flex items-center justify-between p-2.5 rounded-lg hover:bg-surface-overlay/50 transition-colors group">
                         <div class="flex items-center gap-3 min-w-0">
-                            @if($asset && $asset->logo_url)
+                            @if($asset && $asset->asset_class === 'stock')
+                                <x-stock-logo :asset="$asset" size="w-7 h-7" text-size="text-[10px]" />
+                            @elseif($asset && $asset->logo_url)
                                 <img src="{{ $asset->logo_url }}" alt="" class="w-7 h-7 rounded-full bg-surface-overlay flex-shrink-0" loading="lazy">
                             @else
                                 <div class="w-7 h-7 rounded-full bg-surface-overlay flex items-center justify-center text-[10px] font-bold text-content-secondary flex-shrink-0">

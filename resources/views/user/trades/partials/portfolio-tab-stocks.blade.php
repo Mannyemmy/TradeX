@@ -32,8 +32,8 @@
                         <tr class="hover:bg-surface-overlay/50 transition-colors">
                             <td class="px-5 py-3">
                                 <div class="flex items-center gap-2">
-                                    @if($pos->asset && $pos->asset->logo_url)
-                                        <img src="{{ $pos->asset->logo_url }}" alt="{{ $pos->asset->symbol }}" class="w-6 h-6 rounded-full object-cover">
+                                    @if($pos->asset)
+                                        <x-stock-logo :asset="$pos->asset" size="h-6 w-6" />
                                     @endif
                                     <span class="font-medium text-content-primary">{{ $pos->asset->symbol ?? 'N/A' }}</span>
                                 </div>

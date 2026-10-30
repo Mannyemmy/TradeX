@@ -139,7 +139,9 @@
                             <tr class="text-content-secondary hover:bg-surface-overlay/50">
                                 <td class="px-5 py-3 font-medium text-content-primary">
                                     <div class="flex items-center gap-2">
-                                        @if($trade->tradingAsset && $trade->tradingAsset->logo_url)
+                                        @if($trade->tradingAsset && $trade->tradingAsset->asset_class === 'stock')
+                                            <x-stock-logo :asset="$trade->tradingAsset" size="h-6 w-6" text-size="text-[9px]" />
+                                        @elseif($trade->tradingAsset && $trade->tradingAsset->logo_url)
                                             <img src="{{ $trade->tradingAsset->logo_url }}" alt="{{ $trade->asset_name }}" class="w-6 h-6 rounded-full bg-surface-overlay flex-shrink-0" loading="lazy">
                                         @else
                                             <span class="w-6 h-6 rounded-full bg-primary/20 text-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0">{{ strtoupper(substr($trade->asset_name, 0, 2)) }}</span>
