@@ -20,10 +20,17 @@ class StockAdminController extends Controller
     public function index()
     {
         $settings = Settings::find(1);
+        $stockStatus = request('status', 'all');
+        if (!in_array($stockStatus, ['all', 'active', 'inactive'], true)) {
+            $stockStatus = 'all';
+        }
 
         $preferredStockIds = DB::table('trading_assets')
             ->selectRaw("COALESCE(MAX(CASE WHEN data_source = ? THEN id END), MAX(id)) as asset_id", ['twelvedata'])
             ->where('asset_class', 'stock')
+            ->when($stockStatus !== 'all', function ($query) use ($stockStatus) {
+                $query->where('is_active', $stockStatus === 'active');
+            })
             ->groupBy('symbol');
 
         $stocks = TradingAsset::joinSub($preferredStockIds, 'preferred_stock_ids', function ($join) {
@@ -31,7 +38,8 @@ class StockAdminController extends Controller
         })
             ->select('trading_assets.*')
             ->orderBy('trading_assets.name')
-            ->paginate(50);
+            ->paginate(50)
+            ->appends(request()->except('page'));
 
         $activeStockSymbols = DB::table('trading_assets')
             ->where('asset_class', 'stock')
@@ -72,6 +80,7 @@ class StockAdminController extends Controller
             'title' => 'Stock Shares Management',
             'settings' => $settings,
             'stocks' => $stocks,
+            'stockStatus' => $stockStatus,
             'activeStocksCount' => $activeStocksCount,
             'positionStats' => $positionStats,
             'needsPriceRefresh' => $needsPriceRefresh,

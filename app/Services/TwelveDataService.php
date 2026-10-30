@@ -215,7 +215,14 @@ class TwelveDataService
 
         if (!$response->successful()) {
             Log::error("TwelveData stock import HTTP error for {$symbol}: " . $response->status());
-            throw new \RuntimeException('TwelveData returned an HTTP error. Please try again later.');
+            $error = $response->json();
+            $providerMessage = is_array($error) ? ($error['message'] ?? null) : null;
+            $message = "TwelveData returned HTTP {$response->status()} for {$symbol}.";
+            if ($providerMessage) {
+                $message .= ' ' . $providerMessage;
+            }
+
+            throw new \RuntimeException($message);
         }
 
         $quote = $response->json();

@@ -48,11 +48,9 @@ class ActivatePopularStocks extends Command
             return 0;
         }
 
-        $dailyKey = 'stocks:activate-popular:' . now()->toDateString();
-        if (!Cache::add($dailyKey, true, now()->addDay())) {
-            $this->info('The popular-stock activation limit has already been used today. It will continue tomorrow.');
-            return 0;
-        }
+        $dailyKey = 'stocks:activate-popular:quotes:' . now()->toDateString();
+        Cache::add($dailyKey, 0, now()->addDay());
+        $dailyAttempts = (int) Cache::get($dailyKey, 0);
 
         $assets = TradingAsset::ofClass('stock')
             ->whereIn('symbol', $this->popularSymbols)
@@ -63,10 +61,9 @@ class ActivatePopularStocks extends Command
             });
 
         $activated = 0;
-        $attempts = 0;
 
         foreach ($this->popularSymbols as $symbol) {
-            if ($activeCount >= $this->targetActiveStocks || $attempts >= $this->dailyQuoteLimit) {
+            if ($activeCount >= $this->targetActiveStocks || $dailyAttempts >= $this->dailyQuoteLimit) {
                 break;
             }
 
@@ -84,12 +81,13 @@ class ActivatePopularStocks extends Command
                 continue;
             }
 
-            $attempts++;
+            Cache::increment($dailyKey);
+            $dailyAttempts++;
             try {
                 $twelveData->importStock($symbol, $asset->id);
             } catch (\RuntimeException $e) {
                 $this->error("Stopped while requesting {$symbol}: {$e->getMessage()}");
-                $this->line("Activated {$activated} stocks today. The remaining stocks will be retried tomorrow.");
+                $this->line("Activated {$activated} stocks in this run. You can rerun this command to resume; if the error was a rate limit, wait for the quota to reset first.");
                 return 1;
             }
 
@@ -98,7 +96,7 @@ class ActivatePopularStocks extends Command
             $activated++;
             $this->info("Activated {$symbol} ({$activeCount}/{$this->targetActiveStocks}).");
 
-            if ($attempts < $this->dailyQuoteLimit) {
+            if ($dailyAttempts < $this->dailyQuoteLimit && $activeCount < $this->targetActiveStocks) {
                 sleep(13);
             }
         }
@@ -107,6 +105,10 @@ class ActivatePopularStocks extends Command
             $this->info('No eligible popular stocks were available to activate from the imported catalog.');
         } else {
             $this->info("Activated {$activated} stocks today. {$activeCount} of {$this->targetActiveStocks} active stock symbols.");
+        }
+
+        if ($dailyAttempts >= $this->dailyQuoteLimit && $activeCount < $this->targetActiveStocks) {
+            $this->warn("Reached the daily safety cap of {$this->dailyQuoteLimit} quote attempts. The command can continue tomorrow.");
         }
 
         return 0;
